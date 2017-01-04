@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<queue-entries>
+    <total-storage-limit>1000M</total-storage-limit>
+    <queue>
+        <name>system</name>
+        <rate>10/s</rate>
+        <bucket-size>20</bucket-size>
+        <retry-parameters>
+            <task-age-limit>3d</task-age-limit>
+        </retry-parameters>
+        <max-concurrent-requests>
+            15
+        </max-concurrent-requests>
+    </queue>
+</queue-entries>

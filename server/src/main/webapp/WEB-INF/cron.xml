@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+    <cron>
+        <url>/api/v1/secure/monitoring/status</url>
+        <description>Ping the server preventing it from getting stopped by appengine gods.</description>
+        <schedule>every 4 minutes from 06:00 to 23:59</schedule>
+        <timezone>Europe/London</timezone>
+    </cron>
+</cronentries>
