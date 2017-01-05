@@ -2,10 +2,12 @@ package com.backend.auth;
 
 import com.backend.domain.Role;
 import com.backend.domain.UserEntity;
+import com.google.inject.servlet.RequestScoped;
 
 /**
  * Request scoped holder for currently authenticated user
  */
+@RequestScoped
 public class CallContext {
 
     private UserEntity loggedUser;
