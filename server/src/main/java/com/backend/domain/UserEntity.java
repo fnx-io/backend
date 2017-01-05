@@ -19,6 +19,8 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
     private String email;
     private String name;
     private Role role;
+    @JsonIgnore
+    private String passwordHash;
 
 
     public static Key<UserEntity> createKey(Long id) {
@@ -99,5 +101,13 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
     }
 }

@@ -7,6 +7,7 @@ import io.fnx.backend.tools.ofy.OfyProvider;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+@Service
 public class BaseService {
 
     private OfyProvider ofyProvider;

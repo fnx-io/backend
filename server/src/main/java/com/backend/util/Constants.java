@@ -16,4 +16,7 @@ public final class Constants {
     public static final String ENCODING = "UTF-8";
 
     public static final Charset CHARSET = Charset.forName(ENCODING);
+
+    // unprocessable entity
+    public static final int STATUS_VALIDATION_FAILED = 422;
 }

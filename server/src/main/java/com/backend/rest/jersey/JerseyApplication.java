@@ -1,6 +1,7 @@
 package com.backend.rest.jersey;
 
 import com.backend.rest.MonitoringResource;
+import com.backend.rest.UserResource;
 import com.google.common.collect.Sets;
 
 import javax.ws.rs.core.Application;
@@ -25,7 +26,11 @@ public class JerseyApplication extends Application {
         return classes;
     }
 
+    /**
+     * These are all REST Endpoints (resources) for our API
+     */
     private static final List<Class<?>> resources = Arrays.asList(new Class<?>[]{
+            UserResource.class,
             MonitoringResource.class
     });
 }
