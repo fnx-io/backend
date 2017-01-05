@@ -4,22 +4,35 @@ import com.backend.domain.Role;
 import com.backend.domain.UniqueProps;
 import com.backend.domain.UserEntity;
 import com.backend.domain.dto.UserDto;
+import com.backend.domain.dto.login.InvalidCredentialsLoginResult;
+import com.backend.domain.dto.login.LoginResult;
 import com.backend.service.BaseService;
 import com.backend.service.UserService;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
+import io.fnx.backend.domain.AuthTokenEntity;
 import io.fnx.backend.manager.AuthTokenManager;
 import io.fnx.backend.manager.UniqueIndexManager;
+import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
+import org.apache.http.auth.InvalidCredentialsException;
 import org.joda.time.Duration;
 import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static io.fnx.backend.tools.ofy.OfyUtils.keyToId;
+import static java.lang.String.format;
 
 public class UserServiceImpl extends BaseService implements UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private AuthTokenManager<UserEntity> authTokenManager;
     private UniqueIndexManager uniqueIndexManager;
@@ -59,6 +72,56 @@ public class UserServiceImpl extends BaseService implements UserService {
     @Override
     public UserEntity useAuthToken(String token) {
         return authTokenManager.useToken(token);
+    }
+
+    @Override
+    public LoginResult login(String email, String password) {
+        log.debug(format("Attempting to login user with email: %s and password: %s", email, protectPwd(password)));
+        if (isNullOrEmpty(email) || isNullOrEmpty(password)) {
+            log.debug("User could not be authenticated, credentials empty");
+            return new InvalidCredentialsLoginResult();
+        }
+        final UserEntity found = ofy().load().type(UserEntity.class).filter("email", email).first().now();
+        String passwordHash = null;
+        if (found == null) {
+            log.debug(format("No such user with email %s found", email));
+        } else {
+            passwordHash = found.getPasswordHash();
+        }
+        if (isNullOrEmpty(passwordHash)) {
+            // do the hashing work to mask the timing attack
+            hashPassword("aa");
+            return new InvalidCredentialsLoginResult();
+        } else if (!Objects.equals(passwordHash, hashPassword(password, passwordHash))) {
+            log.info("User %s attempted to login with invalid password", email);
+            return new InvalidCredentialsLoginResult();
+        }
+
+        final String token = authTokenManager.newAuthTokenFor(found);
+
+        return new LoginResult(true, found, token);
+    }
+
+    @Override
+    @AllowedForAuthenticated
+    public void logout(String authToken) {
+        final Long curUserId = cc().getLoggedUserId();
+        final AuthTokenEntity found = authTokenManager.getAuthToken(authToken);
+        if (found == null) {
+            log.info(format("Auth token [%s] is invalid", authToken));
+            return;
+        }
+        final Long ownerId = keyToId(found.getOwner());
+        if (!Objects.equals(curUserId, ownerId)) {
+            log.info(format("User [%d] attempted to invalidate token [%s] which is owned by another user [%d]", curUserId, authToken, ownerId));
+            return;
+        }
+        authTokenManager.destroyToken(authToken);
+    }
+
+    private String protectPwd(String password) {
+        if (isNullOrEmpty(password)) return password;
+        return password.replaceAll(".", "*");
     }
 
     @Inject

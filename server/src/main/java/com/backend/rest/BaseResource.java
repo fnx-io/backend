@@ -24,6 +24,10 @@ public abstract class BaseResource {
     @Inject
     protected Provider<CallContext> callContextProvider;
 
+    public CallContext cc() {
+        return callContextProvider.get();
+    }
+
     @OPTIONS
     public Response rootOptions() {
         return Response.ok(null).build();
