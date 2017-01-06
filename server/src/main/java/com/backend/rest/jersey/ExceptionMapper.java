@@ -5,6 +5,7 @@ import com.backend.util.Constants;
 import com.google.common.collect.Maps;
 import com.sun.jersey.api.NotFoundException;
 import io.fnx.backend.manager.UniqueViolationException;
+import io.fnx.backend.tools.authorization.PermissionDeniedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,10 @@ public class ExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<Throwabl
             return unprocessableEntity(renderUniqueViolationException((UniqueViolationException) t));
         } else if (t instanceof com.backend.service.NotFoundException) {
             return unprocessableEntity(entityNotFound((com.backend.service.NotFoundException) t));
+        } else if (t instanceof PermissionDeniedException) {
+            return Response.status(Response.Status.FORBIDDEN).
+                    entity(new ErrorResponse("PermissionDenied", t.getMessage(), null)).
+                    build();
         } else {
             log.warn(t.getMessage(), t);
             return Response.status(500).entity(t.getMessage()).build();
