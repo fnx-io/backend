@@ -2,7 +2,8 @@ package com.backend.rest;
 
 import com.backend.auth.CallContext;
 import com.backend.domain.UserEntity;
-import com.backend.domain.dto.UserDto;
+import com.backend.domain.dto.user.UpdateUserDto;
+import com.backend.domain.dto.user.UserDto;
 import com.backend.domain.dto.login.LoginResult;
 import com.backend.domain.dto.login.UserLoginDto;
 import com.backend.domain.filter.user.ListUsersFilter;
@@ -40,6 +41,13 @@ public class UserResource extends BaseResource {
     @POST
     public UserEntity register(UserDto user) {
         return userService.createUser(user);
+    }
+
+    @PUT
+    @Path("/{id}")
+    public UserEntity update(@PathParam("id") Long id, UpdateUserDto cmd) {
+        cmd.setUserId(id);
+        return userService.updateUser(cmd);
     }
 
     /**

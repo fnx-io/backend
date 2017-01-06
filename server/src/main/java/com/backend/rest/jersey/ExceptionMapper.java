@@ -2,6 +2,7 @@ package com.backend.rest.jersey;
 
 import com.backend.guice.validation.ValidationException;
 import com.backend.util.Constants;
+import com.google.common.collect.Maps;
 import com.sun.jersey.api.NotFoundException;
 import io.fnx.backend.manager.UniqueViolationException;
 import org.slf4j.Logger;
@@ -10,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.validation.ConstraintViolation;
 import javax.ws.rs.core.Response;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -35,10 +33,19 @@ public class ExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<Throwabl
             return unprocessableEntity(err);
         } else if (t instanceof UniqueViolationException) {
             return unprocessableEntity(renderUniqueViolationException((UniqueViolationException) t));
+        } else if (t instanceof com.backend.service.NotFoundException) {
+            return unprocessableEntity(entityNotFound((com.backend.service.NotFoundException) t));
         } else {
             log.warn(t.getMessage(), t);
             return Response.status(500).entity(t.getMessage()).build();
         }
+    }
+
+    private ErrorResponse entityNotFound(com.backend.service.NotFoundException t) {
+        Map<String, Object> details = Maps.newHashMap();
+        details.put("entity", t.entity);
+        details.put("id", t.id);
+        return new ErrorResponse("NotFound", t.getMessage(), Collections.singleton(details));
     }
 
     private ErrorResponse renderUniqueViolationException(UniqueViolationException t) {
@@ -46,9 +53,9 @@ public class ExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<Throwabl
     }
 
     public static ErrorResponse renderValidationError(ValidationException e) {
-        final List<Map<String, String>> details = new ArrayList<>();
+        final List<Map<String, Object>> details = new ArrayList<>();
         for (ConstraintViolation<Object> c : e.getResult()) {
-            Map<String, String> obj = new HashMap<>();
+            Map<String, Object> obj = new HashMap<>();
             obj.put("path", c.getPropertyPath().toString());
             obj.put("messageTemplate", c.getMessageTemplate());
             obj.put("message", c.getMessage());
@@ -65,9 +72,9 @@ public class ExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<Throwabl
         public final boolean error = true;
         public final String type;
         public final String description;
-        public final List<Map<String, String>> details;
+        public final Collection<Map<String, Object>> details;
 
-        public ErrorResponse(String type, String description, List<Map<String, String>> details) {
+        public ErrorResponse(String type, String description, Collection<Map<String, Object>> details) {
             this.type = type;
             this.description = description;
             this.details = details;

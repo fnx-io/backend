@@ -1,7 +1,8 @@
 package com.backend.service;
 
 import com.backend.domain.UserEntity;
-import com.backend.domain.dto.UserDto;
+import com.backend.domain.dto.user.UpdateUserDto;
+import com.backend.domain.dto.user.UserDto;
 import com.backend.domain.dto.login.LoginResult;
 import com.backend.domain.filter.user.ListUsersFilter;
 
@@ -11,6 +12,8 @@ import com.backend.domain.filter.user.ListUsersFilter;
 public interface UserService {
 
     UserEntity createUser(UserDto cmd);
+
+    UserEntity updateUser(UpdateUserDto cmd);
 
     UserEntity useAuthToken(String token);
 

@@ -1,12 +1,9 @@
-package com.backend.domain.dto;
+package com.backend.domain.dto.user;
 
-import com.backend.service.Validate;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-@Validate
-public class UserDto {
+public class BaseUserDto {
 
     @Email
     @NotBlank
@@ -14,10 +11,6 @@ public class UserDto {
 
     @NotBlank
     protected String name;
-
-    @NotBlank
-    @Length(min = 6, message = "{error.password.too.short}")
-    protected String password;
 
     public String getEmail() {
         return email;
@@ -35,11 +28,4 @@ public class UserDto {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

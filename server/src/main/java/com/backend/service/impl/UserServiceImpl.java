@@ -3,12 +3,14 @@ package com.backend.service.impl;
 import com.backend.domain.Role;
 import com.backend.domain.UniqueProps;
 import com.backend.domain.UserEntity;
-import com.backend.domain.dto.UserDto;
+import com.backend.domain.dto.user.UpdateUserDto;
+import com.backend.domain.dto.user.UserDto;
 import com.backend.domain.dto.login.InvalidCredentialsLoginResult;
 import com.backend.domain.dto.login.LoginResult;
 import com.backend.domain.filter.user.ListUsersFilter;
 import com.backend.service.BaseService;
 import com.backend.service.ListResult;
+import com.backend.service.NotFoundException;
 import com.backend.service.UserService;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
@@ -58,6 +60,38 @@ public class UserServiceImpl extends BaseService implements UserService {
             public UserEntity run() {
                 // make sure we are creating user with unique email
                 uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), userKey);
+                ofy().save().entity(user).now();
+                return user;
+            }
+        });
+    }
+
+    @Override
+    public UserEntity updateUser(final UpdateUserDto cmd) {
+        checkNotNull(cmd, "User to change must not be empty!");
+        checkNotNull(cmd.getUserId(), "User id must not be empty!");
+        log.debug(format("User [%d] wants to update user [%d]", cc().getLoggedUserId(), cmd.getUserId()));
+
+        return ofy().transact(new Work<UserEntity>() {
+            @Override
+            public UserEntity run() {
+                final Key<UserEntity> key = UserEntity.createKey(cmd.getUserId());
+                final UserEntity user = ofy().load().key(key).now();
+                if (user == null) throw new NotFoundException(key);
+
+                final String origEmail = user.getEmail();
+
+                user.setEmail(cmd.getEmail());
+                user.setName(cmd.getName());
+                if (!isNullOrEmpty(cmd.getPassword())) {
+                    // also regenerate salt
+                    user.setPasswordHash(hashPassword(cmd.getPassword()));
+                }
+                // do we need to release and acquire new unique for changed email?
+                if (!Objects.equals(origEmail, user.getEmail())) {
+                    uniqueIndexManager.deleteUniqueIndexOwner(UniqueProps.user_email, origEmail);
+                    uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), key);
+                }
                 ofy().save().entity(user).now();
                 return user;
             }
