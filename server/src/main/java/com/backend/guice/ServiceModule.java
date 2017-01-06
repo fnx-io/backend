@@ -1,5 +1,6 @@
 package com.backend.guice;
 
+import com.backend.auth.AllowedForRoleAuthorizationGuard;
 import com.backend.guice.validation.ValidatorInterceptor;
 import com.backend.guice.validation.ValidatorProvider;
 import com.backend.service.DontValidate;
@@ -9,9 +10,11 @@ import com.backend.service.impl.UserServiceImpl;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
+import io.fnx.backend.tools.authorization.*;
 
 import javax.inject.Singleton;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +32,28 @@ public class ServiceModule extends AbstractModule {
             requestInjection(validatorInterceptor);
             bindInterceptor(Matchers.annotatedWith(Service.class), new ValidateMethodMatcher(), validatorInterceptor);
         }
+
+        {
+            final LoggedPrincipalProvider loggedUserProvider = new LoggedPrincipalProvider();
+            requestInjection(loggedUserProvider);
+            final AuthorizationInterceptor fnxAuthorizationInterceptor = new AuthorizationInterceptor(loggedUserProvider);
+            fnxAuthorizationInterceptor.setGuards(createAuthorizationGuards());
+            requestInjection(fnxAuthorizationInterceptor);
+            bindInterceptor(Matchers.annotatedWith(Service.class), Matchers.any(), fnxAuthorizationInterceptor);
+        }
+    }
+
+    private AuthorizationGuard[] createAuthorizationGuards() {
+        final ArrayList<AuthorizationGuard> guards = new ArrayList<>();
+        guards.add(new AllowedForAuthenticatedAuthorizationGuard());
+        guards.add(new AllowedForAdminsAuthorizationGuard());
+        guards.add(new AllowedForAdminsOnlyAuthorizationGuard());
+        final AllowedForRoleAuthorizationGuard roleGuard = new AllowedForRoleAuthorizationGuard();
+        guards.add(roleGuard);
+        final AllowedForOwnerAuthorizationGuard ownerGuard = new AllowedForOwnerAuthorizationGuard();
+        requestInjection(ownerGuard);
+        guards.add(ownerGuard);
+        return guards.toArray(new AuthorizationGuard[guards.size()]);
     }
 
     private static class ValidateMethodMatcher implements Matcher<Method> {

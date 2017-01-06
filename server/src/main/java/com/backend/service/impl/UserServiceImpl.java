@@ -14,13 +14,13 @@ import com.backend.service.NotFoundException;
 import com.backend.service.UserService;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
-import com.googlecode.objectify.cmd.LoadType;
 import com.googlecode.objectify.cmd.Query;
 import io.fnx.backend.domain.AuthTokenEntity;
 import io.fnx.backend.manager.AuthTokenManager;
 import io.fnx.backend.manager.UniqueIndexManager;
+import io.fnx.backend.tools.authorization.AllowedForAdmins;
 import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
-import org.apache.http.auth.InvalidCredentialsException;
+import io.fnx.backend.tools.authorization.AllowedForOwner;
 import org.joda.time.Duration;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -67,6 +67,8 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
+    @AllowedForOwner
+    @AllowedForAdmins
     public UserEntity updateUser(final UpdateUserDto cmd) {
         checkNotNull(cmd, "User to change must not be empty!");
         checkNotNull(cmd.getUserId(), "User id must not be empty!");
