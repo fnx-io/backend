@@ -5,6 +5,8 @@ import com.backend.domain.UserEntity;
 import com.backend.domain.dto.UserDto;
 import com.backend.domain.dto.login.LoginResult;
 import com.backend.domain.dto.login.UserLoginDto;
+import com.backend.domain.filter.user.ListUsersFilter;
+import com.backend.service.ListResult;
 import com.backend.service.UserService;
 
 import javax.inject.Inject;
@@ -19,6 +21,15 @@ import javax.ws.rs.core.Response;
 public class UserResource extends BaseResource {
 
     private UserService userService;
+
+    /**
+     * Allows to list all users
+     * @return single page of users
+     */
+    @GET
+    public ListResult<UserEntity> listUsers() {
+        return userService.listUsers(new ListUsersFilter(filterLimits()));
+    }
 
     /**
      * Registers new user. May fail, if some user already registered with same email address.

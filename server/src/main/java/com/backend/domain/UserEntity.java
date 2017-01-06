@@ -17,6 +17,7 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
     private Long id;
     @Index
     private String email;
+    @Index
     private String name;
     private Role role;
     @JsonIgnore

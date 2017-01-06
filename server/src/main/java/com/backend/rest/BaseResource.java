@@ -1,6 +1,7 @@
 package com.backend.rest;
 
 import com.backend.auth.CallContext;
+import com.backend.domain.filter.FilterLimits;
 import com.google.inject.Inject;
 
 import javax.inject.Provider;
@@ -125,5 +126,9 @@ public abstract class BaseResource {
     @QueryParam("allPages")
     public void setAllPages(final boolean allPages) {
         this.allPages = allPages;
+    }
+
+    public FilterLimits filterLimits() {
+        return new FilterLimits(page, allPages);
     }
 }

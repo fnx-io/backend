@@ -6,10 +6,14 @@ import com.backend.domain.UserEntity;
 import com.backend.domain.dto.UserDto;
 import com.backend.domain.dto.login.InvalidCredentialsLoginResult;
 import com.backend.domain.dto.login.LoginResult;
+import com.backend.domain.filter.user.ListUsersFilter;
 import com.backend.service.BaseService;
+import com.backend.service.ListResult;
 import com.backend.service.UserService;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
+import com.googlecode.objectify.cmd.LoadType;
+import com.googlecode.objectify.cmd.Query;
 import io.fnx.backend.domain.AuthTokenEntity;
 import io.fnx.backend.manager.AuthTokenManager;
 import io.fnx.backend.manager.UniqueIndexManager;
@@ -22,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -117,6 +122,14 @@ public class UserServiceImpl extends BaseService implements UserService {
             return;
         }
         authTokenManager.destroyToken(authToken);
+    }
+
+    @Override
+    public ListResult<UserEntity> listUsers(ListUsersFilter filter) {
+        final Query<UserEntity> query = ofy().load().type(UserEntity.class);
+        final List<UserEntity> result = filter.query(query).list();
+
+        return filter.result(result);
     }
 
     private String protectPwd(String password) {
