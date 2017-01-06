@@ -32,14 +32,15 @@ public class JerseyAuthFilter implements ContainerRequestFilter {
     public ContainerRequest filter(ContainerRequest request) {
 
         String token = request.getHeaderValue(HttpHeaders.AUTHORIZATION);
-        callContextProvider.get().setLoggedUser(null);
+        final CallContext cc = callContextProvider.get();
+        cc.setLoggedUser(null);
 
         if (token != null) {
             final UserEntity user = userService.useAuthToken(token);
-            callContextProvider.get().setLoggedUser(user);
+            cc.setLoggedUser(user);
         }
-        if (callContextProvider.get().logged()) {
-            final UserEntity user = callContextProvider.get().getLoggedUser();
+        if (cc.logged()) {
+            final UserEntity user = cc.getLoggedUser();
             log.info(format("Request authenticated as %s, %s [%d]", user.getName(), user.getEmail(), user.getId()));
         } else if (!isNullOrEmpty(request.getHeaderValue("X-Appengine-Cron")) ||
                    !isNullOrEmpty(request.getHeaderValue("X-AppEngine-QueueName"))) {
