@@ -1,0 +1,40 @@
+name: admin
+description: FNX Admin skeleton for an FNX backend service
+version: 0.0.1
+environment:
+  sdk: '>=1.13.0 <2.0.0'
+dependencies:
+  angular2: '>=2.2.0 <2.3.0'
+  browser: ^0.10.0
+  dart_to_js_script_rewriter: ^1.0.1
+  http: any
+  fnx_config: ^1.0.0
+  cookie: ^0.0.4
+  logging: "^0.11.3"
+  throttle_debounce: "^0.1.2"
+  js: "0.6.1"
+  fnx_ui:
+    git:
+      url: https://github.com/fnx-io/fnx_ui
+      ref: master
+  fnx_rest:
+    git:
+      url: https://github.com/fnx-io/fnx_rest
+      ref: master
+transformers:
+- angular2:
+    platform_directives:
+    - 'package:angular2/common.dart#COMMON_DIRECTIVES'
+    - 'package:angular2/common.dart#CORE_DIRECTIVES'
+    - 'package:angular2/common.dart#FORM_DIRECTIVES'
+    - 'package:angular2/router.dart#ROUTER_DIRECTIVES'
+    - 'package:admin/components.dart#CUSTOM_COMPONENTS'
+    - 'package:fnx_ui/fnx_ui.dart#FNX_UI_COMPONENTS'
+    platform_pipes:
+    - 'package:angular2/common.dart#COMMON_PIPES'
+    - 'package:admin/components.dart#CUSTOM_PIPES'
+    resolved_identifiers:
+      RestClient: 'package:fnx_rest/fnx_rest.dart'
+    entry_points: web/admin.dart
+- dart_to_js_script_rewriter
+- fnx_config
