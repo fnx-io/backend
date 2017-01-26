@@ -12,6 +12,12 @@ public class CallContext {
 
     private UserEntity loggedUser;
 
+    /**
+     * When context is trusted, it might not be authenticated by
+     * an user, but might be authenticated via Appengine security rules
+     */
+    private boolean trusted = false;
+
     public UserEntity getLoggedUser() {
         return loggedUser;
     }
@@ -38,5 +44,13 @@ public class CallContext {
         } else {
             return loggedUser.getRole();
         }
+    }
+
+    public void setTrusted(boolean trusted) {
+        this.trusted = trusted;
+    }
+
+    public boolean isTrusted() {
+        return trusted;
     }
 }
