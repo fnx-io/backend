@@ -22,4 +22,6 @@ public interface UserService {
     void logout(String authToken);
 
     ListResult<UserEntity> listUsers(ListUsersFilter filter);
+
+    UserEntity makeSuperUser(Long userId);
 }

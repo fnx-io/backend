@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.ws.rs.core.Response;
-
 import java.util.*;
 
 import static java.lang.String.format;

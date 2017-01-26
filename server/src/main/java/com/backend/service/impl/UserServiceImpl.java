@@ -1,5 +1,6 @@
 package com.backend.service.impl;
 
+import com.backend.auth.AllowedForTrusted;
 import com.backend.domain.Role;
 import com.backend.domain.UniqueProps;
 import com.backend.domain.UserEntity;
@@ -166,6 +167,26 @@ public class UserServiceImpl extends BaseService implements UserService {
         final List<UserEntity> result = filter.query(query).list();
 
         return filter.result(result);
+    }
+
+    @Override
+    @AllowedForAdmins
+    @AllowedForTrusted
+    public UserEntity makeSuperUser(Long userId) {
+        checkNotNull(userId, "User ID must not be empty!");
+        final Key<UserEntity> key = UserEntity.createKey(userId);
+        return ofy().transact(new Work<UserEntity>() {
+            @Override
+            public UserEntity run() {
+                final UserEntity user = ofy().load().key(key).now();
+                if (user == null) {
+                    throw new NotFoundException(key);
+                }
+                user.setRole(Role.ADMIN);
+                ofy().save().entity(user).now();
+                return user;
+            }
+        });
     }
 
     private String protectPwd(String password) {

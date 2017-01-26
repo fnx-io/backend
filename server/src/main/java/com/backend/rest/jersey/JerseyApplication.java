@@ -2,6 +2,7 @@ package com.backend.rest.jersey;
 
 import com.backend.rest.MonitoringResource;
 import com.backend.rest.UserResource;
+import com.backend.rest.secure.SystemResource;
 import com.google.common.collect.Sets;
 
 import javax.ws.rs.core.Application;
@@ -31,6 +32,8 @@ public class JerseyApplication extends Application {
      */
     private static final List<Class<?>> resources = Arrays.asList(new Class<?>[]{
             UserResource.class,
-            MonitoringResource.class
+            MonitoringResource.class,
+
+            SystemResource.class
     });
 }

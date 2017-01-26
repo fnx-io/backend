@@ -1,6 +1,7 @@
 package com.backend.guice;
 
 import com.backend.auth.AllowedForRoleAuthorizationGuard;
+import com.backend.auth.AllowedForTrustedAuthorizationGuard;
 import com.backend.guice.validation.ValidatorInterceptor;
 import com.backend.guice.validation.ValidatorProvider;
 import com.backend.service.DontValidate;
@@ -53,6 +54,11 @@ public class ServiceModule extends AbstractModule {
         final AllowedForOwnerAuthorizationGuard ownerGuard = new AllowedForOwnerAuthorizationGuard();
         requestInjection(ownerGuard);
         guards.add(ownerGuard);
+
+        final AllowedForTrustedAuthorizationGuard trustedGuard = new AllowedForTrustedAuthorizationGuard();
+        requestInjection(trustedGuard);
+        guards.add(trustedGuard);
+
         return guards.toArray(new AuthorizationGuard[guards.size()]);
     }
 
