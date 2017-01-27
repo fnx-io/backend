@@ -1,12 +1,12 @@
 import 'dart:html';
 import 'package:admin/app_context.dart';
+import 'package:admin/auth.dart' as auth;
 
 import 'package:angular2/core.dart';
 import 'package:angular2/router.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/errors.dart';
 import 'package:logging/logging.dart';
-
 ///
 /// Root komponenta aplikace. Stará se o zobrazování errorů, ale především definuje routovací
 /// pravidla pro další moduly.
@@ -34,6 +34,15 @@ class App {
     this.router = router;
   }
 
+  void authTokenChanged(String token) {
+    auth.saveLoginToken(token);
+    rootRestClient.setHeader('Authorization', token);
+  }
+
+  void loggedUserChanged(Map<String, dynamic> user) {
+    appContext.loggedUser = user;
+  }
+
   void showError(FnxError err) {
     log.info("Showing error: ${err.headline}");
     errorHeadline = err.headline;
@@ -47,10 +56,8 @@ class App {
   }
 
   logout() {
-  }
-
-  login(user) {
-    appContext.loggedUser = user;
+    appContext.logout();
+    auth.removeLoginToken();
   }
 
   bool isTesting() {

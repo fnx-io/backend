@@ -36,11 +36,7 @@
 </template>
 
 <template [ngIf]="!appContext.logged">
-  <div class="padding margin--big--vertical margin--auto width--half">
-    <fnx-alert type="warning" class="margin--bottom" [closable]="false">
-      <h1>You shall not pass!</h1>
-    </fnx-alert>
-  </div>
+  <login-box (token)="authTokenChanged($event)" (user)="loggedUserChanged($event)"></login-box>
 </template>
 
 </fnx-app>
