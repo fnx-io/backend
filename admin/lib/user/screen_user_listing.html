@@ -1,0 +1,21 @@
+<div class="flex--column padding fit">
+  <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink">
+    <table class="table--stripes" *ngIf="!listing.isEmpty()">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of listing.list">
+          <td>{{ u['name'] }}</td>
+          <td>{{ u['email'] }}</td>
+          <td>{{ u['role'] }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <rest-listing-monitor [listing]="listing"></rest-listing-monitor>
+  </fnx-scroll-panel>
+</div>
