@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:admin/app_context.dart';
 import 'package:admin/auth.dart' as auth;
+import 'package:admin/dashboard/screen_dashboard.dart';
 
 import 'package:angular2/core.dart';
 import 'package:angular2/router.dart';
@@ -14,6 +15,7 @@ import 'package:logging/logging.dart';
 ///
 @Component(selector: 'app', templateUrl: 'app.html')
 @RouteConfig(const [
+  const Route(path: '/dashboard', name: 'Dashboard', component: ScreenDashboard, useAsDefault: true)
 ])
 class App {
 

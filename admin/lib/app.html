@@ -3,7 +3,7 @@
     <div class="layout--header">
       <header>
         <nav class="navbar">
-          <h1>Complete Doddle
+          <h1>FNX Admin
             <span *ngIf="isTesting()">!!! TESTING !!!</span>
           </h1>
           <span class="spacer"></span>
@@ -20,8 +20,7 @@
         <div class="layout--sidebar">
           <aside style="width: 15em" class="flex--column">
             <ul class="menu--vertical flex--grow">
-              <li><a href="#" routerLink="['Dashboard']">Dashboard</a></li>
-              <li class="separator"><a href="#" routerLink="['Users']">Users</a></li>
+              <li><a href="#" [routerLink]="['Dashboard']">Dashboard</a></li>
             </ul>
             <p class="text--center bg--fnx no-margin padding">
               <a href="https://fnx.io/">fnx.io</a>
