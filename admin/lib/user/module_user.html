@@ -1,3 +1,11 @@
-<main class="padding">
-  <router-outlet></router-outlet>
-</main>
+<div class="layout--header">
+  <header>
+    <nav class="navbar padding--fab bg--fnx--d1">
+      <h1>Users</h1>
+    </nav>
+    <a [routerLink]="['UserEdit', {id: 'create'}]" class="btn--fab">add</a>
+  </header>
+  <main class="margin">
+    <router-outlet></router-outlet>
+  </main>
+</div>
