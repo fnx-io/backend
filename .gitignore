@@ -14,3 +14,8 @@ hs_err_pid*
 server/target
 .idea
 *.iml
+
+
+# these contain admin build
+server/src/main/webapp/admin
+admin/build

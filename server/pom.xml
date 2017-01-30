@@ -178,6 +178,9 @@
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.version}</version>
+                <configuration>
+                    <version>${app.version}</version>
+                </configuration>
             </plugin>
         </plugins>
     </build>
