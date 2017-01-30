@@ -8,6 +8,7 @@ import com.backend.service.DontValidate;
 import com.backend.service.Service;
 import com.backend.service.UserService;
 import com.backend.service.impl.UserServiceImpl;
+import com.backend.util.conf.AppConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
@@ -27,6 +28,8 @@ public class ServiceModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
+
+        bind(AppConfiguration.class).in(Singleton.class);
         {
             bind(javax.validation.Validator.class).toProvider(ValidatorProvider.class).in(Singleton.class);
             ValidatorInterceptor validatorInterceptor = new ValidatorInterceptor();
