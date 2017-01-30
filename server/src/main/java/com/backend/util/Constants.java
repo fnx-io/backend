@@ -19,4 +19,6 @@ public final class Constants {
 
     // unprocessable entity
     public static final int STATUS_VALIDATION_FAILED = 422;
+
+    public static final String HEADER_FILENAME = "X-Filename";
 }

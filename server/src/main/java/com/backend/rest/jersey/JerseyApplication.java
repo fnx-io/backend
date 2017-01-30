@@ -1,5 +1,6 @@
 package com.backend.rest.jersey;
 
+import com.backend.rest.FileResource;
 import com.backend.rest.MonitoringResource;
 import com.backend.rest.UserResource;
 import com.backend.rest.secure.SystemResource;
@@ -32,6 +33,7 @@ public class JerseyApplication extends Application {
      */
     private static final List<Class<?>> resources = Arrays.asList(new Class<?>[]{
             UserResource.class,
+            FileResource.class,
             MonitoringResource.class,
 
             SystemResource.class

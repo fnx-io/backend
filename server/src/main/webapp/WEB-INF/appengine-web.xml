@@ -10,6 +10,7 @@
 
     <system-properties>
         <property name="root" value="https://fnx-awesome-backend.appspot.com/"/>
+        <property name="file.bucket" value="fnx-backend-files"/>
     </system-properties>
 
 </appengine-web-app>

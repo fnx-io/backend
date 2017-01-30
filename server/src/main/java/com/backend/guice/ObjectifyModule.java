@@ -1,5 +1,6 @@
 package com.backend.guice;
 
+import com.backend.domain.FileEntity;
 import com.backend.domain.UserEntity;
 import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.ObjectifyFilter;
@@ -18,6 +19,7 @@ public class ObjectifyModule extends ServletModule {
     static {
         JodaTimeTranslators.add(ObjectifyService.factory());
         register(UserEntity.class);
+        register(FileEntity.class);
     }
 
     @Override
