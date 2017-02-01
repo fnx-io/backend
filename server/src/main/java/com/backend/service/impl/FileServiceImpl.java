@@ -2,13 +2,18 @@ package com.backend.service.impl;
 
 import com.backend.domain.FileCategory;
 import com.backend.domain.FileEntity;
-import com.backend.service.BaseService;
-import com.backend.service.FileService;
+import com.backend.service.*;
+import com.backend.service.ListResult;
+import com.backend.service.filter.ListFilesFilter;
 import com.backend.util.conf.AppConfiguration;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.tools.cloudstorage.*;
 import com.google.common.base.Joiner;
+import com.googlecode.objectify.cmd.LoadType;
+import com.googlecode.objectify.cmd.Query;
+import io.fnx.backend.tools.authorization.AllowedForAdmins;
+import io.fnx.backend.tools.authorization.AllowedForAdminsOnly;
 import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
 import io.fnx.backend.tools.random.Randomizer;
 import org.joda.time.DateTime;
@@ -71,6 +76,14 @@ public class FileServiceImpl extends BaseService implements FileService {
         ofy().save().entity(f).now();
 
         return f;
+    }
+
+    @Override
+    @AllowedForAdmins
+    public ListResult<FileEntity> listFiles(ListFilesFilter filter) {
+        final Query<FileEntity> query = ofy().load().type(FileEntity.class);
+        final List<FileEntity> result = filter.query(query).list();
+        return filter.result(result);
     }
 
     public static String renderPublicBucketUrl(GcsFilename gcsFilename) {

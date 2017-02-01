@@ -1,14 +1,15 @@
 package com.backend.rest;
 
+import com.backend.domain.FileCategory;
+import com.backend.domain.FileEntity;
 import com.backend.service.FileService;
+import com.backend.service.ListResult;
+import com.backend.service.filter.ListFilesFilter;
 import com.backend.util.Constants;
-import io.fnx.backend.tools.authorization.PermissionDeniedException;
 import io.fnx.backend.tools.random.Randomizer;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +30,11 @@ public class FileResource extends BaseResource {
         final MediaType mediaType = headers.getMediaType();
 
         return created(fileService.storeFile(fileName, mediaType, data));
+    }
+
+    @GET
+    public ListResult<FileEntity> list(@QueryParam("category") FileCategory category) {
+        return fileService.listFiles(new ListFilesFilter(category, filterLimits()));
     }
 
     private String getFileName(List<String> filenameHeaders) {
