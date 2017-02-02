@@ -129,7 +129,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         // check that user is admin, if it is required
         if (found == null) {
             log.debug(format("No such user with email %s found", email));
-        } else if (admin && (found.getRole() == null && !found.getRole().isAdmin())) {
+        } else if (admin && (found.getRole() == null || !found.getRole().isAdmin())) {
             log.info(format("Login limited to admin only, but %s is is not an admin!", email));
         } else {
             passwordHash = found.getPasswordHash();
