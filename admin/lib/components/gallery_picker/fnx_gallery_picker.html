@@ -1,13 +1,29 @@
-<div class="row">
-  <fnx-tabs class="l6 m8 s12">
-    <fnx-tab title="Image gallery">
+<div>
+  <fnx-tabs>
+    <fnx-tab title="Image gallery" #pickImageTab>
       <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink">
         <img *ngFor="let i of listing.list" [src]="thumbnailUrl(i)" class="padding--small">
+        <div class="text--center active padding--big" *ngIf="listing.working">
+          <span class="preloader bg--white fs-xl"></span>
+        </div>
+        <div class="text--center padding--big" *ngIf="!listing.working && !listing.hasNext && listing.list.isEmpty">
+          The gallery is empty.
+        </div>
       </fnx-scroll-panel>
     </fnx-tab>
     <fnx-tab title="Upload new image">
-      <pick-image-component *ngIf="showPickImageStage" (image)="imagePicked($event)"></pick-image-component>
-      <crop-image-component *ngIf="showCropImageStage" [image]="imageRead" (cropped)="imageCropped($event)" (cancel)="cancel()"></crop-image-component>
+      <div class="padding">
+        <div *ngIf="errorMessage != null" class="s12 text--red padding--bottom">
+          {{ errorMessage }}
+        </div>
+        <pick-image-component *ngIf="showPickImageStage" (image)="imagePicked($event)"></pick-image-component>
+        <crop-image-component *ngIf="showCropImageStage" [image]="imageRead" (cropped)="imageCropped($event)" (cancel)="cancel()"></crop-image-component>
+        <div class="text--center active" *ngIf="showImageUploadStage">
+          <h5>Uploading...</h5>
+          <br/>
+          <span class="preloader bg--white fs-xl"></span>
+        </div>
+      </div>
     </fnx-tab>
   </fnx-tabs>
 </div>

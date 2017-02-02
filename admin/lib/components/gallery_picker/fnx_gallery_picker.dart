@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:admin/rest_listing_factory.dart';
 import 'package:angular2/core.dart';
 import 'package:fnx_rest/fnx_rest.dart';
+import 'package:fnx_ui/fnx_ui.dart';
 
 @Component(
   selector: 'fnx-gallery-picker',
@@ -22,7 +23,11 @@ class FnxGalleryPicker {
 
   String errorMessage;
 
-  FnxGalleryPicker(RestClient rest) {
+  FnxApp fnxApp;
+
+  @ViewChild('pickImageTab') FnxTab pickImageTab;
+
+  FnxGalleryPicker(RestClient rest, this.fnxApp) {
     this.rest = rest.child("/v1/files");
     this.listing = RestListingFactory.withPaging(this.rest.child("?category=IMAGE"));
   }
@@ -41,6 +46,7 @@ class FnxGalleryPicker {
   }
 
   void imageCropped(Rectangle<double> crop) {
+    errorMessage = null;
     stage = ImageUploadStage.UPLOAD;
     final FileReader fr = new FileReader();
     fr.readAsArrayBuffer(imageRead.file);
@@ -50,19 +56,29 @@ class FnxGalleryPicker {
 
   Future<bool> uploadImage(File file, Uint8List fileContents) async {
     RestClient rc = this.rest.child("/image").producesBinary(file.type);
-    final RestResult rr = await rc.post(fileContents, headers: {'X-Filename': file.name, 'Content-Type': file.type});
+    RestResult rr;
+    try {
+      rr = await rc.post(fileContents, headers: {'X-Filename': file.name, 'Content-Type': file.type});
+    } catch (e) {
+      rr = null;
+    }
 
-    if (rr.success) {
-      stage = ImageUploadStage.PICK;
+    stage = ImageUploadStage.PICK;
+    if (rr != null && rr.success) {
+      fnxApp.toast("Image has been uploaded.");
+      if (pickImageTab != null) pickImageTab.selectTab();
       listing.refresh();
       return true;
     } else {
+      errorMessage = "We encountered an error during the upload of your image";
+      stage = ImageUploadStage.CROP;
       return false;
     }
   }
 
   bool get showPickImageStage => stage == null || stage == ImageUploadStage.PICK;
   bool get showCropImageStage => stage == ImageUploadStage.CROP;
+  bool get showImageUploadStage => stage == ImageUploadStage.UPLOAD;
 }
 
 enum ImageUploadStage {
@@ -81,6 +97,7 @@ class PickImageStageComponent {
   @Output() EventEmitter<ImageRead> image = new EventEmitter<ImageRead>();
 
   void filePicked(File file) {
+    errorMessage = null;
     if (file == null) {
       errorMessage = 'Please pick an image to upload.';
       return;
