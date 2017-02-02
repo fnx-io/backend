@@ -27,6 +27,8 @@ class FnxGalleryPicker {
 
   @ViewChild('pickImageTab') FnxTab pickImageTab;
 
+  @Output() EventEmitter<String> picked = new EventEmitter<String>();
+
   FnxGalleryPicker(RestClient rest, this.fnxApp) {
     this.rest = rest.child("/v1/files");
     this.listing = RestListingFactory.withPaging(this.rest.child("?category=IMAGE"));
@@ -74,6 +76,17 @@ class FnxGalleryPicker {
       stage = ImageUploadStage.CROP;
       return false;
     }
+  }
+
+  void galleryImagePicked(Map<String, dynamic> imgRecord) {
+    if (imgRecord == null) return;
+    String url = imgRecord['imageUrl'];
+    if (url == null) url = imgRecord['bucketUrl'];
+    if (url == null) return;
+
+    print("Picked! $url");
+
+    picked.emit(url);
   }
 
   bool get showPickImageStage => stage == null || stage == ImageUploadStage.PICK;

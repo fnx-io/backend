@@ -1,8 +1,14 @@
+<style>
+  .gallery-image {
+    cursor: pointer;
+    display: inline-block;
+  }
+</style>
 <div>
   <fnx-tabs>
     <fnx-tab title="Image gallery" #pickImageTab>
       <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink">
-        <img *ngFor="let i of listing.list" [src]="thumbnailUrl(i)" class="padding--small">
+        <img *ngFor="let i of listing.list" (click)="galleryImagePicked(i)" [src]="thumbnailUrl(i)" class="gallery-image margin--small">
         <div class="text--center active padding--big" *ngIf="listing.working">
           <span class="preloader bg--white fs-xl"></span>
         </div>

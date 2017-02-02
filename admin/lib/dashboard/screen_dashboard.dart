@@ -7,4 +7,11 @@ class ScreenDashboard {
   AppContext appCtx;
 
   ScreenDashboard(this.appCtx);
+
+  String imgUrl;
+
+  void galleryImagePicked(String url) {
+    print("Caught: $url");
+    imgUrl = url;
+  }
 }
