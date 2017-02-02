@@ -6,7 +6,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.29.5"
+    version: "0.29.6"
   angular2:
     description:
       name: angular2
@@ -60,7 +60,7 @@ packages:
       name: code_transformers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0+2"
+    version: "0.5.1"
   collection:
     description:
       name: collection
@@ -118,14 +118,14 @@ packages:
   fnx_rest:
     description:
       ref: master
-      resolved-ref: "15fb8faf8f245161bc6309c9721aad13e064945b"
+      resolved-ref: "0fe36c5c66c500fbe4d8e693cc42a59107262eea"
       url: "https://github.com/fnx-io/fnx_rest"
     source: git
     version: "0.5.0"
   fnx_ui:
     description:
       ref: master
-      resolved-ref: "34f1e4c5756816b69ca2a956dc186b60b62a8d28"
+      resolved-ref: "15aa65b4c5e7cf280c0039dea634a90a08f730af"
       url: "https://github.com/fnx-io/fnx_ui"
     source: git
     version: "0.0.6"
