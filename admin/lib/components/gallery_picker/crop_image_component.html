@@ -1,0 +1,8 @@
+<div>
+  <fnx-image-crop *ngIf="image != null" [ratio]="1.0" [src]="image.dataUrlContents" (crop)="imageCropped($event)"></fnx-image-crop>
+  <div class="buttonbar">
+    <a href="#" class="btn" (click)="doCancel($event)">cancel</a>
+    <span class="spacer"></span>
+    <a href="#" class="btn btn--primary" (click)="doFinish($event)">upload</a>
+  </div>
+</div>

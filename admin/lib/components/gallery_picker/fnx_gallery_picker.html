@@ -1,0 +1,13 @@
+<div class="row">
+  <fnx-tabs class="l6 m8 s12">
+    <fnx-tab title="Image gallery">
+      <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink">
+        <img *ngFor="let i of listing.list" [src]="thumbnailUrl(i)" class="padding--small">
+      </fnx-scroll-panel>
+    </fnx-tab>
+    <fnx-tab title="Upload new image">
+      <pick-image-component *ngIf="showPickImageStage" (image)="imagePicked($event)"></pick-image-component>
+      <crop-image-component *ngIf="showCropImageStage" [image]="imageRead" (cropped)="imageCropped($event)" (cancel)="cancel()"></crop-image-component>
+    </fnx-tab>
+  </fnx-tabs>
+</div>
