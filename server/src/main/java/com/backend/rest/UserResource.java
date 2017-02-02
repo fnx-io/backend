@@ -60,8 +60,8 @@ public class UserResource extends BaseResource {
      */
     @POST
     @Path("/session")
-    public Response login(UserLoginDto login) {
-        final LoginResult result = userService.login(login.getEmail(), login.getPassword());
+    public Response login(UserLoginDto login, @QueryParam("admin") boolean admin) {
+        final LoginResult result = userService.login(login.getEmail(), login.getPassword(), admin);
         if (result.isSuccess()) {
             return ok(result);
         } else {

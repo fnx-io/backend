@@ -117,7 +117,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public LoginResult login(String email, String password) {
+    public LoginResult login(String email, String password, boolean admin) {
         log.debug(format("Attempting to login user with email: %s and password: %s", email, protectPwd(password)));
         if (isNullOrEmpty(email) || isNullOrEmpty(password)) {
             log.debug("User could not be authenticated, credentials empty");
@@ -125,8 +125,12 @@ public class UserServiceImpl extends BaseService implements UserService {
         }
         final UserEntity found = ofy().load().type(UserEntity.class).filter("email", email).first().now();
         String passwordHash = null;
+
+        // check that user is admin, if it is required
         if (found == null) {
             log.debug(format("No such user with email %s found", email));
+        } else if (admin && (found.getRole() == null && !found.getRole().isAdmin())) {
+            log.info(format("Login limited to admin only, but %s is is not an admin!", email));
         } else {
             passwordHash = found.getPasswordHash();
         }

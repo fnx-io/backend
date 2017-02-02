@@ -17,7 +17,7 @@ public interface UserService {
 
     UserEntity useAuthToken(String token);
 
-    LoginResult login(String email, String password);
+    LoginResult login(String email, String password, boolean admin);
 
     void logout(String authToken);
 

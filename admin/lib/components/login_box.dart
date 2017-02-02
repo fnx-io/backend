@@ -24,7 +24,7 @@ class LoginBox implements OnInit {
 
   Future<bool> onSubmit() async {
     message = null;
-    RestResult rr = await this.rest.post(formData);
+    RestResult rr = await this.rest.child("?admin=true").post(formData);
     if (rr.success) {
       String authToken = rr.data['token'];
       Map<String, dynamic> loggedUser = rr.data['user'];
@@ -32,7 +32,7 @@ class LoginBox implements OnInit {
       user.emit(loggedUser);
       return true;
     } else if (rr.status == 401) {
-      message = "No such user exists, or the password was invalid";
+      message = "No such user exists, the password was invalid, or the user is not an admin";
     }
 
     return false;
