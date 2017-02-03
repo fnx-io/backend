@@ -21,4 +21,8 @@ public final class Constants {
     public static final int STATUS_VALIDATION_FAILED = 422;
 
     public static final String HEADER_FILENAME = "X-Filename";
+    public static final String TASK_ROOT = "/api/v1/secure/tasks";
+
+    // queues
+    public static final String QUEUE_SYSTEM = "system";
 }

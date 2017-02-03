@@ -4,6 +4,9 @@ import com.backend.auth.AllowedForRoleAuthorizationGuard;
 import com.backend.auth.AllowedForTrustedAuthorizationGuard;
 import com.backend.guice.validation.ValidatorInterceptor;
 import com.backend.guice.validation.ValidatorProvider;
+import com.backend.queue.QueueProvider;
+import com.backend.queue.QueueProviderFactory;
+import com.backend.queue.TaskSubmitterFactory;
 import com.backend.service.DontValidate;
 import com.backend.service.FileService;
 import com.backend.service.Service;
@@ -12,6 +15,7 @@ import com.backend.service.impl.FileServiceImpl;
 import com.backend.service.impl.UserServiceImpl;
 import com.backend.util.conf.AppConfiguration;
 import com.google.inject.AbstractModule;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
 import io.fnx.backend.tools.authorization.*;
@@ -33,6 +37,11 @@ public class ServiceModule extends AbstractModule {
         bind(FileService.class).to(FileServiceImpl.class).in(Singleton.class);
 
         bind(AppConfiguration.class).in(Singleton.class);
+
+        install(new FactoryModuleBuilder().implement(QueueProvider.class, QueueProvider.class)
+                .build(QueueProviderFactory.class));
+        bind(TaskSubmitterFactory.class).in(Singleton.class);
+
         {
             bind(javax.validation.Validator.class).toProvider(ValidatorProvider.class).in(Singleton.class);
             ValidatorInterceptor validatorInterceptor = new ValidatorInterceptor();
