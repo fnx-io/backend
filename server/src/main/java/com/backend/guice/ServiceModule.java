@@ -7,10 +7,8 @@ import com.backend.guice.validation.ValidatorProvider;
 import com.backend.queue.QueueProvider;
 import com.backend.queue.QueueProviderFactory;
 import com.backend.queue.TaskSubmitterFactory;
-import com.backend.service.DontValidate;
-import com.backend.service.FileService;
-import com.backend.service.Service;
-import com.backend.service.UserService;
+import com.backend.service.*;
+import com.backend.service.impl.DelayedTaskServiceImpl;
 import com.backend.service.impl.FileServiceImpl;
 import com.backend.service.impl.UserServiceImpl;
 import com.backend.util.conf.AppConfiguration;
@@ -35,6 +33,7 @@ public class ServiceModule extends AbstractModule {
     protected void configure() {
         bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
         bind(FileService.class).to(FileServiceImpl.class).in(Singleton.class);
+        bind(DelayedTaskService.class).to(DelayedTaskServiceImpl.class).in(Singleton.class);
 
         bind(AppConfiguration.class).in(Singleton.class);
 

@@ -4,6 +4,7 @@ import com.backend.rest.FileResource;
 import com.backend.rest.MonitoringResource;
 import com.backend.rest.UserResource;
 import com.backend.rest.secure.SystemResource;
+import com.backend.rest.secure.tasks.DelayedTasksResource;
 import com.google.common.collect.Sets;
 
 import javax.ws.rs.core.Application;
@@ -36,6 +37,7 @@ public class JerseyApplication extends Application {
             FileResource.class,
             MonitoringResource.class,
 
-            SystemResource.class
+            SystemResource.class,
+            DelayedTasksResource.class
     });
 }
