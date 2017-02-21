@@ -62,7 +62,6 @@ public class ServiceModule extends AbstractModule {
         final ArrayList<AuthorizationGuard> guards = new ArrayList<>();
         guards.add(new AllowedForAuthenticatedAuthorizationGuard());
         guards.add(new AllowedForAdminsAuthorizationGuard());
-        guards.add(new AllowedForAdminsOnlyAuthorizationGuard());
         final AllowedForRoleAuthorizationGuard roleGuard = new AllowedForRoleAuthorizationGuard();
         guards.add(roleGuard);
         final AllowedForOwnerAuthorizationGuard ownerGuard = new AllowedForOwnerAuthorizationGuard();
