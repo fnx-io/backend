@@ -27,7 +27,7 @@ public class Filter {
     }
 
     public <T> ListResult<T> result(List<T> list) {
-        return new ListResult(list, params.getPage());
+        return new ListResult<T>(list, params.getPage());
     }
 
     public <T> Query<T> filterQuery(Query<T> query) {
