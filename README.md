@@ -10,7 +10,8 @@ The backend has two parts: the API server (java 7 compatible) and the admin app 
    - installed [maven](https://maven.apache.org/) (3.3 +-): `brew install maven` (MacOS + Homebrew)
    - installed dart with dartium (preferably for nice dev experience) `brew install dart --with-dartium`
  2. `git clone https://github.com/fnx-io/backend new-app && cd new-app`
- 3. After the project is imported, rename `com.backend` to appropriate package
+ 3. After the project is imported, rename `io.fnx.backend` packages, log4j logging configuration and web.xml to appropriate package
+ / name
  4. Change group id for your new project in [server/pom.xml](server/pom.xml)
  5. Change appengine project id in [server/src/main/webapp/WEB-INF/appengine-web.xml](server/src/main/webapp/WEB-INF/appengine-web.xml)
  6. Download dart project dependencies `cd admin && pub install; cd ..`

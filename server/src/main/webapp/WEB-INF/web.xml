@@ -5,11 +5,11 @@
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
-    <display-name>Complete Doodle</display-name>
+    <display-name>FNX backend</display-name>
 
     <listener>
         <listener-class>
-            com.backend.guice.GuiceConfig
+            io.fnx.backend.guice.GuiceConfig
         </listener-class>
     </listener>
 
