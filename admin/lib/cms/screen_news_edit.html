@@ -13,6 +13,10 @@
             <fnx-text [(ngModel)]="entity['data']['annotation']"></fnx-text>
         </fnx-input>
 
+        <fnx-input label="Annotation2" [required]="true">
+            <fnx-textarea [(ngModel)]="entity['data']['annotation2']"></fnx-textarea>
+        </fnx-input>
+
 
         <fnx-submit-bar [back]="true"></fnx-submit-bar>
     </fnx-form>

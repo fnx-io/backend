@@ -1,0 +1,10 @@
+<div class="text--center padding" style="opacity: 0.6">
+    <p *ngIf="listing.working">
+        <span class="preloader bg--white"></span>
+    </p>
+    <p *ngIf="!listing.working">
+        <span *ngIf="listing.isEmpty()">The list is empty.</span>
+        <span *ngIf="!listing.isEmpty() && !listing.hasNext">You are at the end of the list.</span>
+        <a (click)="listing.refresh()">Refresh</a>
+    </p>
+</div>
