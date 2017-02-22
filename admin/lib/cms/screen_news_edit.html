@@ -1,0 +1,22 @@
+<!-- Screen: NewsEdit -->
+<div class="padding fit row">
+
+    <fnx-form (submit)="saveArticle($event)" *ngIf="entity != null" class="l8 m12 s12">
+
+        <fnx-input label="Name" [required]="true">
+            <fnx-text [(ngModel)]="entity['name']"></fnx-text>
+        </fnx-input>
+
+        <hr>
+
+        <fnx-input label="Annotation" [required]="true">
+            <fnx-text [(ngModel)]="entity['data']['annotation']"></fnx-text>
+        </fnx-input>
+
+
+        <fnx-submit-bar [back]="true"></fnx-submit-bar>
+    </fnx-form>
+
+</div>
+
+

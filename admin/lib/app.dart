@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:admin/app_context.dart';
 import 'package:admin/auth.dart' as auth;
+import 'package:admin/cms/module_news.dart';
 import 'package:admin/dashboard/screen_dashboard.dart';
 import 'package:admin/user/module_user.dart';
 
@@ -17,7 +18,8 @@ import 'package:logging/logging.dart';
 @Component(selector: 'app', templateUrl: 'app.html')
 @RouteConfig(const [
   const Route(path: '/dashboard', name: 'Dashboard', component: ScreenDashboard, useAsDefault: true),
-  const Route(path: '/user/...', name: 'User', component: ModuleUser)
+  const Route(path: '/user/...', name: 'User', component: ModuleUser),
+  const Route(path: "/cms/news/...", name: "CmsNews", component: ModuleNews)
 ])
 class App {
 

@@ -1,5 +1,6 @@
 package io.fnx.backend.rest.jersey;
 
+import io.fnx.backend.rest.CmsArticleResource;
 import io.fnx.backend.rest.FileResource;
 import io.fnx.backend.rest.MonitoringResource;
 import io.fnx.backend.rest.UserResource;
@@ -36,6 +37,7 @@ public class JerseyApplication extends Application {
             UserResource.class,
             FileResource.class,
             MonitoringResource.class,
+		    CmsArticleResource.class,
 
             SystemResource.class,
             DelayedTasksResource.class

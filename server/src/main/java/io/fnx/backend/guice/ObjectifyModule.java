@@ -1,5 +1,6 @@
 package io.fnx.backend.guice;
 
+import io.fnx.backend.domain.CmsArticleEntity;
 import io.fnx.backend.domain.FileEntity;
 import io.fnx.backend.domain.UserEntity;
 import com.google.inject.servlet.ServletModule;
@@ -20,6 +21,7 @@ public class ObjectifyModule extends ServletModule {
         JodaTimeTranslators.add(ObjectifyService.factory());
         register(UserEntity.class);
         register(FileEntity.class);
+	    register(CmsArticleEntity.class);
     }
 
     @Override

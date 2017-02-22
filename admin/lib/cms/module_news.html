@@ -1,0 +1,11 @@
+<div class="layout--header">
+    <header>
+        <nav class="navbar padding--fab bg--fnx--d1">
+            <h1>News</h1>
+            <a [routerLink]="['NewsEdit',{id: 'create'}]" class="btn--fab">add</a>
+        </nav>
+    </header>
+    <main class="padding">
+        <router-outlet></router-outlet>
+    </main>
+</div>

@@ -44,3 +44,24 @@ To make the user administrator, access protected URL [http://localhost:8081/api/
 ```
 
 Notice the role `ADMIN` attribute. You can use this your information into the [admin app](http://localhost:8081/admin)
+
+## Development
+
+### New entity
+
+Create following:
+
+- entity class (package domain)
+- entity service and it's implementation - remember to annotate implementation methods with `@AllowedForFooBar` annotations
+- entity REST resource
+
+And register objects in:
+
+- ObjectifyModule (entity)
+- ServiceModule (service and implementation)
+- JerseyApplication (REST resource)
+
+Consider using scaffolding tool in Dart administration:
+
+     pub run fnx_ui:scaffold_module super_entity super_entity_listing super_entity_edit
+     
