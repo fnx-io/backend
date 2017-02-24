@@ -14,11 +14,6 @@ public class AuditLogEventFilter extends Filter {
         this.eventTarget = eventTarget;
     }
 
-    public AuditLogEventFilter(Long eventTargetId, FilterLimits params) {
-        super(params);
-        this.eventTarget = null; //TODO kurva
-    }
-
     @Override
     public <T> Query<T> filterQuery(Query<T> query) {
         if (eventTarget != null) {

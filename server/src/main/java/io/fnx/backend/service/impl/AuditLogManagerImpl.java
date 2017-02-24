@@ -26,7 +26,7 @@ public class AuditLogManagerImpl extends BaseService implements AuditLogManager 
         event.setId(auditLogEventKey.getId());
         event.setEventTarget(eventTarget);
         event.setMessage(eventMessage);
-        event.setChangedBy(cc().getLoggedUser().getKey());
+        event.setChangedBy(cc().getLoggedUser().getKey()); // TODO null
         event.setOccuredOn(DateTime.now());
 
         return ofy().transact(new Work<AuditLogEventEntity>() {
@@ -36,12 +36,6 @@ public class AuditLogManagerImpl extends BaseService implements AuditLogManager 
                 return event;
             }
         });
-    }
-
-    @Override
-    public AuditLogEventEntity findById(Long id) {
-        checkArgument(id != null, "Event id must not be null!");
-        return ofy().load().key(AuditLogEventEntity.createKey(id)).now();
     }
 
     @Override

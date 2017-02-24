@@ -8,8 +8,6 @@ public interface AuditLogManager {
 
     AuditLogEventEntity createAuditLogEvent(Key eventTarget, String eventMessage);
 
-    AuditLogEventEntity findById(Long id);
-
     ListResult<AuditLogEventEntity> listAuditLogEvents(AuditLogEventFilter filter);
 
 }

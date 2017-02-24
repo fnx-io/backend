@@ -22,14 +22,9 @@ public class AuditLogEventResource extends BaseResource {
 	}
 
 	@GET
-	@Path("/{id}")
-	public AuditLogEventEntity findById(@PathParam("id") Long id) {
-		return auditLogManager.findById(id);
-	}
-	
-	@GET
 	public ListResult<AuditLogEventEntity> list(@QueryParam("eventTargetId") Long eventTargetId) {
-		return auditLogManager.listAuditLogEvents(new AuditLogEventFilter(eventTargetId, filterLimits()));
+		return auditLogManager.listAuditLogEvents(new AuditLogEventFilter(null, filterLimits()));
 	}
+	//TODO: zadratovat typ clanku sem
 
 }
