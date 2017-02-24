@@ -1,5 +1,5 @@
-<div class="flex--column padding fit">
-  <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink">
+<div class="flex--column fit">
+  <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink padding">
     <table class="table--stripes" *ngIf="!listing.isEmpty()">
       <thead>
         <tr>
