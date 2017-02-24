@@ -8,10 +8,7 @@ import io.fnx.backend.queue.QueueProvider;
 import io.fnx.backend.queue.QueueProviderFactory;
 import io.fnx.backend.queue.TaskSubmitterFactory;
 import io.fnx.backend.service.*;
-import io.fnx.backend.service.impl.CmsArticleServiceImpl;
-import io.fnx.backend.service.impl.DelayedTaskServiceImpl;
-import io.fnx.backend.service.impl.FileServiceImpl;
-import io.fnx.backend.service.impl.UserServiceImpl;
+import io.fnx.backend.service.impl.*;
 import io.fnx.backend.util.conf.AppConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
@@ -34,7 +31,8 @@ public class ServiceModule extends AbstractModule {
     protected void configure() {
         bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
         bind(FileService.class).to(FileServiceImpl.class).in(Singleton.class);
-	    bind(CmsArticleService.class).to(CmsArticleServiceImpl.class).in(Singleton.class);
+        bind(AuditLogManager.class).to(AuditLogManagerImpl.class).in(Singleton.class);
+        bind(CmsArticleService.class).to(CmsArticleServiceImpl.class).in(Singleton.class);
         bind(DelayedTaskService.class).to(DelayedTaskServiceImpl.class).in(Singleton.class);
 
         bind(AppConfiguration.class).in(Singleton.class);

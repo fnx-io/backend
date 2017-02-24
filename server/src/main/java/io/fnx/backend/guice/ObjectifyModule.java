@@ -7,6 +7,7 @@ import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.impl.translate.opt.joda.JodaTimeTranslators;
+import io.fnx.backend.domain.eventlog.AuditLogEventEntity;
 
 import javax.inject.Singleton;
 
@@ -21,6 +22,7 @@ public class ObjectifyModule extends ServletModule {
         JodaTimeTranslators.add(ObjectifyService.factory());
         register(UserEntity.class);
         register(FileEntity.class);
+        register(AuditLogEventEntity.class);
 	    register(CmsArticleEntity.class);
     }
 

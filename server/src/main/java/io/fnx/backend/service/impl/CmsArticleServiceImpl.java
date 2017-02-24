@@ -1,9 +1,11 @@
 package io.fnx.backend.service.impl;
 
+import com.google.inject.Inject;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
 import io.fnx.backend.domain.CmsArticleEntity;
-import io.fnx.backend.domain.FileEntity;
+import io.fnx.backend.domain.eventlog.AuditLogEventEntity;
+import io.fnx.backend.service.AuditLogManager;
 import io.fnx.backend.service.BaseService;
 import io.fnx.backend.service.CmsArticleService;
 import io.fnx.backend.service.ListResult;
@@ -20,6 +22,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class CmsArticleServiceImpl extends BaseService implements CmsArticleService {
 
     private static final Logger log = LoggerFactory.getLogger(CmsArticleServiceImpl.class);
+
+    private final AuditLogManager auditLogManager;
+
+    @Inject
+	public CmsArticleServiceImpl(AuditLogManager auditLogManager) {
+		this.auditLogManager = auditLogManager;
+	}
 
 	@Override
 	@AllowedForAdmins
@@ -59,6 +68,10 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 				articleEntity.setCreatedBy(persistent.getCreatedBy());
 				articleEntity.setCreated(persistent.getCreated());
 				ofy().save().entity(articleEntity).now();
+
+				final String msg = "Article has been updated.";
+				auditLogManager.createAuditLogEvent(articleEntity.getKey(), msg);
+
 				return articleEntity;
 			}
 		});
