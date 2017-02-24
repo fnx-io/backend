@@ -3,20 +3,15 @@
 
     <fnx-form (submit)="saveArticle($event)" *ngIf="entity != null" class="l8 m12 s12">
 
-        <fnx-input label="Name" [required]="true">
-            <fnx-text [(ngModel)]="entity['name']"></fnx-text>
+        <fnx-input label="Name">
+            <fnx-text [(ngModel)]="entity['name']" [required]="true"></fnx-text>
         </fnx-input>
 
         <hr>
 
-        <fnx-input label="Annotation" [required]="true">
-            <fnx-text [(ngModel)]="entity['data']['annotation']"></fnx-text>
+        <fnx-input label="Annotation">
+            <fnx-wysiwyg-poor [(ngModel)]="entity['data']['annotation']" [required]="true"></fnx-wysiwyg-poor>
         </fnx-input>
-
-        <fnx-input label="Annotation2" [required]="true">
-            <fnx-textarea [(ngModel)]="entity['data']['annotation2']"></fnx-textarea>
-        </fnx-input>
-
 
         <fnx-submit-bar [back]="true"></fnx-submit-bar>
     </fnx-form>
