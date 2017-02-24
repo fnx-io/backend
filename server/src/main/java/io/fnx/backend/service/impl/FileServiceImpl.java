@@ -46,7 +46,7 @@ public class FileServiceImpl extends BaseService implements FileService {
 
     @Override
     @AllowedForAuthenticated
-    public FileEntity storeFile(String fileName, MediaType mediaType, InputStream inputStream) {
+    public FileEntity storeFile(String fileName, String set, MediaType mediaType, InputStream inputStream) {
         checkArgument(!isNullOrEmpty(fileName), "Missing file name");
         checkNotNull(inputStream, "Missing file data");
         if (mediaType == null) mediaType = MediaType.APPLICATION_OCTET_STREAM_TYPE;
@@ -60,8 +60,11 @@ public class FileServiceImpl extends BaseService implements FileService {
         f.setMediaType(mediaType.toString());
         if (f.isImage()) {
             f.setCategory(FileCategory.IMAGE);
+	        checkArgument(!isNullOrEmpty(set), "When file is an image, you must specify 'set'");
+	        f.setSet(set);
         } else {
             f.setCategory(FileCategory.OTHER);
+	        f.setSet(set); // set optional ... ?
         }
 
         final GcsFilename gcsFilename = storeInBucket(fileBucket, f.getId(), f.getMediaType(), inputStream);

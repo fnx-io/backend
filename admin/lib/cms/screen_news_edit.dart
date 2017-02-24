@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:html';
+import 'package:admin/components/gallery_picker/fnx_gallery_picker.dart';
 import 'package:angular2/core.dart';
 import 'package:angular2/router.dart';
 import 'package:fnx_rest/fnx_rest.dart';
@@ -22,6 +23,11 @@ class ScreenNewsEdit {
   Router router;
 
   Map<String, dynamic> entity;
+
+  ///
+  /// Defines image set mainly the ratio you want to enforce in certain types of images.
+  ///
+  FnxImageSet imageSet = new FnxImageSet("news", "News", 1.3333);
 
   ScreenNewsEdit(RestClient rootRest, this.router, RouteParams params, this.fnxApp) {
     rest = rootRest.child('/v1/cms/articles');
@@ -55,7 +61,7 @@ class ScreenNewsEdit {
       fnxApp.toast('Article has been created');
       router.navigate(['NewsListing']);
       return true;
-    } else if (rr.data['error'] && rr.data['type'] == 'UniqueValueViolation') {
+    } else if (rr.data['error']) {
       fnxApp.alert('User with such email already exists!');
     } else {
       fnxApp.alert('Error while trying to save user');

@@ -22,14 +22,15 @@
 
         -->
         <fnx-input label="Main image" errorMessage="Main image is mandatory">
-            <fnx-image [(ngModel)]="entity['data']['image']" [required]="true"></fnx-image>
+            <fnx-image [(ngModel)]="entity['data']['image']" [required]="true" [imageSet]="imageSet"></fnx-image>
         </fnx-input>
-
+        
         <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
             <fnx-wysiwyg-poor [(ngModel)]="entity['data']['annotation']" [required]="true"></fnx-wysiwyg-poor>
         </fnx-input>
 
         <fnx-submit-bar [back]="true"></fnx-submit-bar>
+        
     </fnx-form>
 
 </div>

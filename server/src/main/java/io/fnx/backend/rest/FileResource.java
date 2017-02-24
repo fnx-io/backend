@@ -31,18 +31,18 @@ public class FileResource extends BaseResource {
 
     @POST
     @Consumes(MediaType.WILDCARD)
-    public Response createFile(@Context HttpHeaders headers, @Context Request request, InputStream data) {
+    public Response createFile(@Context HttpHeaders headers, @Context Request request, @QueryParam("set") String set, InputStream data) {
         final String fileName = getFileName(headers.getRequestHeader(Constants.HEADER_FILENAME));
         final MediaType mediaType = headers.getMediaType();
 
-        return created(fileService.storeFile(fileName, mediaType, data));
+        return created(fileService.storeFile(fileName, set, mediaType, data));
     }
 
     @POST
     @Path("/image")
     @Consumes("image/*")
     public Response createImageFile(@Context HttpHeaders headers, @Context Request request, InputStream data,
-
+                                    @QueryParam("set") String set,
                                     @QueryParam("x") double x, @QueryParam("y") double y,
                                     @QueryParam("widthRatio") double widthRatio, @QueryParam("heightRatio") double heightRatio) throws IOException {
 
@@ -56,21 +56,21 @@ public class FileResource extends BaseResource {
         byte[] cropped = crop(image, x, y, widthRatio, heightRatio);
         image = null;
 
-        return createFile(headers, request, new ByteArrayInputStream(cropped));
+        return createFile(headers, request, set, new ByteArrayInputStream(cropped));
     }
 
     private byte[] crop(byte[] image, double x, double y, double widthRatio, double heightRatio) {
         // no crop if the ratio is not set
         if (widthRatio == 0 || heightRatio == 0) return image;
         final Image img = ImagesServiceFactory.makeImage(image);
-        final Transform cropTransform = ImagesServiceFactory.makeCrop(x, y, widthRatio, heightRatio);
+        final Transform cropTransform = ImagesServiceFactory.makeCrop(x, y, x+widthRatio, y+heightRatio);
         final Image cropped = ImagesServiceFactory.getImagesService().applyTransform(cropTransform, img);
         return cropped.getImageData();
     }
 
     @GET
-    public ListResult<FileEntity> list(@QueryParam("category") FileCategory category) {
-        return fileService.listFiles(new ListFilesFilter(category, filterLimits()));
+    public ListResult<FileEntity> list(@QueryParam("category") FileCategory category, @QueryParam("set") String set) {
+        return fileService.listFiles(new ListFilesFilter(category, set, filterLimits()));
     }
 
     private String getFileName(List<String> filenameHeaders) {

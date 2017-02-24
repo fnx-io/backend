@@ -118,7 +118,7 @@ packages:
   fnx_rest:
     description:
       ref: master
-      resolved-ref: "0fe36c5c66c500fbe4d8e693cc42a59107262eea"
+      resolved-ref: "7d0e5989084827cd0f3e643fe2af6f9a599354a5"
       url: "https://github.com/fnx-io/fnx_rest"
     source: git
     version: "0.5.0"

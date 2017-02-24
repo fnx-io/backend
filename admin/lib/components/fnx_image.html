@@ -12,7 +12,7 @@
 <fnx-modal *ngIf="openPicker" (close)="closeImagePicker()">
     <h3 header>Choose or upload an image</h3>
     <div main style="min-height: 50vh; height: 100%">
-        <fnx-gallery-picker (picked)="pickedImage($event)"></fnx-gallery-picker>
+        <fnx-gallery-picker (picked)="pickedImage($event)" [imageSet]="imageSet"></fnx-gallery-picker>
     </div>
     <div footer class="flex--row padding--top">
         &nbsp;
