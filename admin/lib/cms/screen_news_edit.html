@@ -3,13 +3,29 @@
 
     <fnx-form (submit)="saveArticle($event)" *ngIf="entity != null" class="l8 m12 s12">
 
-        <fnx-input label="Name">
+        <!--
+            name je primo soucastni entity CmsArticleEntity
+        -->
+        <fnx-input label="Name" errorMessage="Name is mandatory">
             <fnx-text [(ngModel)]="entity['name']" [required]="true"></fnx-text>
         </fnx-input>
 
-        <hr>
 
-        <fnx-input label="Annotation">
+        <!--
+            Vsechny dalsi polozky clanku se ukladaji do mapy "data", tzn. jakekoliv rozsireni obsahu clanku
+            o dalsi polozky se dela proste pridanim inputu tady:
+
+            [(ngModel)]="entity['data']['neco_novyho']
+            [(ngModel)]="entity['data']['neco_dalsiho_novyho']
+
+            A tim to hasne, do datastore se to uz ulozi.
+
+        -->
+        <fnx-input label="Main image" errorMessage="Main image is mandatory">
+            <fnx-image [(ngModel)]="entity['data']['image']" [required]="true"></fnx-image>
+        </fnx-input>
+
+        <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
             <fnx-wysiwyg-poor [(ngModel)]="entity['data']['annotation']" [required]="true"></fnx-wysiwyg-poor>
         </fnx-input>
 
