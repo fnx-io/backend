@@ -68,8 +68,12 @@ class FnxGalleryPicker {
     stage = ImageUploadStage.PICK;
     if (rr != null && rr.success) {
       fnxApp.toast("Image has been uploaded.");
+      picked.emit(rr.data['imageUrl']);
+      /*
       if (pickImageTab != null) pickImageTab.selectTab();
+      print(rr.data['imageUrl']);
       listing.refresh();
+      */
       return true;
     } else {
       errorMessage = "We encountered an error during the upload of your image";
