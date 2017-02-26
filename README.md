@@ -65,3 +65,37 @@ Consider using scaffolding tool in Dart administration:
 
      pub run fnx_ui:scaffold_module super_entity super_entity_listing super_entity_edit
      
+### Content Management System
+     
+Backend project template contains support for basic CMS (`CmsArticleEntity`). Structure of an article
+is defined in Dart backend administration, and it's stored in `Map<String, Object> data`. 
+Different kinds of articles are distinguished by `String type` property.
+In Dart administration, type is taken from routing variable, see the main menu in `app.html`:
+
+    <li><a [routerLink]="['Cms', {'type':'news'}]">News</a></li>
+    <li><a [routerLink]="['Cms', {'type':'events'}]">Events</a></li>
+
+Use the type value to adjust content of article form in `screen_cms_edit.html` or content of article preview in
+`screen_cms_listing.html`:
+
+    <fnx-input label="Main image" *ngIf="type == 'news'">
+        <fnx-image [(ngModel)]="entity['data']['image']" [required]="true" [imageSet]="imageSet"></fnx-image>
+    </fnx-input>
+
+    <fnx-input label="Event date" *ngIf="type == 'events'">
+        <fnx-date [(ngModel)]="entity['data']['eventDate']" [dateTime]="true"></fnx-date>
+    </fnx-input>
+
+This allows you to easily customize content of different types of articles, as well as share some basic properties among
+different types of articles (HTML meta, project specific meta data, etc.).
+
+
+It's very convenient, but it also might be limiting. In such case simply create new module and
+listing and edit screens. It's also completely legal to extends `CmsArticleEntity` itself,
+specially when you need to search or order by some of the article properties.
+
+### Files and images
+
+### Audit logs
+
+     
