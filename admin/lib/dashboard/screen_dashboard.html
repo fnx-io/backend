@@ -9,5 +9,5 @@
       <img [src]="imgUrl"/>
     </div>
   </div>
-  <fnx-gallery-picker *ngIf="imgUrl == null" (picked)="galleryImagePicked($event)"></fnx-gallery-picker>
+  <fnx-gallery-picker *ngIf="imgUrl == null" [imageSet]="imageSet" (picked)="galleryImagePicked($event)"></fnx-gallery-picker>
 </main>
