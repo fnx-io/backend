@@ -3,6 +3,7 @@ package io.fnx.backend.rest;
 import com.googlecode.objectify.Key;
 import io.fnx.backend.auth.CallContext;
 import io.fnx.backend.domain.CmsArticleEntity;
+import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.service.CmsArticleService;
 import io.fnx.backend.service.ListResult;
@@ -61,7 +62,10 @@ public class CmsArticleResource extends BaseResource {
 	}
 
 
-	static HydrationRecipe<CmsArticleEntity, CallContext> RECIPE = new SimpleHydrationRecipe<>(new ArticleHydrationStep());
+	static HydrationRecipe<CmsArticleEntity, CallContext> RECIPE = new SimpleHydrationRecipe<>(
+			new ArticleHydrationStep(),
+			new ExamplePrivacyStep()
+	);
 	
 	private static class ArticleHydrationStep implements HydrationRecipeStep<CmsArticleEntity, CallContext> {
 
@@ -77,6 +81,22 @@ public class CmsArticleResource extends BaseResource {
 		public void executeStep(CmsArticleEntity articleEntity, CallContext callContext, Map<Key<Object>, Object> map) {
 			UserEntity author = (UserEntity) map.get(articleEntity.getCreatedBy());
 			articleEntity.setAuthorName(author.getName());
+		}
+	}
+
+	private static class ExamplePrivacyStep implements HydrationRecipeStep<CmsArticleEntity, CallContext> {
+
+		@Override
+		public List<Key<?>> getDependencies(CmsArticleEntity articleEntity, CallContext callContext) {
+			// no dependencies needed
+			return null;
+		}
+
+		@Override
+		public void executeStep(CmsArticleEntity articleEntity, CallContext callContext, Map<Key<Object>, Object> map) {
+			if (callContext.getCurrentRole() != Role.ADMIN) {
+				// articleEntity.sensitiveInfo = null
+			}
 		}
 	}
 
