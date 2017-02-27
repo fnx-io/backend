@@ -3,6 +3,8 @@
 
     <fnx-form (submit)="saveArticle($event)" *ngIf="entity != null" class="l8 m12 s12">
 
+        <span *ng-if="entity['id'] != null">test</span>
+
         <!--
             name je primo soucastni entity CmsArticleEntity
         -->

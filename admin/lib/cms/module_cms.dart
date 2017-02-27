@@ -10,7 +10,7 @@ import 'package:admin/cms/screen_cms_edit.dart';
   const Route(path: '/edit/:id', name: 'CmsEdit', component: ScreenCmsEdit)
 ])
 class ModuleCms implements CanReuse {
-  
+
   RouteParams params;
 
   ///

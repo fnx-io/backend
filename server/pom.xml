@@ -189,7 +189,7 @@
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.version}</version>
                 <configuration>
-                    <version>${app.version}</version>
+                    <version>${appengine.version}</version>
                 </configuration>
             </plugin>
         </plugins>

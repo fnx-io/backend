@@ -125,7 +125,7 @@ packages:
   fnx_ui:
     description:
       ref: master
-      resolved-ref: "0f6f08029802e87180b765cf6ded28ca7bc3bc49"
+      resolved-ref: c957e0f3d041744a23d9372b10a546261dcebf64
       url: "https://github.com/fnx-io/fnx_ui"
     source: git
     version: "0.0.6"
