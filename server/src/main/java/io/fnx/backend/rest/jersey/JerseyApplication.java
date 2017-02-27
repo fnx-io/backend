@@ -34,7 +34,6 @@ public class JerseyApplication extends Application {
             UserResource.class,
             FileResource.class,
             MonitoringResource.class,
-            AuditLogEventResource.class,
 		    CmsArticleResource.class,
 
             SystemResource.class,

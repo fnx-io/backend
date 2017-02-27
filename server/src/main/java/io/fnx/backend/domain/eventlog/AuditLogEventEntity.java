@@ -17,6 +17,7 @@ public class AuditLogEventEntity {
     @Id
     private Long id;
 
+    @Index
     private Key eventTarget;
     
     private String message;

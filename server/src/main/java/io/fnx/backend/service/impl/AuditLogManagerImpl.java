@@ -1,5 +1,6 @@
 package io.fnx.backend.service.impl;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
@@ -20,13 +21,19 @@ public class AuditLogManagerImpl extends BaseService implements AuditLogManager 
     @Override
     public AuditLogEventEntity createAuditLogEvent(Key eventTarget, String eventMessage) {
         checkArgument(eventTarget != null, "Target of event to log must not be empty!");
+        checkArgument(!Strings.isNullOrEmpty(eventMessage), "Event message must not be empty!");
 
         final Key<AuditLogEventEntity> auditLogEventKey = ofy().factory().allocateId(AuditLogEventEntity.class);
         final AuditLogEventEntity event = new AuditLogEventEntity();
         event.setId(auditLogEventKey.getId());
         event.setEventTarget(eventTarget);
         event.setMessage(eventMessage);
-        event.setChangedBy(cc().getLoggedUser().getKey()); // TODO null
+        final UserEntity user = cc().getLoggedUser();
+        if (user == null) {
+            // TODO: anonynomous user
+        } else {
+            event.setChangedBy(user.getKey());
+        }
         event.setOccuredOn(DateTime.now());
 
         return ofy().transact(new Work<AuditLogEventEntity>() {

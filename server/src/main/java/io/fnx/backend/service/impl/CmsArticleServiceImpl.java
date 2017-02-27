@@ -4,13 +4,11 @@ import com.google.inject.Inject;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
 import io.fnx.backend.domain.CmsArticleEntity;
-import io.fnx.backend.domain.eventlog.AuditLogEventEntity;
 import io.fnx.backend.service.AuditLogManager;
 import io.fnx.backend.service.BaseService;
 import io.fnx.backend.service.CmsArticleService;
 import io.fnx.backend.service.ListResult;
 import io.fnx.backend.service.filter.CmsArticleFilter;
-import io.fnx.backend.tools.auth.Principal;
 import io.fnx.backend.tools.authorization.AllowedForAdmins;
 import io.fnx.backend.tools.hydration.HydrationContext;
 import io.fnx.backend.tools.hydration.Hydrator;
@@ -18,7 +16,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -29,12 +26,7 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 
 	private Hydrator hydrator;
 
-    private final AuditLogManager auditLogManager;
-
-    @Inject
-	public CmsArticleServiceImpl(AuditLogManager auditLogManager) {
-		this.auditLogManager = auditLogManager;
-	}
+    private AuditLogManager auditLogManager;
 
 	@Override
 	@AllowedForAdmins
@@ -96,6 +88,11 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 	@Inject
 	public void setHydrator(Hydrator hydrator) {
 		this.hydrator = hydrator;
+	}
+
+	@Inject
+	public void setAuditLogManager(AuditLogManager auditLogManager) {
+		this.auditLogManager = auditLogManager;
 	}
 
 }
