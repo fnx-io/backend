@@ -21,15 +21,21 @@
             A tim to hasne, do datastore se to uz ulozi.
 
         -->
-        <fnx-input label="Main image" errorMessage="Main image is mandatory">
-            <fnx-image [(ngModel)]="entity['data']['image']" [required]="true"></fnx-image>
+        <fnx-input label="Main image" errorMessage="Main image is mandatory" *ngIf="type == 'news'">
+            <fnx-image [(ngModel)]="entity['data']['image']" [required]="true" [imageSet]="imageSet"></fnx-image>
         </fnx-input>
 
+        <fnx-input label="Event date" errorMessage="Event date is mandatory" *ngIf="type == 'events'">
+            <fnx-date [(ngModel)]="entity['data']['eventDate']" [dateTime]="true"></fnx-date>
+        </fnx-input>
+        
         <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
-            <fnx-wysiwyg-poor [(ngModel)]="entity['data']['annotation']" [required]="true"></fnx-wysiwyg-poor>
+            <fnx-wysiwyg-rich [(ngModel)]="entity['data']['annotation']" [required]="true"
+                heightEm="15" maxWidthEm="50"></fnx-wysiwyg-rich>
         </fnx-input>
 
         <fnx-submit-bar [back]="true"></fnx-submit-bar>
+        
     </fnx-form>
 
 </div>

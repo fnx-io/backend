@@ -8,4 +8,9 @@
         <property name="type" direction="asc"/>
         <property name="created" direction="desc"/>
     </datastore-index>
+    <datastore-index kind="FileEntity" ancestor="false" source="manual">
+        <property name="category" direction="asc"/>
+        <property name="set" direction="asc"/>
+        <property name="uploaded" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>

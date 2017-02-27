@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:admin/components/gallery_picker/fnx_gallery_picker.dart';
 import 'package:admin/rest_listing_factory.dart';
 import 'package:angular2/angular2.dart';
 import 'package:angular2/core.dart';
@@ -22,10 +23,20 @@ class FnxImage extends FnxInputComponent implements ControlValueAccessor, OnInit
   @Input()
   bool required = false;
 
+  @Input()
+  FnxImageSet imageSet;
+
   bool openPicker = false;
   bool openDetail = false;
 
   FnxImage(FnxForm form, FnxInput wrapper) : super(form, wrapper);
+
+
+  @override
+  ngOnInit() {
+    super.ngOnInit();
+    if (imageSet == null) throw "You must specify 'set' attribute (instance of FnxImageSet)";
+  }
 
   void openImagePicker(Event e) {
     e.stopPropagation();

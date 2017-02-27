@@ -32,6 +32,9 @@ public class FileEntity {
     @Index
     private FileCategory category;
 
+    @Index
+    private String set; //a.k.a. folder!
+
     private Key<UserEntity> uploader;
     @Index
     private DateTime uploaded;
@@ -116,4 +119,12 @@ public class FileEntity {
     public String getMediaType() {
         return mediaType;
     }
+
+	public String getSet() {
+		return set;
+	}
+
+	public void setSet(String set) {
+		this.set = set;
+	}
 }

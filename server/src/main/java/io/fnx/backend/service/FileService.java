@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 public interface FileService {
 
-    FileEntity storeFile(String fileName, MediaType mediaType, InputStream inputStream);
+    FileEntity storeFile(String fileName, String set, MediaType mediaType, InputStream inputStream);
 
     ListResult<FileEntity> listFiles(ListFilesFilter filter);
 }

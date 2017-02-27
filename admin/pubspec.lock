@@ -118,17 +118,23 @@ packages:
   fnx_rest:
     description:
       ref: master
-      resolved-ref: "0fe36c5c66c500fbe4d8e693cc42a59107262eea"
+      resolved-ref: "7d0e5989084827cd0f3e643fe2af6f9a599354a5"
       url: "https://github.com/fnx-io/fnx_rest"
     source: git
     version: "0.5.0"
   fnx_ui:
     description:
       ref: master
-      resolved-ref: "1706fee9dff44408c2d612046bfe34fc9203ba82"
+      resolved-ref: "0f6f08029802e87180b765cf6ded28ca7bc3bc49"
       url: "https://github.com/fnx-io/fnx_ui"
     source: git
     version: "0.0.6"
+  func:
+    description:
+      name: func
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   glob:
     description:
       name: glob

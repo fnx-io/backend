@@ -111,4 +111,5 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
     public String getPasswordHash() {
         return passwordHash;
     }
+	
 }

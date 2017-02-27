@@ -18,12 +18,13 @@
             </nav>
         </header>
         <main>
-            <fnx-layout-sidebar #layout>
+            <fnx-layout-sidebar #layout [widthPx]="280">
                 <aside sidebar class="flex--column">
                     <ul class="menu--vertical flex--grow" (click)="layout.toggle()">
-                        <li><a [routerLink]="['Dashboard']">Dashboard</a></li>
-                        <li><a [routerLink]="['User']">Users</a></li>
-                        <li><a [routerLink]="['CmsNews']">News</a></li>
+                        <li><a data-prefix="view_compact" [routerLink]="['Dashboard']">Dashboard</a></li>
+                        <li><a data-prefix="group" [routerLink]="['User']">Users</a></li>
+                        <li><a data-prefix="library_books" [routerLink]="['Cms', {'type':'news'}]">News</a></li>
+                        <li><a data-prefix="event_note" [routerLink]="['Cms', {'type':'events'}]">Events</a></li>
                     </ul>
                     <p class="text--center bg--fnx no-margin padding">
                         <a href="https://fnx.io/">fnx.io</a>

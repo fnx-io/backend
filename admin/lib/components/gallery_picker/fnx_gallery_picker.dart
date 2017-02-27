@@ -6,13 +6,27 @@ import 'package:angular2/core.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
+///
+/// Defines set of images. Used to keep similar images together.
+///
+class FnxImageSet {
+
+  final String set;
+  final String name;
+  final double ratio;
+
+  FnxImageSet(this.set, this.name, this.ratio);
+
+}
+
+
 @Component(
   selector: 'fnx-gallery-picker',
   templateUrl: 'fnx_gallery_picker.html',
   directives: const [ PickImageStageComponent,
                       CropImageComponent]
 )
-class FnxGalleryPicker {
+class FnxGalleryPicker implements OnInit {
 
   RestClient rest;
   RestListing listing;
@@ -25,13 +39,23 @@ class FnxGalleryPicker {
 
   FnxApp fnxApp;
 
+  @Input() FnxImageSet imageSet;
+
   @ViewChild('pickImageTab') FnxTab pickImageTab;
 
   @Output() EventEmitter<String> picked = new EventEmitter<String>();
 
+  bool get requiresCrop => imageSet != null && imageSet.ratio != null;
+
   FnxGalleryPicker(RestClient rest, this.fnxApp) {
     this.rest = rest.child("/v1/files");
-    this.listing = RestListingFactory.withPaging(this.rest.child("?category=IMAGE"));
+  }
+
+
+  @override
+  void ngOnInit() {
+    if (imageSet == null) throw "You must specify 'set' attribute (instance of FnxImageSet)";
+    this.listing = RestListingFactory.withPaging(this.rest.child("?category=IMAGE&set=${imageSet.set}"));
   }
 
   String thumbnailUrl(Map<String, dynamic> image) {
@@ -44,7 +68,11 @@ class FnxGalleryPicker {
   void imagePicked(ImageRead img) {
     errorMessage = null;
     imageRead = img;
-    stage = ImageUploadStage.CROP;
+    if (requiresCrop) {
+      stage = ImageUploadStage.CROP;
+    } else {
+      imageCropped(null);
+    }
   }
 
   void imageCropped(Rectangle<double> crop) {
@@ -52,12 +80,21 @@ class FnxGalleryPicker {
     stage = ImageUploadStage.UPLOAD;
     final FileReader fr = new FileReader();
     fr.readAsArrayBuffer(imageRead.file);
-    fr.onLoad.listen((_) => uploadImage(imageRead.file, fr.result));
+    fr.onLoad.listen((_) => uploadImage(imageRead.file, fr.result, crop));
     fr.onError.listen((_) => this.errorMessage = "File ${imageRead.file.name} could not be loaded.");
   }
 
-  Future<bool> uploadImage(File file, Uint8List fileContents) async {
+  Future<bool> uploadImage(File file, Uint8List fileContents, Rectangle<double> crop) async {
     RestClient rc = this.rest.child("/image").producesBinary(file.type);
+    rc = rc.setParam("set", imageSet.set);
+
+    if (crop != null) {
+      rc = rc.setParam("x", crop.left.toString());
+      rc = rc.setParam("y", crop.top.toString());
+      rc = rc.setParam("widthRatio", crop.width.toString());
+      rc = rc.setParam("heightRatio", crop.height.toString());
+    }
+
     RestResult rr;
     try {
       rr = await rc.post(fileContents, headers: {'X-Filename': file.name, 'Content-Type': file.type});
@@ -147,26 +184,28 @@ class ImageRead {
   selector: 'crop-image-component',
   templateUrl: 'crop_image_component.html'
 )
-class CropImageComponent {
+class CropImageComponent implements OnInit {
 
   @Input() ImageRead image;
+  @Input() double ratio;
 
   @Output() EventEmitter<Rectangle<double>> cropped = new EventEmitter<Rectangle<double>>();
-  @Output() EventEmitter<bool> cancel = new EventEmitter<bool>();
 
   Rectangle<double> crop = new Rectangle<double>(0.0, 0.0, 1.0, 1.0);
+
+
+  @override
+  ngOnInit() {
+    if (ratio == null) throw "You must specify crop ratio";
+  }
 
   void imageCropped(Rectangle<double> crop) {
     this.crop = crop;
   }
-
-  void doCancel(Event event) {
-    if (event != null) event.preventDefault();
-    cancel.emit(true);
-  }
-
+  
   void doFinish(Event event) {
     if (event != null) event.preventDefault();
     cropped.emit(crop);
   }
+
 }

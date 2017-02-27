@@ -10,11 +10,15 @@ import io.fnx.backend.service.BaseService;
 import io.fnx.backend.service.CmsArticleService;
 import io.fnx.backend.service.ListResult;
 import io.fnx.backend.service.filter.CmsArticleFilter;
+import io.fnx.backend.tools.auth.Principal;
 import io.fnx.backend.tools.authorization.AllowedForAdmins;
+import io.fnx.backend.tools.hydration.HydrationContext;
+import io.fnx.backend.tools.hydration.Hydrator;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -22,6 +26,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class CmsArticleServiceImpl extends BaseService implements CmsArticleService {
 
     private static final Logger log = LoggerFactory.getLogger(CmsArticleServiceImpl.class);
+
+	private Hydrator hydrator;
 
     private final AuditLogManager auditLogManager;
 
@@ -82,7 +88,14 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 	public ListResult<CmsArticleEntity> listArticles(CmsArticleFilter filter) {
 		final Query<CmsArticleEntity> query = ofy().load().type(CmsArticleEntity.class);
 		final List<CmsArticleEntity> result = filter.query(query).list();
+
+		hydrator.hydrate(result, new HydrationContext(cc().getLoggedUser()));
 		return filter.result(result);
+	}
+
+	@Inject
+	public void setHydrator(Hydrator hydrator) {
+		this.hydrator = hydrator;
 	}
 
 }
