@@ -25,8 +25,6 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 
     private static final Logger log = LoggerFactory.getLogger(CmsArticleServiceImpl.class);
 
-	private Hydrator hydrator;
-
 	@Override
 	@AllowedForAdmins
 	public CmsArticleEntity createArticle(CmsArticleEntity articleEntity) {
@@ -75,14 +73,7 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 	public ListResult<CmsArticleEntity> listArticles(CmsArticleFilter filter) {
 		final Query<CmsArticleEntity> query = ofy().load().type(CmsArticleEntity.class);
 		final List<CmsArticleEntity> result = filter.query(query).list();
-
-		hydrator.hydrate(result, new HydrationContext(cc().getLoggedUser()));
 		return filter.result(result);
-	}
-
-	@Inject
-	public void setHydrator(Hydrator hydrator) {
-		this.hydrator = hydrator;
 	}
 
 }

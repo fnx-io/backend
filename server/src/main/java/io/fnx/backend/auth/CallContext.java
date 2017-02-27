@@ -3,12 +3,13 @@ package io.fnx.backend.auth;
 import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UserEntity;
 import com.google.inject.servlet.RequestScoped;
+import io.fnx.backend.tools.hydration.HydrationContext;
 
 /**
  * Request scoped holder for currently authenticated user
  */
 @RequestScoped
-public class CallContext {
+public class CallContext implements HydrationContext {
 
     private UserEntity loggedUser;
 
