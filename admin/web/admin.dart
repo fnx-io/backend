@@ -61,6 +61,15 @@ Future<Null> main() async {
   // app context - save global state in here
   AppContext appCtx = new AppContext(apiRoot);
 
+  // load remote configuration and enums
+  RestResult rr = await rest.child("/v1/config").get();
+  if (rr == null || rr.status != 200) {
+    throw "Cannot load configuration from the server";
+  }
+  appCtx.config = rr.data;
+  r.info("Loaded configuration: ${appCtx.config}");
+
+
   // START!
   bootstrap(App, [
     ROUTER_PROVIDERS,

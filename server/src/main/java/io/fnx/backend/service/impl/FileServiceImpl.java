@@ -6,7 +6,7 @@ import io.fnx.backend.service.BaseService;
 import io.fnx.backend.service.FileService;
 import io.fnx.backend.service.ListResult;
 import io.fnx.backend.service.filter.ListFilesFilter;
-import io.fnx.backend.util.conf.AppConfiguration;
+import io.fnx.backend.util.conf.BackendConfiguration;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.tools.cloudstorage.*;
@@ -148,7 +148,7 @@ public class FileServiceImpl extends BaseService implements FileService {
     }
 
     @Inject
-    public void setConfiguration(AppConfiguration cfg) {
+    public void setConfiguration(BackendConfiguration cfg) {
         this.fileBucket = cfg.getProperty("file.bucket");
     }
 }
