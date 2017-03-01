@@ -1,10 +1,7 @@
 package io.fnx.backend.domain.eventlog;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Unindex;
+import com.googlecode.objectify.annotation.*;
 import io.fnx.backend.domain.UserEntity;
 import org.joda.time.DateTime;
 
@@ -23,10 +20,12 @@ public class AuditLogEventEntity {
     private String message;
 
     @Index
-    private DateTime occuredOn;
+    private DateTime occurredOn;
 
     private Key<UserEntity> changedBy;
 
+    @Ignore
+    private String changedByName;
 
     public static Key<AuditLogEventEntity> createKey(Long id) {
         return idToKey(AuditLogEventEntity.class, id);
@@ -57,12 +56,12 @@ public class AuditLogEventEntity {
         this.message = message;
     }
 
-    public DateTime getOccuredOn() {
-        return occuredOn;
+    public DateTime getOccurredOn() {
+        return occurredOn;
     }
 
-    public void setOccuredOn(DateTime occuredOn) {
-        this.occuredOn = occuredOn;
+    public void setOccurredOn(DateTime occurredOn) {
+        this.occurredOn = occurredOn;
     }
 
     public Key<UserEntity> getChangedBy() {
@@ -71,6 +70,14 @@ public class AuditLogEventEntity {
 
     public void setChangedBy(Key<UserEntity> changedBy) {
         this.changedBy = changedBy;
+    }
+
+    public String getChangedByName() {
+        return changedByName;
+    }
+
+    public void setChangedByName(String changedByName) {
+        this.changedByName = changedByName;
     }
 
 }

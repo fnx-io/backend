@@ -13,4 +13,8 @@
         <property name="set" direction="asc"/>
         <property name="uploaded" direction="desc"/>
     </datastore-index>
+    <datastore-index kind="AuditLogEventEntity" ancestor="false" source="manual">
+        <property name="eventTarget" direction="asc"/>
+        <property name="occurredOn" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>

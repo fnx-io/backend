@@ -37,6 +37,9 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 
 		ofy().save().entity(articleEntity).now();
 
+		final String msg = "Article has been created.";
+		auditLogManager.createAuditLogEvent(articleEntity.getKey(), msg);
+
 		return articleEntity;
 	}
 
@@ -65,7 +68,7 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 				articleEntity.setCreated(persistent.getCreated());
 				ofy().save().entity(articleEntity).now();
 
-				final String msg = "Article has been updated.";
+				final String msg = "Article has been changed.";
 				auditLogManager.createAuditLogEvent(articleEntity.getKey(), msg);
 
 				return articleEntity;

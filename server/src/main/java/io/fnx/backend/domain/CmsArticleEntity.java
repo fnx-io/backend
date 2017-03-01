@@ -98,35 +98,3 @@ public class CmsArticleEntity {
 	}
 
 }
-/*
-class CmsArticleHydrationRecipe implements HydrationRecipe {
-
-	private CmsArticleEntity articleEntity;
-
-	public CmsArticleHydrationRecipe(CmsArticleEntity articleEntity) {
-		this.articleEntity = articleEntity;
-	}
-
-	@Override
-	public Object transformForApi(HydrationContext ctx) {
-		return articleEntity;
-	}
-
-	@Override
-	public Collection<HydratedProperty> propsToHydrate(HydrationContext ctx) {
-		HydratedProperty createdByInfo = new SingleValueHydratedProperty<CmsArticleEntity, UserEntity>() {
-			@Override
-			public Key<UserEntity> getKey(CmsArticleEntity object) {
-				return object.getCreatedBy();
-			}
-
-			@Override
-			public void setProperty(CmsArticleEntity object, UserEntity entity) {
-				object.setAuthorName(entity.getName());
-			}
-		};
-		return Arrays.asList(createdByInfo);
-	}
-};
-*/
-

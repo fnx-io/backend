@@ -24,7 +24,7 @@ public class AuditLogEventFilter extends Filter {
 
     @Override
     public <T> Query<T> orderQuery(Query<T> query) {
-        return query.order("-occuredOn");
+        return query.order("-occurredOn");
     }
 
 }

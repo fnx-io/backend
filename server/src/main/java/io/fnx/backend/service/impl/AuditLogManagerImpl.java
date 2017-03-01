@@ -34,7 +34,7 @@ public class AuditLogManagerImpl extends BaseService implements AuditLogManager 
         } else {
             event.setChangedBy(user.getKey());
         }
-        event.setOccuredOn(DateTime.now());
+        event.setOccurredOn(DateTime.now());
 
         return ofy().transact(new Work<AuditLogEventEntity>() {
             @Override

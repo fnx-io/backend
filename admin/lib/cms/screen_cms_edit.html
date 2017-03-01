@@ -1,9 +1,7 @@
 <!-- Screen: NewsEdit -->
-<div class="padding fit row">
+<div class="margin fit row--gutter">
 
     <fnx-form (submit)="saveArticle($event)" *ngIf="entity != null" class="l8 m12 s12">
-
-        <span *ng-if="entity['id'] != null">test</span>
 
         <!--
             name je primo soucastni entity CmsArticleEntity
@@ -30,16 +28,45 @@
         <fnx-input label="Event date" errorMessage="Event date is mandatory" *ngIf="type == 'events'">
             <fnx-date [(ngModel)]="entity['data']['eventDate']" [dateTime]="true"></fnx-date>
         </fnx-input>
-        
+
         <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
             <fnx-wysiwyg-rich [(ngModel)]="entity['data']['annotation']" [required]="true"
                 heightEm="15" maxWidthEm="50"></fnx-wysiwyg-rich>
         </fnx-input>
 
         <fnx-submit-bar [back]="true"></fnx-submit-bar>
-        
+
     </fnx-form>
+
+    <span class="s1">
+        <a *ngIf="id != null" (click)="eventLogModalVisible = true" class="icon btn">history</a>
+    </span>
 
 </div>
 
+<fnx-modal *ngIf="eventLogModalVisible" (close)="eventLogModalVisible = false">
+    <h3 header>Change history</h3>
+    <div main class="row--gutter">
+        <fnx-scroll-panel (loadMore)="logListing.loadNextPage()" class="width--100 margin">
+            <table>
+                <thead>
+                <tr>
+                    <th>Date & time</th>
+                    <th>Author</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="!logListing.isEmpty()">
+                    <tr *ngFor="let event of logListing.list">
+                        <td>{{event['occurredOn']}}</td>
+                        <td>{{event['changedByName']}}</td>
+                        <td>{{event['message']}}</td>
+                    </tr>
+                </tbody>
+            </table>
 
+            <rest-listing-monitor [listing]="logListing"></rest-listing-monitor>
+
+        </fnx-scroll-panel>
+    </div>
+</fnx-modal>
