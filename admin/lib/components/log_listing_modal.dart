@@ -17,8 +17,6 @@ class LogListingModal implements OnInit {
   @Output()
   EventEmitter<bool> close = new EventEmitter<bool>();
 
-  StreamSubscription<KeyboardEvent> keyDownSubscription;
-
   RestListing logListing;
 
   onClose() {
