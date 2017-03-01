@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:admin/cms/module_cms.dart';
+import 'package:admin/components/log_listing_modal.dart';
 import 'package:admin/components/gallery_picker/fnx_gallery_picker.dart';
 import 'package:admin/rest_listing_factory.dart';
 import 'package:angular2/core.dart';
@@ -31,9 +32,7 @@ class ScreenCmsEdit {
 
   bool eventLogModalVisible = false;
 
-  // should be a component
   RestClient logRest;
-  RestListing logListing;
 
   ///
   /// Defines image set. Mainly the ratio you want to enforce in certain types of images.
@@ -51,7 +50,6 @@ class ScreenCmsEdit {
     }
 
     logRest = rootRest.child("/v1/cms/articles/${id}/log");
-    logListing = RestListingFactory.withPaging(logRest);
   }
 
   Future<bool> fetchDetails() async {
