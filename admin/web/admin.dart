@@ -13,14 +13,24 @@ import 'package:angular2/router.dart';
 import 'package:fnx_config/fnx_config_read.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/errors.dart';
+import 'package:fnx_ui/i18n/fnx_messages_all.dart' as fnx_messages;
 import 'package:http/src/exception.dart';
+import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 
-main() {
+Future<Null> main() async {
+
+  // init translation of fnx_ui
+  String locale = "en_US";
+  Intl.defaultLocale = locale;
+  fnx_messages.initializeMessages(locale);
+
+
+  // Load compile time configuration (API endpoints and so)
   // see https://pub.dartlang.org/packages/fnx_config
   String apiRoot = fnxConfig()["apiRoot"];
 
-  // logging
+  // configure logging
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
     String message = '[${rec.level.name}]:'.padRight(8) + '${rec.loggerName}: ${rec.message}';
@@ -36,13 +46,43 @@ main() {
   // Startup info
   Logger r = new Logger("admin.dart");
   r.info("================================================================");
-  r.info(" Starting FNX admin:");
+  r.info(" Starting fnx admin:");
   r.info("   - apiRoot: ${apiRoot}");
   r.info("   - build: ${fnxConfigMeta()["timestamp"]}");
   r.info("================================================================");
 
+  // root rest client
   RestClient rest = new HttpRestClient.root(apiRoot);
+
+  // exception handling
   FnxExceptionHandler exceptionHandler = new FnxExceptionHandler();
+  registerCustomExceptionHandlers(exceptionHandler);
+
+  // app context - save global state in here
+  AppContext appCtx = new AppContext(apiRoot);
+
+  // load remote configuration and enums
+  RestResult rr = await rest.child("/v1/config").get();
+  if (rr == null || rr.status != 200) {
+    throw "Cannot load configuration from the server";
+  }
+  appCtx.config = rr.data;
+  r.info("Loaded configuration: ${appCtx.config}");
+
+
+  // START!
+  bootstrap(App, [
+    ROUTER_PROVIDERS,
+    CUSTOM_COMPONENTS,
+    provide(LocationStrategy, useClass: HashLocationStrategy),
+    provide(RestClient, useValue: rest),
+    provide(ExceptionHandler, useValue: exceptionHandler),
+    provide(FnxExceptionHandler, useValue: exceptionHandler),
+    provide(AppContext, useValue: appCtx)
+  ]);
+}
+
+void registerCustomExceptionHandlers(FnxExceptionHandler exceptionHandler) {
   // ====== custom exceptions ===========================================
   exceptionHandler.registerErrorProcessor(Map, (exception, stacktrace) {
     Map e = exception as Map;
@@ -65,16 +105,4 @@ main() {
         headline: "Connection error"
     );
   });
-  AppContext appCtx = new AppContext(apiRoot);
-
-  // START!
-  bootstrap(App, [
-    ROUTER_PROVIDERS,
-    CUSTOM_COMPONENTS,
-    provide(LocationStrategy, useClass: HashLocationStrategy),
-    provide(RestClient, useValue: rest),
-    provide(ExceptionHandler, useValue: exceptionHandler),
-    provide(FnxExceptionHandler, useValue: exceptionHandler),
-    provide(AppContext, useValue: appCtx)
-  ]);
 }

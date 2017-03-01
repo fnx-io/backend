@@ -12,7 +12,7 @@ import static java.lang.String.format;
 
 @Entity
 @Unindex
-public class CmsArticleEntity implements CanBeHydrated<CmsArticleEntity, HydrationContext> {
+public class CmsArticleEntity {
 
 	@Id
 	private Long id;
@@ -97,12 +97,8 @@ public class CmsArticleEntity implements CanBeHydrated<CmsArticleEntity, Hydrati
 		this.authorName = authorName;
 	}
 
-	@Override
-	public HydrationRecipe getRecipe() {
-		return new CmsArticleHydrationRecipe(this);
-	}
 }
-
+/*
 class CmsArticleHydrationRecipe implements HydrationRecipe {
 
 	private CmsArticleEntity articleEntity;
@@ -132,4 +128,5 @@ class CmsArticleHydrationRecipe implements HydrationRecipe {
 		return Arrays.asList(createdByInfo);
 	}
 };
+*/
 

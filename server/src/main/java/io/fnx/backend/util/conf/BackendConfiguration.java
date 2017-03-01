@@ -26,7 +26,7 @@ import static java.lang.String.format;
  *   &lt;/appengine-web-app&gt;
  * </pre>
  */
-public class AppConfiguration {
+public class BackendConfiguration {
 
 
     /**

@@ -14,12 +14,13 @@ import io.fnx.backend.service.impl.DelayedTaskServiceImpl;
 import io.fnx.backend.service.impl.FileServiceImpl;
 import io.fnx.backend.service.impl.UserServiceImpl;
 import io.fnx.backend.tools.hydration.Hydrator;
-import io.fnx.backend.util.conf.AppConfiguration;
+import io.fnx.backend.util.conf.BackendConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
 import io.fnx.backend.tools.authorization.*;
+import io.fnx.backend.util.conf.ClientConfiguration;
 
 import javax.inject.Singleton;
 import java.lang.reflect.Method;
@@ -42,7 +43,8 @@ public class ServiceModule extends AbstractModule {
 
 	    bind(Hydrator.class).in(Singleton.class);
 
-        bind(AppConfiguration.class).in(Singleton.class);
+        bind(BackendConfiguration.class).in(Singleton.class);
+	    bind(ClientConfiguration.class).in(Singleton.class);
 
         install(new FactoryModuleBuilder().implement(QueueProvider.class, QueueProvider.class)
                 .build(QueueProviderFactory.class));

@@ -6,6 +6,7 @@ class AppContext {
 
   // prihlaseny uzivatel
   Map loggedUser = null;
+  Map config = null;
 
   bool get logged => loggedUser != null;
 

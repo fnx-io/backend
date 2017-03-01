@@ -91,11 +91,29 @@ different types of articles (HTML meta, project specific meta data, etc.).
 
 
 It's very convenient, but it also might be limiting. In such case simply create new module and
-listing and edit screens. It's also completely legal to extends `CmsArticleEntity` itself,
-specially when you need to search or order by some of the article properties.
+listing and edit screens. It's also completely legal to add more properties to `CmsArticleEntity` itself,
+specially when you need to search or order by some of article properties.
 
 ### Files and images
 
 ### Audit logs
+
+### Configuration
+
+#### Server side
+
+Configuration is stored in `BackendConfiguration.java` and is loaded from system environment
+properties which are defined in `appengine-web.xml`. You WILL have to change for example `file.bucket` property.
+
+#### Client (Dart) side
+
+There are two configurations:
+
+- *compile time*, which is stored in `lib/conf/*` and handled by
+[fnx_config](https://pub.dartlang.org/packages/fnx_config). See app initialization in `admin.dart`. It usually contains
+only the API endpoint which is different for development and for production.
+- *runtime* configuration, which is downloaded from the server during start. See `ClientConfiguration.java`,
+`ConfigResource.java` and again `admin.dart`. This configuration should for example contain all shared enums.
+
 
      

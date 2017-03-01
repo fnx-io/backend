@@ -35,6 +35,7 @@ public class JerseyApplication extends Application {
             FileResource.class,
             MonitoringResource.class,
 		    CmsArticleResource.class,
+		    ConfigResource.class,
 
             SystemResource.class,
             DelayedTasksResource.class

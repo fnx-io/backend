@@ -3,6 +3,7 @@ package io.fnx.backend.rest;
 import io.fnx.backend.auth.CallContext;
 import io.fnx.backend.domain.filter.FilterLimits;
 import com.google.inject.Inject;
+import io.fnx.backend.tools.hydration.Hydrator;
 
 import javax.inject.Provider;
 import javax.ws.rs.Consumes;
@@ -25,11 +26,15 @@ public abstract class BaseResource {
     @Inject
     protected Provider<CallContext> callContextProvider;
 
-    public CallContext cc() {
+	protected Hydrator hydrator;
+
+	public CallContext cc() {
         return callContextProvider.get();
     }
 
-    @OPTIONS
+
+
+	@OPTIONS
     public Response rootOptions() {
         return Response.ok(null).build();
     }
@@ -131,4 +136,11 @@ public abstract class BaseResource {
     public FilterLimits filterLimits() {
         return new FilterLimits(page, allPages);
     }
+
+
+	@Inject
+	public void setHydrator(Hydrator hydrator) {
+		this.hydrator = hydrator;
+	}
+	
 }
