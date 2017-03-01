@@ -30,7 +30,7 @@ class ScreenCmsEdit {
 
   String get type => moduleCms.type;
 
-  bool eventLogModalVisible = false;
+  bool logModalVisible = false;
 
   RestClient logRest;
 

@@ -62,7 +62,7 @@ public class CmsArticleResource extends BaseResource {
 
     @GET
     @Path("/{id}/log")
-    public ListResult<AuditLogEventEntity> list(@PathParam("id") Long id) {
+    public ListResult<AuditLogEventEntity> listLogEvents(@PathParam("id") Long id) {
         Key articleKey = CmsArticleEntity.createKey(id);
         ListResult<AuditLogEventEntity>  result = auditLogManager.listAuditLogEvents(new AuditLogEventFilter(articleKey, filterLimits()));
         hydrator.hydrateCollection(result, EVENT_RECIPE, cc());

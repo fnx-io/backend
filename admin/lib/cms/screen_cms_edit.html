@@ -39,9 +39,9 @@
     </fnx-form>
 
     <span class="s1">
-        <a *ngIf="id != null" (click)="eventLogModalVisible = true" class="icon btn">history</a>
+        <a *ngIf="id != null" (click)="logModalVisible = true" class="icon btn">history</a>
     </span>
 
 </div>
 
-<log-listing-modal *ngIf="eventLogModalVisible" [restClient]="logRest" (close)="eventLogModalVisible = false"></log-listing-modal>
+<log-listing-modal *ngIf="logModalVisible" [restClient]="logRest" (close)="logModalVisible = false"></log-listing-modal>

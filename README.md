@@ -98,6 +98,15 @@ specially when you need to search or order by some of article properties.
 
 ### Audit logs
 
+To use built-in audit logging support:
+
+- create audit log REST endpoint
+    - see `CmsArticleResource : listLogEvents`
+- write log events using `AuditLogManager`
+    - see `CmsArticleServiceImpl` 
+- use `log-listing-modal` Angular component to display log events
+    - see `screen_cms_edit.dart`
+
 ### Configuration
 
 #### Server side
