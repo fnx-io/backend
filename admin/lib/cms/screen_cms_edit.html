@@ -7,7 +7,7 @@
             name je primo soucastni entity CmsArticleEntity
         -->
         <fnx-input label="Name" errorMessage="Name is mandatory">
-            <fnx-text [(ngModel)]="entity['name']" [required]="true"></fnx-text>
+            <fnx-text [(ngModel)]="entity['name']" [required]="true" autoFocus></fnx-text>
         </fnx-input>
 
 
@@ -23,6 +23,10 @@
         -->
         <fnx-input label="Main image" errorMessage="Main image is mandatory" *ngIf="type == 'news'">
             <fnx-image [(ngModel)]="entity['data']['image']" [required]="true" [imageSet]="imageSet"></fnx-image>
+        </fnx-input>
+
+        <fnx-input label="Gallery" *ngIf="type == 'news'">
+            <fnx-gallery [(ngModel)]="entity['data']['gallery']" [imageSet]="imageSet"></fnx-gallery>
         </fnx-input>
 
         <fnx-input label="Event date" errorMessage="Event date is mandatory" *ngIf="type == 'events'">

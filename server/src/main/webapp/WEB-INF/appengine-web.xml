@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 
+    <!--
+       These values are actually only placeholders, see pom.xml
+       and use "make appengine-prod" and "make appengine-test" to
+       deploy your app.
+    -->
     <application>fnx-backend</application>
     <version>v0-init</version>
+    
     <threadsafe>true</threadsafe>
     <sessions-enabled>false</sessions-enabled>
 
     <instance-class>F1</instance-class>
 
     <system-properties>
-        <property name="root" value="https://fnx-backend.appspot.com/"/>
-        <property name="file.bucket" value="fnx-backend-files"/>
+
+        <!-- For app id = fnx-backend -->
+        <property name="fnx-backend.root" value="https://fnx-backend.appspot.com/"/>
+        <property name="fnx-backend.file.bucket" value="fnx-backend-files"/>
+
+        <!-- For app id = fnx-backend-test -->
+        <property name="fnx-backend-test.root" value="https://fnx-backend.appspot.com/"/>
+        <property name="fnx-backend-test.file.bucket" value="fnx-backend-files"/>
+
+
     </system-properties>
 
 </appengine-web-app>

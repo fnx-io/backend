@@ -10,6 +10,7 @@ $(ADMIN_BUILD):
 $(ADMIN_BUILD)-always:
 	cd $(ADMIN_ROOT); pub get
 	cd $(ADMIN_ROOT); pub build
+	cd $(ADMIN_ROOT)/build; rm `find . -name *ng_*.json`
 
 admin-clean:
 	rm -rf $(ADMIN_BUILD)
@@ -23,7 +24,9 @@ admin-install: admin
 server-clean:
 	rm -rf $(SERVER_ADMIN_BUILD)
 
-appengine: admin-install
-	cd $(SERVER_ROOT); mvn appengine:update
+appengine-prod: admin-install
+	cd $(SERVER_ROOT); mvn appengine:update -Pprod
 
+appengine-test: admin-install
+	cd $(SERVER_ROOT); mvn appengine:update -Ptest
 

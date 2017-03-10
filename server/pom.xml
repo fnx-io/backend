@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.fnx.backend</groupId>
     <artifactId>api-server</artifactId>
@@ -16,7 +16,29 @@
         <guice.version>4.1.0</guice.version>
         <slf4j.version>1.7.22</slf4j.version>
         <jersey.version>1.19.3</jersey.version>
+
     </properties>
+
+    <!-- PROFILES (appengine - installations) ===================================== -->
+    <profiles>
+        <profile>
+            <!-- Production -->
+            <id>prod</id>
+            <properties>
+                <app.id>fnx-backend</app.id>
+                <app.version>v01-init</app.version>
+            </properties>
+        </profile>
+        <profile>
+            <!-- Test -->
+            <id>test</id>
+            <properties>
+                <app.id>fnx-backend-test</app.id>
+                <app.version>v01-init</app.version>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
@@ -189,7 +211,9 @@
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.version}</version>
                 <configuration>
-                    <version>${appengine.version}</version>
+                    <!-- These properties are set by profiles - prod or test. See Makefile -->
+                    <appId>${app.id}</appId>
+                    <version>${app.version}</version>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,5 +1,6 @@
 package io.fnx.backend.gson;
 
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,6 +19,7 @@ public class GsonProvider implements Provider<Gson> {
         final GsonBuilder builder = new GsonBuilder();
         builder.setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         builder.registerTypeAdapter(DateTime.class, new DateTimeAdapter());
+	    builder.registerTypeAdapter(GeoPt.class, new GeoPtAdapter());
 
         registerKeyTypeAdapters(builder);
 

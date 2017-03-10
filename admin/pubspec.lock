@@ -6,7 +6,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.29.7"
+    version: "0.29.8"
   angular2:
     description:
       name: angular2
@@ -90,7 +90,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.3+1"
+    version: "0.13.4"
   dart_style:
     description:
       name: dart_style
@@ -125,7 +125,7 @@ packages:
   fnx_ui:
     description:
       ref: master
-      resolved-ref: "4d151504b8dab4366a5662460d5cb3a60772230a"
+      resolved-ref: "9e24b9c1e5152acfbc2e3095cade15a5063daa04"
       url: "https://github.com/fnx-io/fnx_ui"
     source: git
     version: "0.0.6"
@@ -248,7 +248,7 @@ packages:
       name: source_maps
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.2"
+    version: "0.10.3"
   source_span:
     description:
       name: source_span
@@ -260,7 +260,7 @@ packages:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.3"
   stream_channel:
     description:
       name: stream_channel

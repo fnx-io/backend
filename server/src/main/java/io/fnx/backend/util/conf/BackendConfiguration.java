@@ -90,6 +90,8 @@ public class BackendConfiguration {
      * @throws InvalidConfigurationKeyException when the value is not present
      */
     public String getProperty(String key) {
+    	String appId = SystemProperty.applicationId.get();
+    	key = appId+"."+key;
         final String value = System.getProperty(key);
         if (value == null) throw new InvalidConfigurationKeyException(key, format("Missing configuration key: %s", key));
         return value;
