@@ -101,6 +101,13 @@ public class UserServiceImpl extends BaseService implements UserService {
         });
     }
 
+
+	@Override
+	@AllowedForAdmins
+	public UserEntity getUser(Long id) {
+		return ofy().load().key(UserEntity.createKey(id)).now();
+	}
+
     private String hashPassword(String password) {
         return hashPassword(password, BCrypt.gensalt(10));
     }

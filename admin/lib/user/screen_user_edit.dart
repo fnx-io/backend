@@ -7,8 +7,8 @@ import 'package:fnx_rest/fnx_rest.dart';
 import 'package:admin/model/enums.dart' as enums;
 
 @Component(
-  selector: 'screen-user-edit',
-  templateUrl: 'screen_user_edit.html'
+    selector: 'screen-user-edit',
+    templateUrl: 'screen_user_edit.html'
 )
 class ScreenUserEdit {
 
@@ -40,7 +40,7 @@ class ScreenUserEdit {
       entity = rr.data;
       return true;
     } else {
-      return false;
+      throw rr;
     }
   }
 
@@ -48,16 +48,21 @@ class ScreenUserEdit {
 
   Future<bool> saveUser(Event e) async {
     e.preventDefault();
-    RestResult rr = await rest.post(entity);
+    RestResult rr = creating ? await rest.post(entity) : await rest.child("/$id").put(entity);
     if (rr.success) {
-      fnxApp.toast('User has been added');
+      if (creating) {
+        fnxApp.toast('User was created.');
+      } else {
+        fnxApp.toast("User was changed.");
+      }
       router.navigate(['UserListing']);
       return true;
     } else if (rr.data['error'] && rr.data['type'] == 'UniqueValueViolation') {
-        fnxApp.alert('User with such email already exists!');
+      fnxApp.alert("This email is already used!");
     } else {
-        fnxApp.alert('Error while trying to save user');
+      throw rr;
     }
-    return false;
   }
+
+
 }

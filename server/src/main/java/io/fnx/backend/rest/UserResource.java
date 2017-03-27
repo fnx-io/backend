@@ -50,7 +50,14 @@ public class UserResource extends BaseResource {
         return userService.updateUser(cmd);
     }
 
-    /**
+	@GET
+	@Path("/{id}")
+	public UserEntity getUser(@PathParam("id") Long id) {
+		return userService.getUser(id);
+	}
+
+
+	/**
      * Tries to login the user with provided credentials. If the user is authenticated,
      * also creates new Authorization token
      *

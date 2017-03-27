@@ -24,4 +24,7 @@ public interface UserService {
     ListResult<UserEntity> listUsers(ListUsersFilter filter);
 
     UserEntity makeSuperUser(Long userId);
+
+	UserEntity getUser(Long id);
+
 }

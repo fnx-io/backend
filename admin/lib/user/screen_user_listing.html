@@ -1,21 +1,23 @@
 <div class="flex--column fit">
-  <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink padding">
-    <table class="table--stripes" *ngIf="!listing.isEmpty()">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let u of listing.list">
-          <td>{{ u['name'] }}</td>
-          <td>{{ u['email'] }}</td>
-          <td>{{ u['role'] }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <rest-listing-monitor [listing]="listing"></rest-listing-monitor>
-  </fnx-scroll-panel>
+    <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink padding">
+        <table class="table--stripes" *ngIf="!listing.isEmpty()">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let u of listing.list">
+                <td>{{ u['name'] }}</td>
+                <td>{{ u['email'] }}</td>
+                <td>{{ u['role'] }}</td>
+                <td><a class="btn" [routerLink]="['UserEdit', {id: u['id'].toString()}]">edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <rest-listing-monitor [listing]="listing"></rest-listing-monitor>
+    </fnx-scroll-panel>
 </div>

@@ -1,24 +1,29 @@
 <div class="padding">
     <fnx-form (submit)="saveUser($event)" *ngIf="entity != null">
-        <div class="row--gutter">
-            <fnx-input label="User's name" class="l6 m6 s12" [required]="true">
+        <div style="max-width: 50em;">
+
+            <fnx-input label="User's name" [required]="true">
                 <fnx-text [(ngModel)]="entity['name']"></fnx-text>
             </fnx-input>
-            <fnx-input label="User's email" class="l6 m6 s12" [required]="true">
+
+            <fnx-input label="User's email" [required]="true">
                 <fnx-text [(ngModel)]="entity['email']"></fnx-text>
             </fnx-input>
-        </div>
-        <div class="row--gutter">
-            <fnx-input label="Role" class="l6 m6 s12">
+
+            <fnx-input label="Role" *ngIf="creating">
                 <fnx-select [(ngModel)]="entity['role']" [required]="true">
                     <fnx-option [value]="null" label="Select appropriate role"></fnx-option>
                     <fnx-option *ngFor="let r of roles" [value]="r.name" [label]="r.label"></fnx-option>
                 </fnx-select>
             </fnx-input>
-            <fnx-input label="Password" class="l6 m6 s12" errorMessage="Password is required and must be at least 6 characters long">
-                <fnx-text [(ngModel)]="entity['password']" type="password" [required]="true" [minLength]="6"></fnx-text>
+
+            <fnx-input label="Password" errorMessage="Password is required and must be at least 6 characters long">
+                <fnx-text [(ngModel)]="entity['password']" type="password" [required]="creating" [minLength]="6"></fnx-text>
             </fnx-input>
+
+            <p *ngIf="!creating">Fill the password only if you want to change it.</p>
+
         </div>
-        <fnx-submit-bar></fnx-submit-bar>
+        <fnx-submit-bar [back]="true"></fnx-submit-bar>
     </fnx-form>
 </div>

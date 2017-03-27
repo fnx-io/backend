@@ -105,4 +105,15 @@ void registerCustomExceptionHandlers(FnxExceptionHandler exceptionHandler) {
         headline: "Connection error"
     );
   });
+
+  exceptionHandler.registerErrorProcessor(RestResult, (exception, stacktrace) {
+    RestResult rr = exception as RestResult;
+    if (rr.status == 403) return new FnxError("You don't have a permission to this operation.");
+    if (rr.status == 404) return new FnxError("Requested record was not found, please refresh your browser.");
+    if (rr.status >= 500) return new FnxError("Server error, please try again later");
+    if (rr.data != null && rr.data['description'] != null) {
+      return new FnxError(rr.data['description']);
+    }
+    return new FnxError("Unable to obtain data from server (${rr.status}: ${rr.data}).");
+  });
 }
