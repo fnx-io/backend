@@ -28,18 +28,33 @@
 
     <app>
         <!-- Preloader -->
-        <div class="flex--column fit text--center text--fnx">
-            <span class="flex--grow"></span>
+        <div class="flex--column fit text--center text--white bg--theme">
+            <div class="flex--grow"></div>
             <h1>fnx.io backend admin</h1>
             <p class="margin">
-                <span class="preloader bg--white fs-xl"></span>
+                <span class="preloader bg--theme fs-xl"></span>
             </p>
             <p>... is loading</p>
-            <span class="flex--grow--2"></span>
+            <div class="flex--grow--2">
+                <script>
+                    setTimeout(function() {
+                        var warning = document.getElementById("tooLong");
+                        if (warning) {
+                            warning.style.display="block";
+                        }
+                    }, 7000);
+                </script>
+                <div class="margin--big--top text--center" id="tooLong" style="display: none">
+                    <p>Loading of the application takes longer then expected.<br>It's possible your internet connection is too slow,
+                        or maybe you are using unsupported internet browser.</p>
+                    <p>Support browsers are Chrome, Firefox, Safari and Edge (in current versions)<br>
+                        and Internet Explorer version 11.</p>
+                </div>
+            </div>
         </div>
     </app>
 
-    <script defer src="admin.dart" type="application/dart"></script>
+    <script defer src="index.dart" type="application/dart"></script>
     <script defer src="packages/browser/dart.js"></script>
 </body>
 </html>

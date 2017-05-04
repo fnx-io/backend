@@ -25,4 +25,5 @@ public final class Constants {
 
     // queues
     public static final String QUEUE_SYSTEM = "system";
+	public static final String MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
 }

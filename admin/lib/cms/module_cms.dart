@@ -1,7 +1,7 @@
+import 'package:admin/cms/screen_cms_edit.dart';
+import 'package:admin/cms/screen_cms_listing.dart';
 import 'package:angular2/core.dart';
 import 'package:angular2/router.dart';
-import 'package:admin/cms/screen_cms_listing.dart';
-import 'package:admin/cms/screen_cms_edit.dart';
 
 
 @Component(selector: 'module-cms', templateUrl: 'module_cms.html')

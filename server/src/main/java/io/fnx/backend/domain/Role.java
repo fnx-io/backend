@@ -3,8 +3,9 @@ package io.fnx.backend.domain;
 import io.fnx.backend.tools.auth.PrincipalRole;
 
 public enum Role implements PrincipalRole {
-    ADMIN,
-    USER,
+
+	ADMIN,
+	USER,
     ANONYMOUS;
 
     @Override

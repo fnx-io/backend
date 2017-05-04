@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cookie/cookie.dart' as cookie;
 
 const COOKIE_NAME = "auth_key";

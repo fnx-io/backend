@@ -1,7 +1,6 @@
 import 'package:admin/cms/module_cms.dart';
-import 'package:admin/rest_listing_factory.dart';
+import 'package:admin/util/rest_listing_factory.dart';
 import 'package:angular2/core.dart';
-import 'package:angular2/router.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 
 ///

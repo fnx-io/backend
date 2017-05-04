@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:html';
+
 import 'package:admin/cms/module_cms.dart';
-import 'package:admin/components/log_listing_modal.dart';
 import 'package:admin/components/gallery_picker/fnx_gallery_picker.dart';
-import 'package:admin/rest_listing_factory.dart';
 import 'package:angular2/core.dart';
 import 'package:angular2/router.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
-import 'package:admin/model/enums.dart' as enums;
 
 ///
 /// ScreenNewsEdit

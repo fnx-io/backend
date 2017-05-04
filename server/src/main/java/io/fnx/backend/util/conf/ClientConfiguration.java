@@ -4,8 +4,13 @@ import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import io.fnx.backend.domain.FileCategory;
+import io.fnx.backend.util.EnumerationRepository;
+import io.fnx.backend.util.MessageAccessor;
 
+import javax.inject.Inject;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.String.format;
 
@@ -17,13 +22,22 @@ import static java.lang.String.format;
  */
 public class ClientConfiguration {
 
-	FileCategory[] fileCategories = FileCategory.values();
+	private final Map<String, String> messages;
+	private final EnumerationRepository enumerations;
 
-	public FileCategory[] getFileCategories() {
-		return fileCategories;
+	@Inject
+	public ClientConfiguration(EnumerationRepository enumerationRepository, MessageAccessor messageAccessor) throws IOException {
+		this.enumerations = enumerationRepository;
+		this.messages = messageAccessor.buildMessagesMap();
 	}
 
-	public void setFileCategories(FileCategory[] fileCategories) {
-		this.fileCategories = fileCategories;
+
+	public Map<String, String> getMessages() {
+		return messages;
 	}
+
+	public EnumerationRepository getEnumerations() {
+		return enumerations;
+	}
+
 }

@@ -4,8 +4,8 @@ import 'dart:html';
 
 import 'package:admin/app.dart';
 import 'package:admin/components.dart';
-import 'package:admin/app_context.dart';
-
+import 'package:admin/model/enumeration_repository.dart';
+import 'package:admin/util/app_context.dart';
 import 'package:angular2/angular2.dart';
 import 'package:angular2/platform/browser.dart';
 import 'package:angular2/platform/common.dart';
@@ -18,7 +18,11 @@ import 'package:http/src/exception.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 
-Future<Null> main() async {
+void main() {
+  startApp().catchError((dynamic error) => window.alert("Unable to start application, please try again later: $error"));
+}
+
+Future<Null> startApp() async {
 
   // init translation of fnx_ui
   String locale = "en_US";
@@ -66,9 +70,9 @@ Future<Null> main() async {
   if (rr == null || rr.status != 200) {
     throw "Cannot load configuration from the server";
   }
-  appCtx.config = rr.data;
-  r.info("Loaded configuration: ${appCtx.config}");
-
+  appCtx.messages = rr.data['messages'];
+  appCtx.enumerations = EnumerationRepository.buildFromAllEnumerations(rr.data['enumerations']);
+  r.info("Loaded configuration: ${appCtx.enumerations.keys}");
 
   // START!
   bootstrap(App, [

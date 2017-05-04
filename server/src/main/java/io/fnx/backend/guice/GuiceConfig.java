@@ -18,6 +18,7 @@ public class GuiceConfig extends GuiceServletContextListener {
         log.info("Initializing Guice injector");
         return Guice.createInjector(
                 new FnxGaeToolsModule(),
+                new UtilModule(),
                 new ObjectifyModule(),
                 new RestModule(),
                 new ServiceModule()

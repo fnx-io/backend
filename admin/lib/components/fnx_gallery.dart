@@ -1,11 +1,8 @@
-import 'dart:async';
 import 'dart:html';
-import 'dart:typed_data';
+
 import 'package:admin/components/gallery_picker/fnx_gallery_picker.dart';
-import 'package:admin/rest_listing_factory.dart';
 import 'package:angular2/angular2.dart';
 import 'package:angular2/core.dart';
-import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
 const CUSTOM_INPUT_GALLERY_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR, useExisting: FnxGallery, multi: true);

@@ -1,10 +1,12 @@
-import 'package:fnx_ui/fnx_ui.dart';
 import 'dart:async';
 import 'dart:html';
+
+import 'package:admin/model/enum_item.dart';
+import 'package:admin/util/app_context.dart';
 import 'package:angular2/core.dart';
 import 'package:angular2/router.dart';
 import 'package:fnx_rest/fnx_rest.dart';
-import 'package:admin/model/enums.dart' as enums;
+import 'package:fnx_ui/fnx_ui.dart';
 
 @Component(
     selector: 'screen-user-edit',
@@ -20,11 +22,12 @@ class ScreenUserEdit {
 
   Map<String, dynamic> entity;
 
-  List<enums.UserRole> roles = enums.UserRole.ALL_ROLES;
+  List<EnumItem> roles;
 
-  ScreenUserEdit(RestClient rootRest, this.router, RouteParams params, this.fnxApp) {
+  ScreenUserEdit(RestClient rootRest, this.router, RouteParams params, this.fnxApp, AppContext ctx) {
     rest = rootRest.child('/v1/users');
     id = params.get('id');
+    roles = ctx.enumerations['roles'].all.where((EnumItem i) => i.value != 'ANONYMOUS').toList();
 
     if (creating) {
       entity = {'role': 'USER'};

@@ -1,7 +1,8 @@
 import 'dart:async';
+
+import 'package:admin/util/auth.dart' as auth;
 import 'package:angular2/core.dart';
 import 'package:fnx_rest/fnx_rest.dart';
-import 'package:admin/auth.dart' as auth;
 
 @Component(
   selector: 'login-box',

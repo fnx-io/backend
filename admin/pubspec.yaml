@@ -35,6 +35,6 @@ transformers:
     - 'package:admin/components.dart#CUSTOM_PIPES'
     resolved_identifiers:
       RestClient: 'package:fnx_rest/fnx_rest.dart'
-    entry_points: web/admin.dart
+    entry_points: web/index.dart
 - dart_to_js_script_rewriter
 - fnx_config

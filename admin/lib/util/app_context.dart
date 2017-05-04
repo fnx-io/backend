@@ -1,12 +1,17 @@
+import 'package:admin/model/enumeration_repository.dart';
 
 class AppContext {
-  final String apiRoot;
 
-  AppContext(this.apiRoot);
+  final String apiRoot;
 
   // prihlaseny uzivatel
   Map loggedUser = null;
-  Map config = null;
+
+  Map messages = null;
+  Map<String,EnumerationRepository> enumerations;
+
+  AppContext(this.apiRoot);
+
 
   bool get logged => loggedUser != null;
 
