@@ -4,6 +4,7 @@ import 'package:admin/components/gallery_picker/fnx_gallery_picker.dart';
 import 'package:angular2/angular2.dart';
 import 'package:angular2/core.dart';
 import 'package:fnx_ui/fnx_ui.dart';
+import 'package:fnx_ui/src/validator.dart';
 
 const CUSTOM_INPUT_GALLERY_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR, useExisting: FnxGallery, multi: true);
 
@@ -25,13 +26,18 @@ class FnxGallery extends FnxInputComponent implements ControlValueAccessor, OnIn
   bool required = false;
 
   @Input()
+  bool disabled = false;
+
+  @Input()
+  bool readonly = false;
+
+  @Input()
   FnxImageSet imageSet;
 
   bool openPicker = false;
   String openDetail = null;
 
-  FnxGallery(FnxForm form, FnxInput wrapper) : super(form, wrapper);
-
+  FnxGallery(FnxValidatorComponent parent) : super(parent);
 
   @override
   ngOnInit() {
@@ -83,4 +89,9 @@ class FnxGallery extends FnxInputComponent implements ControlValueAccessor, OnIn
     }
     return value.isNotEmpty;
   }
+
+  void onReorder(ReorderEvent e) {
+    e.applyToList(value);
+  }
+
 }

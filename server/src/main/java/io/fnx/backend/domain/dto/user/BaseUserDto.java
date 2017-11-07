@@ -10,7 +10,10 @@ public class BaseUserDto {
     protected String email;
 
     @NotBlank
-    protected String name;
+    protected String firstName;
+
+	@NotBlank
+	protected String lastName;
 
     public String getEmail() {
         return email;
@@ -20,12 +23,19 @@ public class BaseUserDto {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 }

@@ -15,15 +15,20 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 
     @Id
     private Long id;
+
     @Index
     private String email;
-    @Index
-    private String name;
+
+    private String firstName;
+
+	@Index
+	private String lastName;
+
     private Role role;
+
     @JsonIgnore
     private String passwordHash;
-
-
+	
     public static Key<UserEntity> createKey(Long id) {
         return idToKey(UserEntity.class, id);
     }
@@ -52,7 +57,6 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
         return "UserEntity{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
                 ", role=" + role +
                 '}';
     }
@@ -88,14 +92,6 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -111,5 +107,31 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
     public String getPasswordHash() {
         return passwordHash;
     }
-	
+
+    public String getFullName() {
+    	if (lastName == null) {
+    		if (firstName == null) return "";
+    		return firstName;
+	    }
+	    if (firstName == null) {
+    		return lastName;
+	    }
+	    return firstName+" "+lastName;
+    }
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 }

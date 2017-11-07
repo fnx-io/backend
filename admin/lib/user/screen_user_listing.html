@@ -3,7 +3,7 @@
         <table class="table--stripes" *ngIf="!listing.isEmpty()">
             <thead>
             <tr>
-                <th>Name</th>
+                <th colspan="2">Name</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th></th>
@@ -11,7 +11,8 @@
             </thead>
             <tbody>
             <tr *ngFor="let u of listing.list">
-                <td>{{ u['name'] }}</td>
+                <td>{{ u['firstName'] }}</td>
+                <td>{{ u['lastName'] }}</td>
                 <td>{{ u['email'] }}</td>
                 <td>{{ u['role'] }}</td>
                 <td><a class="btn" [routerLink]="['UserEdit', {id: u['id'].toString()}]">edit</a></td>

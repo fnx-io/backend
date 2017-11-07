@@ -19,68 +19,69 @@ import static java.lang.String.format;
 
 public class JerseyAuthFilter implements ContainerRequestFilter {
 
-    private static Logger log = LoggerFactory.getLogger(JerseyAuthFilter.class.getName());
+	private static Logger log = LoggerFactory.getLogger(JerseyAuthFilter.class.getName());
 
-    private Provider<CallContext> callContextProvider;
-    private UserService userService;
+	private Provider<CallContext> callContextProvider;
+	private UserService userService;
 
-    @Inject
-    public JerseyAuthFilter(Provider<CallContext> callContextProvider, UserService userService) {
-        this.callContextProvider = callContextProvider;
-        this.userService = userService;
-    }
+	@Inject
+	public JerseyAuthFilter(Provider<CallContext> callContextProvider, UserService userService) {
+		this.callContextProvider = callContextProvider;
+		this.userService = userService;
+	}
 
-    @Override
-    public ContainerRequest filter(ContainerRequest request) {
+	@Override
+	public ContainerRequest filter(ContainerRequest request) {
 
-        String token = request.getHeaderValue(HttpHeaders.AUTHORIZATION);
-        final CallContext cc = callContextProvider.get();
-        cc.setLoggedUser(null);
+		String token = request.getHeaderValue(HttpHeaders.AUTHORIZATION);
+		final CallContext cc = callContextProvider.get();
+		cc.setLoggedUser(null);
 
-        final boolean trustedRequest = requestIsTrusted();
-        cc.setTrusted(trustedRequest);
+		final boolean trustedRequest = requestIsTrusted();
+		cc.setTrusted(trustedRequest);
 
-        if (trustedRequest) {
-            String email = null;
-            final User appengineUser = us().getCurrentUser();
-            if (appengineUser != null) email = appengineUser.getEmail();
-            log.info(format("Request is considered to be TRUSTED, called by user [%s]", email));
-        }
+		if (trustedRequest) {
+			String email = null;
+			final User appengineUser = us().getCurrentUser();
+			if (appengineUser != null) email = appengineUser.getEmail();
+			log.info(format("Request is considered to be TRUSTED, called by user [%s]", email));
+		}
 
-        if (token != null) {
-            final UserEntity user = userService.useAuthToken(token);
-            cc.setLoggedUser(user);
-        }
-        if (cc.logged()) {
-            final UserEntity user = cc.getLoggedUser();
-            log.info(format("Request authenticated as %s, %s [%d]", user.getName(), user.getEmail(), user.getId()));
-        } else if (!isNullOrEmpty(request.getHeaderValue("X-Appengine-Cron")) ||
-                   !isNullOrEmpty(request.getHeaderValue("X-AppEngine-QueueName"))) {
-            // explicitly set cron and task queue requests as trusted
-            cc.setTrusted(true);
-            log.info("Request originated from Appengine and is considered TRUSTED");
-        } else if (!trustedRequest) {
-            log.info("Request not authenticated or token expired");
-        }
-        return request;
-    }
+		if (token != null) {
+			final UserEntity user = userService.useAuthToken(token);
+			cc.setLoggedUser(user);
+		}
+		if (cc.logged()) {
+			final UserEntity user = cc.getLoggedUser();
+			log.info(format("Request authenticated as %s, %s [%d]", user.getFullName(), user.getEmail(), user.getId()));
 
-    /**
-     * Appengine has its own notion of users.
-     * They can be granted different roles in the console.
-     * Selected group of them might become Administrators and then appengine
-     * will protect configured endpoints by Google login screen.
-     *
-     * @return This function returns <code>true</code> if current request is
-     * executing in the context of authenticated Appengine admin account
-     */
-    public static boolean requestIsTrusted() {
-        final com.google.appengine.api.users.UserService service = us();
-        return service.isUserLoggedIn() && service.isUserAdmin();
-    }
+		} else if (!isNullOrEmpty(request.getHeaderValue("X-Appengine-Cron")) ||
+				!isNullOrEmpty(request.getHeaderValue("X-AppEngine-QueueName"))) {
+			// explicitly set cron and task queue requests as trusted
+			cc.setTrusted(true);
+			log.info("Request originated from Appengine and is considered TRUSTED");
+		} else if (!trustedRequest) {
+			log.info("Request not authenticated or token expired");
+		}
+		return request;
+	}
 
-    private static com.google.appengine.api.users.UserService us() {
-        return UserServiceFactory.getUserService();
-    }
+	/**
+	 * Appengine has its own notion of users.
+	 * They can be granted different roles in the console.
+	 * Selected group of them might become Administrators and then appengine
+	 * will protect configured endpoints by Google login screen.
+	 *
+	 * @return This function returns <code>true</code> if current request is
+	 * executing in the context of authenticated Appengine admin account
+	 */
+	public static boolean requestIsTrusted() {
+		final com.google.appengine.api.users.UserService service = us();
+		return service.isUserLoggedIn() && service.isUserAdmin();
+	}
+
+	private static com.google.appengine.api.users.UserService us() {
+		return UserServiceFactory.getUserService();
+	}
 
 }

@@ -9,7 +9,7 @@
     <span class="spacer"></span>
 </div>
 
-<fnx-modal *ngIf="openPicker" (close)="closeImagePicker()">
+<fnx-modal *ngIf="openPicker && !disabled && !readonly" (close)="closeImagePicker()">
     <h3 header>Choose or upload an image</h3>
     <div main style="min-height: 50vh; height: 100%">
         <fnx-gallery-picker (picked)="pickedImage($event)" [imageSet]="imageSet"></fnx-gallery-picker>
@@ -20,7 +20,7 @@
 </fnx-modal>
 
 
-<fnx-modal *ngIf="openDetail" (close)="openDetail = false">
+<fnx-modal *ngIf="openDetail && !disabled && !readonly" (close)="openDetail = false">
     <h3 header>Image</h3>
     <div main>
         <img [attr.src]="value">

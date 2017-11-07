@@ -2,10 +2,7 @@ package io.fnx.backend.domain;
 
 import com.google.common.collect.Sets;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Unindex;
+import com.googlecode.objectify.annotation.*;
 import org.joda.time.DateTime;
 
 import java.util.Collections;
@@ -16,6 +13,7 @@ import static java.lang.String.format;
 
 @Entity
 @Unindex
+@Cache
 public class FileEntity {
 
     public static final Set<String> IMAGE_MEDIA_TYPES = Collections.unmodifiableSet(

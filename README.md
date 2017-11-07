@@ -28,7 +28,7 @@ There is non trivial amount of steps involved when setting such project up. Plea
 After you have working setup and managed to start the Appengine local server on [localhost:8081](http://localhost:8081) you can create first user: 
 
 ```
-curl -H "Content-Type: application/json"  -X POST -d '{"name":"First User","password":"tajneheslo", "email": "email@example.com"}' http://localhost:8081/api/v1/users
+curl -H "Content-Type: application/json"  -X POST -d '{"firstName":"First", "lastName":"User", "password":"tajneheslo", "email": "email@example.com"}' http://localhost:8081/api/v1/users
 ```
 
 Server response will be similar to this one, grap the user id and lets make the user admin:

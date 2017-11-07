@@ -23,6 +23,6 @@ public class ArticleHydrationStep implements HydrationRecipeStep<CmsArticleEntit
     @Override
     public void executeStep(CmsArticleEntity articleEntity, CallContext callContext, Map<Key<Object>, Object> map) {
         UserEntity author = (UserEntity) map.get(articleEntity.getCreatedBy());
-        articleEntity.setAuthorName(author.getName());
+        articleEntity.setAuthorName(author.getFullName());
     }
 }

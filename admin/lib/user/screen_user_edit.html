@@ -2,8 +2,12 @@
     <fnx-form (submit)="saveUser($event)" *ngIf="entity != null">
         <div style="max-width: 50em;">
 
-            <fnx-input label="User's name" [required]="true">
-                <fnx-text [(ngModel)]="entity['name']"></fnx-text>
+            <fnx-input label="User's first name" [required]="true">
+                <fnx-text [(ngModel)]="entity['firstName']"></fnx-text>
+            </fnx-input>
+
+            <fnx-input label="User's last name" [required]="true">
+                <fnx-text [(ngModel)]="entity['lastName']"></fnx-text>
             </fnx-input>
 
             <fnx-input label="User's email" [required]="true">

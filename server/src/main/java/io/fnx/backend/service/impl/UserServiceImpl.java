@@ -52,7 +52,8 @@ public class UserServiceImpl extends BaseService implements UserService {
         final UserEntity user = new UserEntity();
         user.setId(userKey.getId());
         user.setEmail(cmd.getEmail());
-        user.setName(cmd.getName());
+        user.setFirstName(cmd.getFirstName());
+	    user.setLastName(cmd.getLastName());
         user.setPasswordHash(hashPassword(cmd.getPassword()));
         user.setRole(Role.USER);
 
@@ -85,7 +86,8 @@ public class UserServiceImpl extends BaseService implements UserService {
                 final String origEmail = user.getEmail();
 
                 user.setEmail(cmd.getEmail());
-                user.setName(cmd.getName());
+	            user.setFirstName(cmd.getFirstName());
+	            user.setLastName(cmd.getLastName());
                 if (!isNullOrEmpty(cmd.getPassword())) {
                     // also regenerate salt
                     user.setPasswordHash(hashPassword(cmd.getPassword()));

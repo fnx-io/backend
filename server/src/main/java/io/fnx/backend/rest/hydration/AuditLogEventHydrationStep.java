@@ -23,7 +23,7 @@ public class AuditLogEventHydrationStep implements HydrationRecipeStep<AuditLogE
     @Override
     public void executeStep(AuditLogEventEntity auditLogEventEntity, CallContext callContext, Map<Key<Object>, Object> map) {
         UserEntity changedBy = (UserEntity) map.get(auditLogEventEntity.getChangedBy());
-        auditLogEventEntity.setChangedByName(changedBy.getName());
+        auditLogEventEntity.setChangedByName(changedBy.getFullName());
     }
 
 }

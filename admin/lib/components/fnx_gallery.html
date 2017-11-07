@@ -1,6 +1,6 @@
-<div class="flex--row" style="flex-wrap: wrap">
+<div class="flex--row" style="flex-wrap: wrap" reorderContainer (reorder)="onReorder($event)">
     <a class="border margin--small--bottom margin--small--right panel shadow shadow--raising relative image"
-       (click)="showImageDetail($event, i)" *ngFor="let i of value">
+       (click)="showImageDetail($event, i)" *ngFor="let i of value; let a = index" [reorderItem]="a">
         <img [attr.src]="i" style="height: 6em">
         <button class="btn icon delete-icon"
                 style="position: absolute; top: 5px; right: 5px;"
