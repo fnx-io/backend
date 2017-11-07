@@ -11,17 +11,32 @@ import org.slf4j.LoggerFactory;
  * Initializes guice injector
  */
 public class GuiceConfig extends GuiceServletContextListener {
-    private static final Logger log = LoggerFactory.getLogger(GuiceConfig.class);
+
+	private static final Logger log = LoggerFactory.getLogger(GuiceConfig.class);
+
+	private static Injector INSTANCE = null;
 
     @Override
     protected Injector getInjector() {
         log.info("Initializing Guice injector");
-        return Guice.createInjector(
-                new FnxGaeToolsModule(),
-                new UtilModule(),
-                new ObjectifyModule(),
-                new RestModule(),
-                new ServiceModule()
-        );
+
+        // This is very dirty, but we need it
+	    // because some libraries are just incompatible with DI
+        if (INSTANCE == null) {
+	        INSTANCE = Guice.createInjector(
+			        new FnxGaeToolsModule(),
+			        new UtilModule(),
+			        new ObjectifyModule(),
+			        new RestModule(),
+			        new ServiceModule(),
+			        new WebModule()
+	        );
+        }
+        return INSTANCE;
     }
+
+	public static Injector getInjectorInstance() {
+    	return INSTANCE;
+	}
+
 }

@@ -19,10 +19,12 @@
         <!-- For app id = fnx-backend -->
         <property name="fnx-backend.root" value="https://fnx-backend.appspot.com/"/>
         <property name="fnx-backend.file.bucket" value="fnx-backend-files"/>
+        <property name="fnx-backend.use.https.redirect" value="false"/><!-- TODO -->
 
         <!-- For app id = fnx-backend-test -->
         <property name="fnx-backend-test.root" value="https://fnx-backend.appspot.com/"/>
         <property name="fnx-backend-test.file.bucket" value="fnx-backend-files"/>
+        <property name="fnx-backend-test.use.https.redirect" value="false"/>
 
 
     </system-properties>
