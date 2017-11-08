@@ -4,12 +4,10 @@
 
     <div th:replace="fragments/header :: header"></div>
 
-    <p>Na webu
+    <p>Vítáme vás na webu
         <a th:href="${root}" th:text="${root}"></a>
-        Vám byl založen účet
-        '<th:block th:text="${email}"></th:block>'
-        s heslem
-        '<th:block th:text="${password}"></th:block>'.
+        kde jste si právě založil účet
+        <th:block th:text="${email}"></th:block>.
     </p>
 
     <div th:replace="fragments/footer :: footer"></div>

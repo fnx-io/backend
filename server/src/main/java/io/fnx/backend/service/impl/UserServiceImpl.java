@@ -50,26 +50,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     @AllowedForAdmins
     @AllowedForTrusted
     public UserEntity createUser(UserDto cmd) {
-        checkNotNull(cmd, "User must not be null");
-        final Key<UserEntity> userKey = ofy().factory().allocateId(UserEntity.class);
-        final UserEntity user = new UserEntity();
-        user.setId(userKey.getId());
-        user.setEmail(cmd.getEmail());
-        user.setFirstName(cmd.getFirstName());
-	    user.setLastName(cmd.getLastName());
-        user.setPasswordHash(hashPassword(cmd.getPassword()));
-        user.setRole(Role.USER);
-
-        UserEntity result = ofy().transact(new Work<UserEntity>() {
-            @Override
-            public UserEntity run() {
-                // make sure we are creating user with unique email
-                uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), userKey);
-                ofy().save().entity(user).now();
-                return user;
-            }
-        });
-
+        UserEntity result = createUserImpl(cmd);
 	    Map<String, Object> params = new HashMap<>();
 	    params.put("email", result.getEmail());
 	    params.put("password", cmd.getPassword());
@@ -77,7 +58,43 @@ public class UserServiceImpl extends BaseService implements UserService {
         return result;
     }
 
-    @Override
+	@Override
+	public UserEntity registerUser(UserDto cmd) {
+		UserEntity result = createUserImpl(cmd);
+		Map<String, Object> params = new HashMap<>();
+		params.put("email", result.getEmail());
+		mailService.sendEmail(result, messageAccessor.getMessage("email.subject.userRegistered"), "user-registered", params);
+		return result;
+	}
+
+	private UserEntity createUserImpl(UserDto cmd) {
+		checkNotNull(cmd, "User must not be null");
+		final Key<UserEntity> userKey = ofy().factory().allocateId(UserEntity.class);
+		final UserEntity user = new UserEntity();
+		user.setId(userKey.getId());
+		user.setEmail(cmd.getEmail());
+		user.setFirstName(cmd.getFirstName());
+		user.setLastName(cmd.getLastName());
+		user.setPasswordHash(hashPassword(cmd.getPassword()));
+		if (cc().isAdmin()) {
+			user.setRole(cmd.getRole());
+		}
+		if (user.getRole() == null) {
+			user.setRole(Role.USER);
+		}
+		return ofy().transact(new Work<UserEntity>() {
+			@Override
+			public UserEntity run() {
+				// make sure we are creating user with unique email
+				uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), userKey);
+				ofy().save().entity(user).now();
+				return user;
+			}
+		});
+	}
+
+
+	@Override
     @AllowedForOwner
     @AllowedForAdmins
     public UserEntity updateUser(final UpdateUserDto cmd) {
@@ -97,6 +114,11 @@ public class UserServiceImpl extends BaseService implements UserService {
                 user.setEmail(cmd.getEmail());
 	            user.setFirstName(cmd.getFirstName());
 	            user.setLastName(cmd.getLastName());
+
+	            if (cc().isAdmin() && cmd.getRole() != null) {
+	            	user.setRole(cmd.getRole());
+	            }
+
                 if (!isNullOrEmpty(cmd.getPassword())) {
                     // also regenerate salt
                     user.setPasswordHash(hashPassword(cmd.getPassword()));
@@ -141,6 +163,7 @@ public class UserServiceImpl extends BaseService implements UserService {
             log.debug("User could not be authenticated, credentials empty");
             return new InvalidCredentialsLoginResult();
         }
+        
         final UserEntity found = ofy().load().type(UserEntity.class).filter("email", email).first().now();
         String passwordHash = null;
 
@@ -152,10 +175,12 @@ public class UserServiceImpl extends BaseService implements UserService {
         } else {
             passwordHash = found.getPasswordHash();
         }
+        
         if (isNullOrEmpty(passwordHash)) {
             // do the hashing work to mask the timing attack
             hashPassword("aa");
             return new InvalidCredentialsLoginResult();
+            
         } else if (!Objects.equals(passwordHash, hashPassword(password, passwordHash))) {
             log.info("User %s attempted to login with invalid password", email);
             return new InvalidCredentialsLoginResult();

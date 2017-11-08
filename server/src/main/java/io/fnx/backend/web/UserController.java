@@ -34,10 +34,10 @@ public class UserController {
         if (authKey != null) {
             final UserEntity user = userService.useAuthToken(authKey);
             if (user != null) {
+	            log.info("Request by "+user);
                 callContextProvider.get().setLoggedUser(user);
             }
         }
-        log.info("Request by "+callContextProvider.get().getLoggedUser());
     }
 
 }

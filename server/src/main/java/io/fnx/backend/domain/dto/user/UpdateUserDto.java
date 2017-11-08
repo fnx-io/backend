@@ -1,5 +1,6 @@
 package io.fnx.backend.domain.dto.user;
 
+import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.service.Validate;
 import com.googlecode.objectify.Key;
@@ -14,7 +15,9 @@ public class UpdateUserDto extends BaseUserDto implements OwnedEntity<UserEntity
     @Length(min = 6, message = "{error.password.too.short}")
     protected String password;
 
-    @Override
+	protected Role role;
+	
+	@Override
     public Key<UserEntity> getOwnerKey() {
         return UserEntity.createKey(userId);
     }
@@ -34,4 +37,12 @@ public class UpdateUserDto extends BaseUserDto implements OwnedEntity<UserEntity
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 }

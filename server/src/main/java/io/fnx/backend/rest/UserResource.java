@@ -39,9 +39,22 @@ public class UserResource extends BaseResource {
      * @return Newly created user when the registration was successful (contains ID for the user).
      */
     @POST
-    public UserEntity register(UserDto user) {
+    public UserEntity create(UserDto user) {
         return userService.createUser(user);
     }
+
+	/**
+	 * Registers new user. May fail, if some user already registered with same email address.
+	 *
+	 * @param user details about the user to be created
+	 * @return Newly created user when the registration was successful (contains ID for the user).
+	 */
+	@POST
+	@Path("/register")
+	public UserEntity register(UserDto user) {
+		return userService.registerUser(user);
+	}
+
 
     @PUT
     @Path("/{id}")

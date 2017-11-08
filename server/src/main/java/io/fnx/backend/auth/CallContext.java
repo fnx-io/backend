@@ -1,8 +1,8 @@
 package io.fnx.backend.auth;
 
+import com.google.inject.servlet.RequestScoped;
 import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UserEntity;
-import com.google.inject.servlet.RequestScoped;
 import io.fnx.backend.tools.hydration.HydrationContext;
 
 /**
@@ -54,4 +54,8 @@ public class CallContext implements HydrationContext {
     public boolean isTrusted() {
         return trusted;
     }
+
+	public boolean isAdmin() {
+		return getCurrentRole() == Role.ADMIN;
+	}
 }

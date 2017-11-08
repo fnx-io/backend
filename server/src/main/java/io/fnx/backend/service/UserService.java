@@ -11,7 +11,9 @@ import io.fnx.backend.domain.filter.user.ListUsersFilter;
  */
 public interface UserService {
 
-    UserEntity createUser(UserDto cmd);
+	UserEntity registerUser(UserDto cmd); // by anonymous from anywhere
+
+    UserEntity createUser(UserDto cmd); // by admin from backend
 
     UserEntity updateUser(UpdateUserDto cmd);
 

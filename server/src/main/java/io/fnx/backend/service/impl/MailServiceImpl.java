@@ -35,6 +35,8 @@ public class MailServiceImpl extends BaseService implements MailService {
 		}
 		if (backendConfiguration.getBooleanProperty("email.skip")) {
 			log.warn("Emails disabled by appengine-web.xml configuration - email.skip");
+			log.info("Would send: "+subject);
+			log.info(htmlBody);
 			return;
 		}
 		log.info("Sending email '"+subject+"' to "+to.getEmail());

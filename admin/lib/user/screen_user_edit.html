@@ -14,7 +14,7 @@
                 <fnx-text [(ngModel)]="entity['email']"></fnx-text>
             </fnx-input>
 
-            <fnx-input label="Role" *ngIf="creating">
+            <fnx-input label="Role">
                 <fnx-select [(ngModel)]="entity['role']" [required]="true">
                     <fnx-option [value]="null" label="Select appropriate role"></fnx-option>
                     <fnx-option *ngFor="let r of roles" [value]="r.value" [label]="r.label"></fnx-option>
