@@ -1,9 +1,6 @@
 package io.fnx.backend.guice;
 
-import io.fnx.backend.web.HttpsRedirect;
-import io.fnx.backend.web.PageMeta;
-import io.fnx.backend.web.PagesController;
-import io.fnx.backend.web.UserController;
+import io.fnx.backend.web.*;
 import ognl.OgnlRuntime;
 import org.mint42.MintModule;
 
@@ -21,10 +18,13 @@ public class WebModule extends MintModule {
 
 		// TODO: add your routes
 		route(".*", HttpsRedirect.class);
+		route(".*", FlashMessages.class);
 		route(".*", UserController.class);
 
 		route("/", PagesController.class, "index");
 
+		route("/logout", UserController.class, "doLogout");
+		route("/login", UserController.class, "doLogin");
 
 		/*
 		route("/pravidla", PagesController.class, "pravidla");

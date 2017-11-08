@@ -13,15 +13,9 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 @RequestScoped
-public class PagesController {
+public class PagesController extends BaseController {
 
 	private static final Logger log = LoggerFactory.getLogger(PagesController.class);
-
-	@Inject
-	private Provider<CallContext> callContextProvider;
-
-	@Inject
-	private PageMeta pageMeta;
 
 	@OnAction("index")
 	public Resolution index(MintContext ctx) {

@@ -1,5 +1,25 @@
 <th:block th:fragment="header">
-    <header>
-        <h1>FNX BACKEND TEMPLATE</h1>
-    </header>
+    <hr>
+    <p>HEADER</p>
+
+    <h1>FNX BACKEND TEMPLATE</h1>
+
+    <th:block th:if="${!messages.isEmpty()}">
+        <h3>Messages:</h3>
+        <p th:each="msg : ${messages}" th:text="${'Message: '+msg}"></p>
+    </th:block>
+
+
+    <th:block th:if="${!errors.isEmpty()}">
+        <h3>Errors:</h3>
+        <p th:each="msg : ${errors}" th:text="${'Error: '+msg}"></p>
+    </th:block>
+
+
+    <th:block th:if="${logged}">
+        <p>Jste <span th:text="${loggedUser.getFullName()}"></span>. <a href="/logout">logout</a></p>
+    </th:block>
+
+    <p>/HEADER</p>
+    <hr>
 </th:block>

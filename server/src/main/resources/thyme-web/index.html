@@ -12,6 +12,17 @@
     <h2>I'm index!</h2>
     <p>And this is root of this web <a th:href="${root}" th:text="${root}"></a>.</p>
 
+
+
+    <form action="/login" method="POST" th:if="${!logged}">
+
+        <hr>
+
+        email <input type="text" name="email" th:value="${email}"> <br>
+        password <input type="password" name="password"> <br>
+        <button type="submit">login</button>
+    </form>
+
     <div th:replace="fragments/footer :: footer"></div>
 
 
