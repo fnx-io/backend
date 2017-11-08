@@ -40,6 +40,7 @@ public class ServiceModule extends AbstractModule {
         bind(AuditLogManager.class).to(AuditLogManagerImpl.class).in(Singleton.class);
         bind(CmsArticleService.class).to(CmsArticleServiceImpl.class).in(Singleton.class);
         bind(DelayedTaskService.class).to(DelayedTaskServiceImpl.class).in(Singleton.class);
+	    bind(MailService.class).to(MailServiceImpl.class).in(Singleton.class);
 
 	    bind(Hydrator.class).in(Singleton.class);
 

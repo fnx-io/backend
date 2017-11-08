@@ -106,6 +106,17 @@ To use built-in audit logging support:
     - see `CmsArticleServiceImpl` 
 - use `log-listing-modal` Angular component to display log events
     - see `screen_cms_edit.dart`
+    
+### Frontend
+
+Server-side rendered frontend is prepared using mint42. Please notice following:
+
+- Default values for HTML meta-tags in WebModule
+- customized values for HTML meta-tags in PagesController
+- simple support for semi-static pages in PagesController
+- HTTPs enforcing in HttpsRedirect (see appengine-web.xml config) 
+- prepared Thyme layout templates in resources/thyme-web
+      
 
 ### Configuration
 

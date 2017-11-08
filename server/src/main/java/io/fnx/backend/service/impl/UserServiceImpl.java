@@ -9,10 +9,7 @@ import io.fnx.backend.domain.dto.user.UserDto;
 import io.fnx.backend.domain.dto.login.InvalidCredentialsLoginResult;
 import io.fnx.backend.domain.dto.login.LoginResult;
 import io.fnx.backend.domain.filter.user.ListUsersFilter;
-import io.fnx.backend.service.BaseService;
-import io.fnx.backend.service.ListResult;
-import io.fnx.backend.service.NotFoundException;
-import io.fnx.backend.service.UserService;
+import io.fnx.backend.service.*;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
@@ -22,6 +19,7 @@ import io.fnx.backend.manager.UniqueIndexManager;
 import io.fnx.backend.tools.authorization.AllowedForAdmins;
 import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
 import io.fnx.backend.tools.authorization.AllowedForOwner;
+import io.fnx.backend.util.MessageAccessor;
 import org.joda.time.Duration;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -29,7 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -44,8 +44,11 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     private AuthTokenManager<UserEntity> authTokenManager;
     private UniqueIndexManager uniqueIndexManager;
+    private MailService mailService;
 
     @Override
+    @AllowedForAdmins
+    @AllowedForTrusted
     public UserEntity createUser(UserDto cmd) {
         checkNotNull(cmd, "User must not be null");
         final Key<UserEntity> userKey = ofy().factory().allocateId(UserEntity.class);
@@ -57,7 +60,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         user.setPasswordHash(hashPassword(cmd.getPassword()));
         user.setRole(Role.USER);
 
-        return ofy().transact(new Work<UserEntity>() {
+        UserEntity result = ofy().transact(new Work<UserEntity>() {
             @Override
             public UserEntity run() {
                 // make sure we are creating user with unique email
@@ -66,6 +69,12 @@ public class UserServiceImpl extends BaseService implements UserService {
                 return user;
             }
         });
+
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("email", result.getEmail());
+	    params.put("password", cmd.getPassword());
+        mailService.sendEmail(result, messageAccessor.getMessage("email.subject.userCreated"), "user-created", params);
+        return result;
     }
 
     @Override
@@ -217,4 +226,10 @@ public class UserServiceImpl extends BaseService implements UserService {
     public void setUniqueIndexManager(UniqueIndexManager uniqueIndexManager) {
         this.uniqueIndexManager = uniqueIndexManager;
     }
+
+    @Inject
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
+	}
+	
 }

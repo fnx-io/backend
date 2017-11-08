@@ -3,6 +3,8 @@ package io.fnx.backend.service;
 import io.fnx.backend.auth.CallContext;
 import com.googlecode.objectify.Objectify;
 import io.fnx.backend.tools.ofy.OfyProvider;
+import io.fnx.backend.util.MessageAccessor;
+import io.fnx.backend.util.conf.BackendConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -12,6 +14,8 @@ public class BaseService {
 
     private OfyProvider ofyProvider;
     private Provider<CallContext> callContextProvider;
+    protected BackendConfiguration backendConfiguration;
+    protected MessageAccessor messageAccessor;
 
     public Objectify ofy() {
         return ofyProvider.get();
@@ -30,4 +34,14 @@ public class BaseService {
     public void setCallContextProvider(Provider<CallContext> callContextProvider) {
         this.callContextProvider = callContextProvider;
     }
+
+    @Inject
+	public void setBackendConfiguration(BackendConfiguration backendConfiguration) {
+		this.backendConfiguration = backendConfiguration;
+	}
+
+	@Inject
+	public void setMessageAccessor(MessageAccessor messageAccessor) {
+		this.messageAccessor = messageAccessor;
+	}
 }

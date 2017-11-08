@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+    <div th:replace="fragments/header :: header"></div>
+
+    <h2>Na webu
+        <a th:href="${root}" th:text="${root}"></a>
+        Vám byl založen účet
+        <th:block th:text="${email}"></th:block>
+        s heslem
+        <th:block th:text="${password}"></th:block>
+    </h2>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>
