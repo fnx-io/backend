@@ -15,6 +15,7 @@ import org.mint42.annotations.RequestBean;
 import org.mint42.annotations.Validate;
 import org.mint42.execution.ExecutionStep;
 import org.mint42.execution.ExecutionStepContext;
+import org.mint42.messages.LocalizableFieldControllerMessage;
 import org.mint42.resolution.Resolution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,8 +98,7 @@ public class UserController extends BaseController {
 		String token = tokenManager.newAuthTokenFor(user);
 		WebTool.setCookieValue(mintContext.getResponse(), FRONTEND_SESSION_ID, token, SESSION_COOKIE_DURATION);
 		callContext.setLoggedUser(user);
-		mintContext.getMessages().addMessage("message.registered");
-		return new ThymeResolution("index");
+		return redirectWithMessage("/","message.registered");
 	}
 
 
