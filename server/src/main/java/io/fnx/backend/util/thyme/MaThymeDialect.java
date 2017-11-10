@@ -30,7 +30,7 @@ public class MaThymeDialect extends AbstractDialect {
 	private static final int PRECEDENCE = 10000;
 
 	@Inject
-	private Provider<MintContext> callContextProvider;
+	private Provider<MintContext> mintContextProvider;
 
 	@Inject
 	private MessageProvider messages;
@@ -52,6 +52,7 @@ public class MaThymeDialect extends AbstractDialect {
 		processors.add(new I18nTitleTextProcessor());
 		processors.add(new I18nPlaceholderTextProcessor());
 		processors.add(new I18nValueTextProcessor());
+		processors.add(new I18nFieldValueTextProcessor());
 		return processors;
 	}
 
@@ -62,7 +63,7 @@ public class MaThymeDialect extends AbstractDialect {
 		}
 
 		try {
-			return messages.renderMessage(localePicker.getLocale(callContextProvider.get()), code, null);
+			return messages.renderMessage(localePicker.getLocale(mintContextProvider.get()), code, null);
 		} catch (java.util.MissingResourceException e) {
 			// ok, chybi text
 			return null;
@@ -80,7 +81,7 @@ public class MaThymeDialect extends AbstractDialect {
 		}
 
 		protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
-			if (callContextProvider == null) {
+			if (mintContextProvider == null) {
 				GuiceConfig.getInjectorInstance().injectMembers(MaThymeDialect.this);
 			}
 			String code = element.getAttributeValue(attributeName);
@@ -111,7 +112,7 @@ public class MaThymeDialect extends AbstractDialect {
 		}
 
 		protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
-			if (callContextProvider == null) {
+			if (mintContextProvider == null) {
 				GuiceConfig.getInjectorInstance().injectMembers(MaThymeDialect.this);
 			}
 			String code = element.getAttributeValue(attributeName);
@@ -131,6 +132,29 @@ public class MaThymeDialect extends AbstractDialect {
 		}
 	}
 
+	public class I18nFieldValueTextProcessor extends AbstractAttrProcessor {
+
+		public I18nFieldValueTextProcessor() {
+			super("fieldValue");
+		}
+
+		public final int getPrecedence() {
+			return PRECEDENCE;
+		}
+
+		protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
+			if (mintContextProvider == null) {
+				GuiceConfig.getInjectorInstance().injectMembers(MaThymeDialect.this);
+			}
+			String code = element.getAttributeValue(attributeName);
+			String val = mintContextProvider.get().getRequest().getParameter(code);
+			if (val == null) val = "";
+			element.setAttribute("value", val);
+			element.removeAttribute(attributeName);
+			return ProcessorResult.OK;
+		}
+	}
+
 	public class I18nPlaceholderTextProcessor extends AbstractAttrProcessor {
 
 		public I18nPlaceholderTextProcessor() {
@@ -142,7 +166,7 @@ public class MaThymeDialect extends AbstractDialect {
 		}
 
 		protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
-			if (callContextProvider == null) {
+			if (mintContextProvider == null) {
 				GuiceConfig.getInjectorInstance().injectMembers(MaThymeDialect.this);
 			}
 			String code = element.getAttributeValue(attributeName);
@@ -174,7 +198,7 @@ public class MaThymeDialect extends AbstractDialect {
 		}
 
 		protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
-			if (callContextProvider == null) {
+			if (mintContextProvider == null) {
 				GuiceConfig.getInjectorInstance().injectMembers(MaThymeDialect.this);
 			}
 			String code = element.getAttributeValue(attributeName);
@@ -186,7 +210,7 @@ public class MaThymeDialect extends AbstractDialect {
 				element.setAttribute("style", "color: red");
 				return ProcessorResult.OK;
 			}
-			element.setAttribute("href", localePicker.getLocale(callContextProvider.get())+"/"+newText);
+			element.setAttribute("href", localePicker.getLocale(mintContextProvider.get())+"/"+newText);
 
 			element.removeAttribute(attributeName);
 
@@ -205,7 +229,7 @@ public class MaThymeDialect extends AbstractDialect {
 		}
 
 		protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
-			if (callContextProvider == null) {
+			if (mintContextProvider == null) {
 				GuiceConfig.getInjectorInstance().injectMembers(MaThymeDialect.this);
 			}
 			String code = element.getAttributeValue(attributeName);

@@ -25,6 +25,7 @@ public class WebModule extends MintModule {
 
 		route("/logout", UserController.class, "doLogout");
 		route("/login", UserController.class, "doLogin");
+		route("/register", UserController.class, "doRegister");
 
 		/*
 		route("/pravidla", PagesController.class, "pravidla");

@@ -18,8 +18,33 @@
 
         <hr>
 
-        email <input type="text" name="email" th:value="${email}"> <br>
-        password <input type="password" name="password"> <br>
+        email <input type="text" name="login.email" th:value="${login == null ? '' : login.email}"> <br>
+        password <input type="login.password" name="password"> <br>
+        <button type="submit">login</button>
+    </form>
+
+
+    <form action="/register" method="POST" th:if="${!logged}">
+
+        <hr>
+
+        <!--
+           Takhle se vyrenderuje chyba v policku formulare:
+        -->
+        <th:block th:if="${ errorsMap['register.firstName'] != null && !errorsMap['register.firstName'].isEmpty()}">
+            <p th:each="msg : ${errorsMap['register.firstName']}" th:text="${'Error: '+msg}" style="color: red;"></p>
+        </th:block>
+
+        firstName <input type="text" name="register.firstName" ma:fieldValue="register.firstName"> <br>
+        <!--
+           TODO: chce to nejaky macro nebo tak neco:
+           <ma:fieldErrors field="register.firstName"> ... tak nejak.
+        -->
+
+
+        lastName <input type="text" name="register.lastName" ma:fieldValue="register.lastName"> <br>
+        email <input type="text" name="register.email" ma:fieldValue="register.email"> <br>
+        password <input type="password" name="register.password"> <br>
         <button type="submit">login</button>
     </form>
 

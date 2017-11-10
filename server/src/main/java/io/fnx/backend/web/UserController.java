@@ -1,24 +1,25 @@
 package io.fnx.backend.web;
 
 import com.google.inject.servlet.RequestScoped;
-import io.fnx.backend.auth.CallContext;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.domain.dto.login.LoginResult;
 import io.fnx.backend.domain.dto.login.UserLoginDto;
+import io.fnx.backend.domain.dto.user.UserDto;
+import io.fnx.backend.manager.AuthTokenManager;
+import io.fnx.backend.manager.UniqueViolationException;
 import io.fnx.backend.service.UserService;
 import org.mint42.MintContext;
 import org.mint42.annotations.On;
 import org.mint42.annotations.OnAction;
 import org.mint42.annotations.RequestBean;
-import org.mint42.resolution.RedirectResolution;
+import org.mint42.annotations.Validate;
+import org.mint42.execution.ExecutionStep;
+import org.mint42.execution.ExecutionStepContext;
 import org.mint42.resolution.Resolution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by venash on 25.09.17.
@@ -33,6 +34,9 @@ public class UserController extends BaseController {
 	
 	@Inject
 	private UserService userService;
+
+	@Inject
+	private AuthTokenManager<UserEntity> tokenManager;
 
 	@On(stage = On.Stage.PRECONDITIONS)
 	public void initCC() {
@@ -62,7 +66,42 @@ public class UserController extends BaseController {
 			return new ThymeResolution("index");
 		}
 	}
-	
+
+	/**
+	 * Execution step se vaze na tohle konkretni volani tenhle konkretni metody. Napriklad tedy obsahuje
+	 * validacni chyby vznikle z @RequestBean("register")
+	 *
+	 * 
+	 * @param userRegister
+	 * @param step
+	 * @return
+	 */
+	@OnAction("doRegister")
+	public Resolution register(@RequestBean("register") @Validate UserDto userRegister, ExecutionStep step) {
+		assertPOST();
+
+		if (step.hasBindingErrors()) {
+			// nevalidni form
+			mintContext.getErrors().addMessage("error.formErrors");
+			return new ThymeResolution("index");
+		}
+
+		UserEntity user;
+		try {
+			user = userService.registerUser(userRegister);
+		} catch (UniqueViolationException e) {
+			mintContext.getErrors().addMessage("error.email.duplicate");
+			return new ThymeResolution("index");
+		}
+
+		String token = tokenManager.newAuthTokenFor(user);
+		WebTool.setCookieValue(mintContext.getResponse(), FRONTEND_SESSION_ID, token, SESSION_COOKIE_DURATION);
+		callContext.setLoggedUser(user);
+		mintContext.getMessages().addMessage("message.registered");
+		return new ThymeResolution("index");
+	}
+
+
 	@OnAction("doLogout")
 	public Resolution logOut(MintContext ctx) {
 		if (callContext.logged()) {

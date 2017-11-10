@@ -10,9 +10,9 @@
     </th:block>
 
 
-    <th:block th:if="${!errors.isEmpty()}">
+    <th:block th:if="${errorsMap['global'] != null && !errorsMap['global'].isEmpty()}">
         <h3>Errors:</h3>
-        <p th:each="msg : ${errors}" th:text="${'Error: '+msg}"></p>
+        <p th:each="msg : ${errorsMap['global']}" th:text="${'Error: '+msg}" style="color: red;"></p>
     </th:block>
 
 
