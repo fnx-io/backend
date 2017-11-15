@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+
+    <th:block th:replace="fragments/head :: head"></th:block>
+
+</head>
+<body>
+
+    <div th:replace="fragments/header :: header"></div>
+
+    <form action="/forgotten/save" method="POST" th:if="${!logged}">
+
+        <input type="hidden" name="email" th:value="${email}">
+        <input type="hidden" name="token" th:value="${token}">
+
+        nove heslo email <input type="text" name="password.password"> <br>
+        
+        <button type="submit">change password</button>
+    </form>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+
+</body>
+</html>

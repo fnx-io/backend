@@ -5,6 +5,7 @@ import com.googlecode.objectify.annotation.*;
 import io.fnx.backend.tools.auth.Principal;
 import io.fnx.backend.tools.auth.PrincipalRole;
 import io.fnx.backend.tools.authorization.OwnedEntity;
+import org.joda.time.DateTime;
 
 import static io.fnx.backend.tools.ofy.OfyUtils.idToKey;
 
@@ -28,6 +29,12 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 
     @JsonIgnore
     private String passwordHash;
+	
+	@JsonIgnore
+    private DateTime passwordTokenValidTill;
+
+	@JsonIgnore
+    private String passwordToken;
 	
     public static Key<UserEntity> createKey(Long id) {
         return idToKey(UserEntity.class, id);
@@ -133,5 +140,21 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public DateTime getPasswordTokenValidTill() {
+		return passwordTokenValidTill;
+	}
+
+	public void setPasswordTokenValidTill(DateTime passwordTokenValidTill) {
+		this.passwordTokenValidTill = passwordTokenValidTill;
+	}
+
+	public String getPasswordToken() {
+		return passwordToken;
+	}
+
+	public void setPasswordToken(String passwordToken) {
+		this.passwordToken = passwordToken;
 	}
 }

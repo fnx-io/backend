@@ -1,5 +1,6 @@
 package io.fnx.backend.service.impl;
 
+import com.google.common.base.Preconditions;
 import io.fnx.backend.auth.AllowedForTrusted;
 import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UniqueProps;
@@ -19,7 +20,9 @@ import io.fnx.backend.manager.UniqueIndexManager;
 import io.fnx.backend.tools.authorization.AllowedForAdmins;
 import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
 import io.fnx.backend.tools.authorization.AllowedForOwner;
+import io.fnx.backend.tools.random.Randomizer;
 import io.fnx.backend.util.MessageAccessor;
+import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -45,6 +48,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     private AuthTokenManager<UserEntity> authTokenManager;
     private UniqueIndexManager uniqueIndexManager;
     private MailService mailService;
+    private Randomizer randomizer;
 
     @Override
     @AllowedForAdmins
@@ -141,7 +145,45 @@ public class UserServiceImpl extends BaseService implements UserService {
 		return ofy().load().key(UserEntity.createKey(id)).now();
 	}
 
-    private String hashPassword(String password) {
+	@Override
+	public void generateForgottenPasswordToken(String email) {
+		Preconditions.checkArgument(email != null, "Email is null");
+		randomSleep();
+		Key<UserEntity> ownerKey = uniqueIndexManager.getUniqueValueOwner(UniqueProps.user_email, email);
+		if (ownerKey != null) {
+			final UserEntity user = ofy().load().key(ownerKey).now();
+			if (user != null) {
+				final int validForHours = 1;
+				ofy().transact(new Runnable() {
+					@Override
+					public void run() {
+						String token = randomizer.randomBase64(22);
+						DateTime validTill = new DateTime();
+						validTill = validTill.plusHours(validForHours);
+						user.setPasswordToken(token);
+						user.setPasswordTokenValidTill(validTill);
+						ofy().save().entity(user).now();
+					}
+				});
+				Map<String, Object> params = new HashMap<>();
+				params.put("validForHours", validForHours);
+				params.put("token", user.getPasswordToken());
+				params.put("email", user.getEmail());
+				//mailService.sendEmail(result, messageAccessor.getMessage("email.subject.userCreated"), "user-created", params);
+				mailService.sendEmail(user, messageAccessor.getMessage("email.subject.passwordToken"), "forgotten-password", params);
+			}
+		} else {
+			log.info("Email "+email+" was not found");
+		}
+
+	}
+
+	@Override
+	public boolean changeForgottenPassword(String token, String email, String password) {
+		return false;
+	}
+
+	private String hashPassword(String password) {
         return hashPassword(password, BCrypt.gensalt(10));
     }
 
@@ -256,5 +298,9 @@ public class UserServiceImpl extends BaseService implements UserService {
 	public void setMailService(MailService mailService) {
 		this.mailService = mailService;
 	}
-	
+
+	@Inject
+	public void setRandomizer(Randomizer randomizer) {
+		this.randomizer = randomizer;
+	}
 }

@@ -52,7 +52,7 @@ public class UserController extends BaseController {
 	}
 
 	@OnAction("doLogin")
-	public Resolution login(@RequestBean UserLoginDto userLogin) {
+	public Resolution login(@RequestBean("login") UserLoginDto userLogin) {
 		assertPOST();
 
 		LoginResult user = userService.login(userLogin.getEmail(), userLogin.getPassword(), false);
@@ -103,14 +103,44 @@ public class UserController extends BaseController {
 
 
 	@OnAction("doLogout")
-	public Resolution logOut(MintContext ctx) {
+	public Resolution logOut() {
 		if (callContext.logged()) {
-			String authKey = WebTool.getCookieValue(ctx.getRequest(), FRONTEND_SESSION_ID);
-			WebTool.deleteCookie(ctx.getResponse(), FRONTEND_SESSION_ID);
+			String authKey = WebTool.getCookieValue(mintContext.getRequest(), FRONTEND_SESSION_ID);
+			WebTool.deleteCookie(mintContext.getResponse(), FRONTEND_SESSION_ID);
 			userService.logout(authKey);
 			callContext.setLoggedUser(null);
 		}
 		return redirectWithMessage("/", "message.loggedOut");
+	}
+
+	@OnAction("doForgottenRequest")
+	public Resolution forgottenRequest() {
+		return new ThymeResolution("forgotten-request");
+	}
+
+	@OnAction("doForgottenSend")
+	public Resolution forgottenSend(@RequestBean("password") UserLoginDto userLogin) {
+		userService.generateForgottenPasswordToken(userLogin.getEmail());
+		return redirectWithMessage("/", "message.forgottenMaybeSent");
+	}
+
+	@OnAction("doForgottenChange")
+	public Resolution forgottenChange() {
+		return new ThymeResolution("forgotten-change");
+	}
+
+	@OnAction("doForgottenSave")
+	public Resolution forgottenSave(@RequestBean("register") @Validate UserDto userRegister, ExecutionStep step) {
+		assertPOST();
+		if (step.hasBindingErrors()) {
+			// nevalidni form
+			mintContext.getErrors().addMessage("error.formErrors");
+			return new ThymeResolution("forgotten-change");
+		}
+
+		userService.changeForgottenPassword()
+
+		return redirectWithMessage("/", "message.forgottenPasswordChanged");
 	}
 
 

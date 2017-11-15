@@ -27,6 +27,11 @@ public class WebModule extends MintModule {
 		route("/login", UserController.class, "doLogin");
 		route("/register", UserController.class, "doRegister");
 
+		route("/forgotten/request", UserController.class, "doForgottenRequest");
+		route("/forgotten/send", UserController.class, "doForgottenSend");
+		route("/forgotten/change", UserController.class, "doForgottenChange");
+		route("/forgotten/save", UserController.class, "doForgottenSave");
+
 		/*
 		route("/pravidla", PagesController.class, "pravidla");
 		route("/vyherci", PagesController.class, "vyherci");

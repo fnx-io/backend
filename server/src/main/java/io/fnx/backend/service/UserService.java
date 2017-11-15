@@ -29,4 +29,9 @@ public interface UserService {
 
 	UserEntity getUser(Long id);
 
+	void generateForgottenPasswordToken(String email);
+
+	boolean changeForgottenPassword(String token, String email, String password);
+
+
 }

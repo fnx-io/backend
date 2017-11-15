@@ -44,4 +44,11 @@ public class BaseService {
 	public void setMessageAccessor(MessageAccessor messageAccessor) {
 		this.messageAccessor = messageAccessor;
 	}
+
+	protected void randomSleep() {
+		try {
+			Thread.sleep((long) (Math.random()*100)+10);
+		} catch (InterruptedException e) { }
+	}
+
 }
