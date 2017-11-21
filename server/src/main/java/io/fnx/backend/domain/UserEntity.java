@@ -36,6 +36,9 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 	@JsonIgnore
     private String passwordToken;
 	
+	@Index
+	private String avatarUrl;
+	
     public static Key<UserEntity> createKey(Long id) {
         return idToKey(UserEntity.class, id);
     }
@@ -156,5 +159,13 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 
 	public void setPasswordToken(String passwordToken) {
 		this.passwordToken = passwordToken;
+	}
+	
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 }

@@ -19,3 +19,5 @@ server/target
 # these contain admin build
 server/src/main/webapp/admin
 admin/build
+
+server/src/main/webapp/WEB-INF/appengine-web.example

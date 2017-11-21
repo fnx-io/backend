@@ -1,6 +1,7 @@
 package io.fnx.backend.web;
 
 import com.google.inject.servlet.RequestScoped;
+import io.fnx.backend.auth.CallContext;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.domain.dto.login.LoginResult;
 import io.fnx.backend.domain.dto.login.UserLoginDto;
@@ -56,8 +57,7 @@ public class UserController extends BaseController {
 		LoginResult user = userService.login(userLogin.getEmail(), userLogin.getPassword(), false);
 		
 		if (user.isSuccess()) {
-			WebTool.setCookieValue(mintContext.getResponse(), FRONTEND_SESSION_ID, user.getToken(), SESSION_COOKIE_DURATION);
-			callContext.setLoggedUser(user.getUser());
+			loginImpl(mintContext, callContext, user.getToken(), user.getUser());
 			return redirectWithMessage("/", "message.loggedIn");
 
 		} else {
@@ -94,8 +94,7 @@ public class UserController extends BaseController {
 		}
 
 		String token = tokenManager.newAuthTokenFor(user);
-		WebTool.setCookieValue(mintContext.getResponse(), FRONTEND_SESSION_ID, token, SESSION_COOKIE_DURATION);
-		callContext.setLoggedUser(user);
+		loginImpl(mintContext, callContext, token, user);
 		return redirectWithMessage("/","message.registered");
 	}
 
@@ -147,5 +146,17 @@ public class UserController extends BaseController {
 		}
 	}
 
+	/**
+	 * Nastavi cookie a call context, takze je uzivatel prihlaseny.
+	 *
+	 * @param mintContext
+	 * @param ctx
+	 * @param authTokenFromManager
+	 * @param user
+	 */
+	public static void loginImpl(MintContext mintContext, CallContext ctx, String authTokenFromManager, UserEntity user) {
+		WebTool.setCookieValue(mintContext.getResponse(), FRONTEND_SESSION_ID, authTokenFromManager, SESSION_COOKIE_DURATION);
+		ctx.setLoggedUser(user);
+	}
 
 }

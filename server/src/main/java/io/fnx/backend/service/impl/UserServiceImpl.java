@@ -1,28 +1,25 @@
 package io.fnx.backend.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.Work;
+import com.googlecode.objectify.cmd.Query;
 import io.fnx.backend.auth.AllowedForTrusted;
-import io.fnx.backend.domain.Role;
-import io.fnx.backend.domain.UniqueProps;
-import io.fnx.backend.domain.UserEntity;
+import io.fnx.backend.domain.*;
+import io.fnx.backend.domain.dto.login.InvalidCredentialsLoginResult;
+import io.fnx.backend.domain.dto.login.LoginResult;
 import io.fnx.backend.domain.dto.user.PasswordChangeDto;
 import io.fnx.backend.domain.dto.user.UpdateUserDto;
 import io.fnx.backend.domain.dto.user.UserDto;
-import io.fnx.backend.domain.dto.login.InvalidCredentialsLoginResult;
-import io.fnx.backend.domain.dto.login.LoginResult;
 import io.fnx.backend.domain.filter.user.ListUsersFilter;
-import io.fnx.backend.service.*;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Work;
-import com.googlecode.objectify.cmd.Query;
-import io.fnx.backend.domain.AuthTokenEntity;
 import io.fnx.backend.manager.AuthTokenManager;
 import io.fnx.backend.manager.UniqueIndexManager;
+import io.fnx.backend.service.*;
 import io.fnx.backend.tools.authorization.AllowedForAdmins;
 import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
 import io.fnx.backend.tools.authorization.AllowedForOwner;
 import io.fnx.backend.tools.random.Randomizer;
-import io.fnx.backend.util.MessageAccessor;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.mindrot.jbcrypt.BCrypt;
@@ -30,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +94,65 @@ public class UserServiceImpl extends BaseService implements UserService {
 		});
 	}
 
+	@Override
+	public LoginResult loginOnCreate(UserEntity socialMediaUser, String socialMediaId, String socialMediaFlavour) {
+		final Key<SocialMediaId> socMemKey = SocialMediaId.buildKey(socialMediaId, socialMediaFlavour);
+		final SocialMediaId id = ofy().load().key(socMemKey).now();
+
+		UserEntity existingUser;
+
+		if (id == null) {
+			// try by email
+			existingUser = ofy().load().type(UserEntity.class).filter("email", socialMediaUser.getEmail()).first().now();
+		} else {
+			log.info("Found "+socialMediaUser+" by social media id");
+			// we have this user
+			existingUser = id.getOwner().get();
+		}
+
+		if (existingUser != null) {
+			// user already exists
+			log.info("User exists, updating");
+			existingUser.setPasswordHash(null); // delete password
+			existingUser.setFirstName(socialMediaUser.getFirstName());
+			existingUser.setLastName(socialMediaUser.getLastName());
+			existingUser.setAvatarUrl(socialMediaUser.getAvatarUrl());
+			if (id == null) {
+				// but was found by email, let's store his ID
+				SocialMediaId socMemId = new SocialMediaId();
+				socMemId.setOwner(Ref.create(existingUser.getKey()));
+				socMemId.setId(socMemKey.getName());
+				ofy().save().entities(existingUser, socMemId).now();
+			} else {
+				ofy().save().entity(existingUser).now();
+			}
+
+		} else {
+			// user doesn't exist
+			log.info("User doesn't exist creating");
+			existingUser = socialMediaUser;
+			existingUser.setRole(Role.USER);
+			final Key<UserEntity> userKey = ofy().factory().allocateId(UserEntity.class);
+
+			final UserEntity finalExistingUser = existingUser;
+			ofy().transact(new Runnable() {
+				@Override
+				public void run() {
+					// make sure we are creating user with unique email
+					uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, finalExistingUser.getEmail(), userKey);
+					finalExistingUser.setId(userKey.getId());
+
+					SocialMediaId socMemId = new SocialMediaId();
+					socMemId.setOwner(Ref.create(finalExistingUser.getKey()));
+					socMemId.setId(socMemKey.getName());
+
+					ofy().save().entities(finalExistingUser, socMemId).now();
+				}
+			});
+		}
+
+		return new LoginResult(true, existingUser, authTokenManager.newAuthTokenFor(existingUser));
+	}
 
 	@Override
 	@AllowedForOwner

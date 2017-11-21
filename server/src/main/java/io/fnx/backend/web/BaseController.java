@@ -6,6 +6,8 @@ import io.fnx.backend.auth.CallContext;
 import org.mint42.MintContext;
 import org.mint42.resolution.RedirectResolution;
 import org.mint42.resolution.Resolution;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
@@ -14,6 +16,8 @@ import javax.inject.Inject;
  */
 @RequestScoped
 public class BaseController {
+	
+	protected Logger log = LoggerFactory.getLogger(getClass().getName());
 
 	@Inject
 	protected CallContext callContext;

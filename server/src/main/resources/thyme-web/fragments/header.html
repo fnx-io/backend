@@ -18,6 +18,8 @@
 
     <th:block th:if="${logged}">
         <p>Jste <span th:text="${loggedUser.getFullName()}"></span>. <a href="/logout">logout</a></p>
+
+        <p th:if="${loggedUser.avatarUrl != null}"><img th:src="${loggedUser.avatarUrl}" style="width: 50px"></p>
     </th:block>
 
     <p>/HEADER</p>

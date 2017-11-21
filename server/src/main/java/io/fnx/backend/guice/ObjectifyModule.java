@@ -2,6 +2,7 @@ package io.fnx.backend.guice;
 
 import io.fnx.backend.domain.CmsArticleEntity;
 import io.fnx.backend.domain.FileEntity;
+import io.fnx.backend.domain.SocialMediaId;
 import io.fnx.backend.domain.UserEntity;
 import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.ObjectifyFilter;
@@ -24,6 +25,7 @@ public class ObjectifyModule extends ServletModule {
         register(FileEntity.class);
         register(AuditLogEventEntity.class);
 	    register(CmsArticleEntity.class);
+	    register(SocialMediaId.class);
     }
 
     @Override

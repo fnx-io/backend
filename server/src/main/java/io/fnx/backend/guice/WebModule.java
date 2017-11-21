@@ -1,5 +1,9 @@
 package io.fnx.backend.guice;
 
+import io.fnx.backend.social.BaseSocialPlugin;
+import io.fnx.backend.social.web.BaseSocialController;
+import io.fnx.backend.social.web.FacebookSocialController;
+import io.fnx.backend.social.web.GoogleSocialController;
 import io.fnx.backend.web.*;
 import ognl.OgnlRuntime;
 import org.mint42.MintModule;
@@ -32,41 +36,19 @@ public class WebModule extends MintModule {
 		route("/forgotten/change", UserController.class, "doForgottenChange");
 		route("/forgotten/save", UserController.class, "doForgottenSave");
 
-		/*
-		route("/pravidla", PagesController.class, "pravidla");
-		route("/vyherci", PagesController.class, "vyherci");
-		route("/90-let-fernetu-stock", PagesController.class, "90-let-fernetu-stock");
-		Route prihlaseni = route("/prihlaseni", PagesController.class, "prihlaseni");
-		route("/soutezit", PagesController.class, "soutezit");
 
-		route("/submit", CompetitionController.class, "submit");
-		route("/register", CompetitionController.class, "register");
-		route("/login", CompetitionController.class, "login");
+		route("/social/google/redirect", GoogleSocialController.class, "doRedirect");
+		route("/social/google/return", GoogleSocialController.class, "doReturn");
+		route("/social/facebook/redirect", FacebookSocialController.class, "doRedirect");
+		route("/social/facebook/return", FacebookSocialController.class, "doReturn");
 
-		prihlaseni.addChild("/forgotten-password", CompetitionController.class, "zapomenute-heslo");
-		route("/new-password", CompetitionController.class, "new-password");
-
-		route("/logout", CompetitionController.class, "logout-action");
-		*/
 		
 		/*
-		route(".*", PageMetaDecorator.class);
-
-		route("/kalendar-behu", CalendarController.class, "init");
-		Route hospiceVCR = route("/hospice-v-cr", HospiceVCrController.class, "init");
 		hospiceVCR.addChild("/(?<id>[A-Za-z0-9-]+)", HospiceVCrController.class, "detail");
-
 		Route news = route("/novinky", NewsController.class, "init");
 		news.addChild("/(?<id>[0-9]+)", NewsController.class, "detail");
-
 		Route vyzvy = route("/vyzvy", CallsController.class, "init");
 		vyzvy.addChild("/(?<id>[A-Za-z0-9-]+)", CallsController.class, "detail");
-
-		route("/detail-behu/(?<id>[0-9]+)", RunDetailController.class, "detail");
-		route("/detail-bezce/(?<id>[0-9]+)", AboutMeController.class, "init");
-
-		route("/hitparada", HitparadaController.class, "init");
-		route("/o-projektu", OtherInfoController.class, "init");
 		*/
 	}
 

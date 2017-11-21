@@ -33,6 +33,7 @@ public interface UserService {
 	void generateForgottenPasswordToken(String email);
 
 	boolean changeForgottenPassword(PasswordChangeDto change);
-
-
+	
+	LoginResult loginOnCreate(UserEntity user, String socialMediaId, String socialMediaFlavour);
+	
 }
