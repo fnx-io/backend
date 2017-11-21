@@ -11,10 +11,10 @@
 
     <form action="/forgotten/save" method="POST" th:if="${!logged}">
 
-        <input type="hidden" name="email" th:value="${email}">
-        <input type="hidden" name="token" th:value="${token}">
-
-        nove heslo email <input type="text" name="password.password"> <br>
+        <input type="hidden" name="change.email" th:value="${change == null ? '' : change.email}">
+        <input type="hidden" name="change.token" th:value="${change == null ? '' : change.token}">
+        
+        nove heslo <input type="password" name="change.password"> <br>
         
         <button type="submit">change password</button>
     </form>

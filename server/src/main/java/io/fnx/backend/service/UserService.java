@@ -1,6 +1,7 @@
 package io.fnx.backend.service;
 
 import io.fnx.backend.domain.UserEntity;
+import io.fnx.backend.domain.dto.user.PasswordChangeDto;
 import io.fnx.backend.domain.dto.user.UpdateUserDto;
 import io.fnx.backend.domain.dto.user.UserDto;
 import io.fnx.backend.domain.dto.login.LoginResult;
@@ -31,7 +32,7 @@ public interface UserService {
 
 	void generateForgottenPasswordToken(String email);
 
-	boolean changeForgottenPassword(String token, String email, String password);
+	boolean changeForgottenPassword(PasswordChangeDto change);
 
 
 }

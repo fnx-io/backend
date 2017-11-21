@@ -5,6 +5,7 @@ import io.fnx.backend.auth.AllowedForTrusted;
 import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UniqueProps;
 import io.fnx.backend.domain.UserEntity;
+import io.fnx.backend.domain.dto.user.PasswordChangeDto;
 import io.fnx.backend.domain.dto.user.UpdateUserDto;
 import io.fnx.backend.domain.dto.user.UserDto;
 import io.fnx.backend.domain.dto.login.InvalidCredentialsLoginResult;
@@ -43,24 +44,24 @@ import static java.lang.String.format;
 
 public class UserServiceImpl extends BaseService implements UserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    private AuthTokenManager<UserEntity> authTokenManager;
-    private UniqueIndexManager uniqueIndexManager;
-    private MailService mailService;
-    private Randomizer randomizer;
+	private AuthTokenManager<UserEntity> authTokenManager;
+	private UniqueIndexManager uniqueIndexManager;
+	private MailService mailService;
+	private Randomizer randomizer;
 
-    @Override
-    @AllowedForAdmins
-    @AllowedForTrusted
-    public UserEntity createUser(UserDto cmd) {
-        UserEntity result = createUserImpl(cmd);
-	    Map<String, Object> params = new HashMap<>();
-	    params.put("email", result.getEmail());
-	    params.put("password", cmd.getPassword());
-        mailService.sendEmail(result, messageAccessor.getMessage("email.subject.userCreated"), "user-created", params);
-        return result;
-    }
+	@Override
+	@AllowedForAdmins
+	@AllowedForTrusted
+	public UserEntity createUser(UserDto cmd) {
+		UserEntity result = createUserImpl(cmd);
+		Map<String, Object> params = new HashMap<>();
+		params.put("email", result.getEmail());
+		params.put("password", cmd.getPassword());
+		mailService.sendEmail(result, messageAccessor.getMessage("email.subject.userCreated"), "user-created", params);
+		return result;
+	}
 
 	@Override
 	public UserEntity registerUser(UserDto cmd) {
@@ -99,44 +100,44 @@ public class UserServiceImpl extends BaseService implements UserService {
 
 
 	@Override
-    @AllowedForOwner
-    @AllowedForAdmins
-    public UserEntity updateUser(final UpdateUserDto cmd) {
-        checkNotNull(cmd, "User to change must not be empty!");
-        checkNotNull(cmd.getUserId(), "User id must not be empty!");
-        log.debug(format("User [%d] wants to update user [%d]", cc().getLoggedUserId(), cmd.getUserId()));
+	@AllowedForOwner
+	@AllowedForAdmins
+	public UserEntity updateUser(final UpdateUserDto cmd) {
+		checkNotNull(cmd, "User to change must not be empty!");
+		checkNotNull(cmd.getUserId(), "User id must not be empty!");
+		log.debug(format("User [%d] wants to update user [%d]", cc().getLoggedUserId(), cmd.getUserId()));
 
-        return ofy().transact(new Work<UserEntity>() {
-            @Override
-            public UserEntity run() {
-                final Key<UserEntity> key = UserEntity.createKey(cmd.getUserId());
-                final UserEntity user = ofy().load().key(key).now();
-                if (user == null) throw new NotFoundException(key);
+		return ofy().transact(new Work<UserEntity>() {
+			@Override
+			public UserEntity run() {
+				final Key<UserEntity> key = UserEntity.createKey(cmd.getUserId());
+				final UserEntity user = ofy().load().key(key).now();
+				if (user == null) throw new NotFoundException(key);
 
-                final String origEmail = user.getEmail();
+				final String origEmail = user.getEmail();
 
-                user.setEmail(cmd.getEmail());
-	            user.setFirstName(cmd.getFirstName());
-	            user.setLastName(cmd.getLastName());
+				user.setEmail(cmd.getEmail());
+				user.setFirstName(cmd.getFirstName());
+				user.setLastName(cmd.getLastName());
 
-	            if (cc().isAdmin() && cmd.getRole() != null) {
-	            	user.setRole(cmd.getRole());
-	            }
+				if (cc().isAdmin() && cmd.getRole() != null) {
+					user.setRole(cmd.getRole());
+				}
 
-                if (!isNullOrEmpty(cmd.getPassword())) {
-                    // also regenerate salt
-                    user.setPasswordHash(hashPassword(cmd.getPassword()));
-                }
-                // do we need to release and acquire new unique for changed email?
-                if (!Objects.equals(origEmail, user.getEmail())) {
-                    uniqueIndexManager.deleteUniqueIndexOwner(UniqueProps.user_email, origEmail);
-                    uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), key);
-                }
-                ofy().save().entity(user).now();
-                return user;
-            }
-        });
-    }
+				if (!isNullOrEmpty(cmd.getPassword())) {
+					// also regenerate salt
+					user.setPasswordHash(hashPassword(cmd.getPassword()));
+				}
+				// do we need to release and acquire new unique for changed email?
+				if (!Objects.equals(origEmail, user.getEmail())) {
+					uniqueIndexManager.deleteUniqueIndexOwner(UniqueProps.user_email, origEmail);
+					uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), key);
+				}
+				ofy().save().entity(user).now();
+				return user;
+			}
+		});
+	}
 
 
 	@Override
@@ -179,122 +180,144 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	public boolean changeForgottenPassword(String token, String email, String password) {
+	public boolean changeForgottenPassword(final PasswordChangeDto change) {
+		Preconditions.checkArgument(change != null, "change is null");
+		Preconditions.checkArgument(change.getEmail() != null, "Email is null");
+		Preconditions.checkArgument(change.getToken() != null, "Token is null");
+		Preconditions.checkArgument(change.getPassword() != null, "Password is null");
+		Preconditions.checkArgument(change.getPassword().length() >= 6, "Min length == 6");
+		randomSleep();
+		Key<UserEntity> ownerKey = uniqueIndexManager.getUniqueValueOwner(UniqueProps.user_email, change.getEmail());
+		if (ownerKey != null) {
+			final UserEntity user = ofy().load().key(ownerKey).now();
+			if (user != null && change.getToken().equals(user.getPasswordToken())) {
+				ofy().transact(new Runnable() {
+					@Override
+					public void run() {
+						user.setPasswordToken(null);
+						user.setPasswordTokenValidTill(null);
+						user.setPasswordHash(hashPassword(change.getPassword()));
+						ofy().save().entity(user).now();
+					}
+				});
+				return true;
+			}
+		}
 		return false;
 	}
 
 	private String hashPassword(String password) {
-        return hashPassword(password, BCrypt.gensalt(10));
-    }
+		return hashPassword(password, BCrypt.gensalt(10));
+	}
 
-    private String hashPassword(String password, String salt) {
-        checkArgument(!isNullOrEmpty(password), "Password cannot be blank");
-        checkArgument(!isNullOrEmpty(salt), "Salt cannot be empty");
-        return BCrypt.hashpw(password, salt);
-    }
+	private String hashPassword(String password, String salt) {
+		checkArgument(!isNullOrEmpty(password), "Password cannot be blank");
+		checkArgument(!isNullOrEmpty(salt), "Salt cannot be empty");
+		return BCrypt.hashpw(password, salt);
+	}
 
-    @Override
-    public UserEntity useAuthToken(String token) {
-        return authTokenManager.useToken(token);
-    }
+	@Override
+	public UserEntity useAuthToken(String token) {
+		return authTokenManager.useToken(token);
+	}
 
-    @Override
-    public LoginResult login(String email, String password, boolean admin) {
-        log.debug(format("Attempting to login user with email: %s and password: %s", email, protectPwd(password)));
-        if (isNullOrEmpty(email) || isNullOrEmpty(password)) {
-            log.debug("User could not be authenticated, credentials empty");
-            return new InvalidCredentialsLoginResult();
-        }
-        
-        final UserEntity found = ofy().load().type(UserEntity.class).filter("email", email).first().now();
-        String passwordHash = null;
+	@Override
+	public LoginResult login(String email, String password, boolean admin) {
+		log.debug(format("Attempting to login user with email: %s and password: %s", email, protectPwd(password)));
+		if (isNullOrEmpty(email) || isNullOrEmpty(password)) {
+			log.debug("User could not be authenticated, credentials empty");
+			return new InvalidCredentialsLoginResult();
+		}
 
-        // check that user is admin, if it is required
-        if (found == null) {
-            log.debug(format("No such user with email %s found", email));
-        } else if (admin && (found.getRole() == null || !found.getRole().isAdmin())) {
-            log.info(format("Login limited to admin only, but %s is is not an admin!", email));
-        } else {
-            passwordHash = found.getPasswordHash();
-        }
-        
-        if (isNullOrEmpty(passwordHash)) {
-            // do the hashing work to mask the timing attack
-            hashPassword("aa");
-            return new InvalidCredentialsLoginResult();
-            
-        } else if (!Objects.equals(passwordHash, hashPassword(password, passwordHash))) {
-            log.info("User %s attempted to login with invalid password", email);
-            return new InvalidCredentialsLoginResult();
-        }
+		final UserEntity found = ofy().load().type(UserEntity.class).filter("email", email).first().now();
+		String passwordHash = null;
 
-        final String token = authTokenManager.newAuthTokenFor(found);
+		// check that user is admin, if it is required
+		if (found == null) {
+			log.debug(format("No such user with email %s found", email));
+		} else if (admin && (found.getRole() == null || !found.getRole().isAdmin())) {
+			log.info(format("Login limited to admin only, but %s is is not an admin!", email));
+		} else {
+			passwordHash = found.getPasswordHash();
+		}
 
-        return new LoginResult(true, found, token);
-    }
+		if (isNullOrEmpty(passwordHash)) {
+			// do the hashing work to mask the timing attack
+			hashPassword("aa");
+			return new InvalidCredentialsLoginResult();
 
-    @Override
-    @AllowedForAuthenticated
-    public void logout(String authToken) {
-        final Long curUserId = cc().getLoggedUserId();
-        final AuthTokenEntity found = authTokenManager.getAuthToken(authToken);
-        if (found == null) {
-            log.info(format("Auth token [%s] is invalid", authToken));
-            return;
-        }
-        final Long ownerId = keyToId(found.getOwner());
-        if (!Objects.equals(curUserId, ownerId)) {
-            log.info(format("User [%d] attempted to invalidate token [%s] which is owned by another user [%d]", curUserId, authToken, ownerId));
-            return;
-        }
-        authTokenManager.destroyToken(authToken);
-    }
+		} else if (!Objects.equals(passwordHash, hashPassword(password, passwordHash))) {
+			log.info("User %s attempted to login with invalid password", email);
+			return new InvalidCredentialsLoginResult();
+		}
 
-    @Override
-    public ListResult<UserEntity> listUsers(ListUsersFilter filter) {
-        final Query<UserEntity> query = ofy().load().type(UserEntity.class);
-        final List<UserEntity> result = filter.query(query).list();
+		final String token = authTokenManager.newAuthTokenFor(found);
 
-        return filter.result(result);
-    }
+		return new LoginResult(true, found, token);
+	}
 
-    @Override
-    @AllowedForAdmins
-    @AllowedForTrusted
-    public UserEntity makeSuperUser(Long userId) {
-        checkNotNull(userId, "User ID must not be empty!");
-        final Key<UserEntity> key = UserEntity.createKey(userId);
-        return ofy().transact(new Work<UserEntity>() {
-            @Override
-            public UserEntity run() {
-                final UserEntity user = ofy().load().key(key).now();
-                if (user == null) {
-                    throw new NotFoundException(key);
-                }
-                user.setRole(Role.ADMIN);
-                ofy().save().entity(user).now();
-                return user;
-            }
-        });
-    }
+	@Override
+	@AllowedForAuthenticated
+	public void logout(String authToken) {
+		final Long curUserId = cc().getLoggedUserId();
+		final AuthTokenEntity found = authTokenManager.getAuthToken(authToken);
+		if (found == null) {
+			log.info(format("Auth token [%s] is invalid", authToken));
+			return;
+		}
+		final Long ownerId = keyToId(found.getOwner());
+		if (!Objects.equals(curUserId, ownerId)) {
+			log.info(format("User [%d] attempted to invalidate token [%s] which is owned by another user [%d]", curUserId, authToken, ownerId));
+			return;
+		}
+		authTokenManager.destroyToken(authToken);
+	}
 
-    private String protectPwd(String password) {
-        if (isNullOrEmpty(password)) return password;
-        return password.replaceAll(".", "*");
-    }
+	@Override
+	public ListResult<UserEntity> listUsers(ListUsersFilter filter) {
+		final Query<UserEntity> query = ofy().load().type(UserEntity.class);
+		final List<UserEntity> result = filter.query(query).list();
 
-    @Inject
-    public void setAuthTokenManager(AuthTokenManager<UserEntity> authTokenManager) {
-        authTokenManager.setTokenValidDuration(Duration.standardDays(60L));
-        this.authTokenManager = authTokenManager;
-    }
+		return filter.result(result);
+	}
 
-    @Inject
-    public void setUniqueIndexManager(UniqueIndexManager uniqueIndexManager) {
-        this.uniqueIndexManager = uniqueIndexManager;
-    }
+	@Override
+	@AllowedForAdmins
+	@AllowedForTrusted
+	public UserEntity makeSuperUser(Long userId) {
+		checkNotNull(userId, "User ID must not be empty!");
+		final Key<UserEntity> key = UserEntity.createKey(userId);
+		return ofy().transact(new Work<UserEntity>() {
+			@Override
+			public UserEntity run() {
+				final UserEntity user = ofy().load().key(key).now();
+				if (user == null) {
+					throw new NotFoundException(key);
+				}
+				user.setRole(Role.ADMIN);
+				ofy().save().entity(user).now();
+				return user;
+			}
+		});
+	}
 
-    @Inject
+	private String protectPwd(String password) {
+		if (isNullOrEmpty(password)) return password;
+		return password.replaceAll(".", "*");
+	}
+
+	@Inject
+	public void setAuthTokenManager(AuthTokenManager<UserEntity> authTokenManager) {
+		authTokenManager.setTokenValidDuration(Duration.standardDays(60L));
+		this.authTokenManager = authTokenManager;
+	}
+
+	@Inject
+	public void setUniqueIndexManager(UniqueIndexManager uniqueIndexManager) {
+		this.uniqueIndexManager = uniqueIndexManager;
+	}
+
+	@Inject
 	public void setMailService(MailService mailService) {
 		this.mailService = mailService;
 	}

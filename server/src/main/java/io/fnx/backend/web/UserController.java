@@ -4,15 +4,13 @@ import com.google.inject.servlet.RequestScoped;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.domain.dto.login.LoginResult;
 import io.fnx.backend.domain.dto.login.UserLoginDto;
+import io.fnx.backend.domain.dto.user.PasswordChangeDto;
 import io.fnx.backend.domain.dto.user.UserDto;
 import io.fnx.backend.manager.AuthTokenManager;
 import io.fnx.backend.manager.UniqueViolationException;
 import io.fnx.backend.service.UserService;
 import org.mint42.MintContext;
-import org.mint42.annotations.On;
-import org.mint42.annotations.OnAction;
-import org.mint42.annotations.RequestBean;
-import org.mint42.annotations.Validate;
+import org.mint42.annotations.*;
 import org.mint42.execution.ExecutionStep;
 import org.mint42.execution.ExecutionStepContext;
 import org.mint42.messages.LocalizableFieldControllerMessage;
@@ -125,22 +123,28 @@ public class UserController extends BaseController {
 	}
 
 	@OnAction("doForgottenChange")
-	public Resolution forgottenChange() {
+	public Resolution forgottenChange(@RequestBean("change") PasswordChangeDto change) {
+		mintContext.getRequest().setAttribute("change", change);
 		return new ThymeResolution("forgotten-change");
 	}
 
 	@OnAction("doForgottenSave")
-	public Resolution forgottenSave(@RequestBean("register") @Validate UserDto userRegister, ExecutionStep step) {
+	public Resolution forgottenSave(@RequestBean("change") @Validate PasswordChangeDto change, ExecutionStep step) {
 		assertPOST();
+		mintContext.getRequest().setAttribute("change", change);
 		if (step.hasBindingErrors()) {
 			// nevalidni form
 			mintContext.getErrors().addMessage("error.formErrors");
 			return new ThymeResolution("forgotten-change");
 		}
 
-		userService.changeForgottenPassword()
+		boolean result = userService.changeForgottenPassword(change);
 
-		return redirectWithMessage("/", "message.forgottenPasswordChanged");
+		if (result) {
+			return redirectWithMessage("/", "message.forgottenPasswordChanged");
+		} else {
+			return redirectWithMessage("/", "message.forgottenPasswordNotChanged");
+		}
 	}
 
 
