@@ -1,5 +1,9 @@
 package io.fnx.backend.guice;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.matcher.Matcher;
+import com.google.inject.matcher.Matchers;
 import io.fnx.backend.auth.AllowedForRoleAuthorizationGuard;
 import io.fnx.backend.auth.AllowedForTrustedAuthorizationGuard;
 import io.fnx.backend.guice.validation.ValidatorInterceptor;
@@ -9,17 +13,9 @@ import io.fnx.backend.queue.QueueProviderFactory;
 import io.fnx.backend.queue.TaskSubmitterFactory;
 import io.fnx.backend.service.*;
 import io.fnx.backend.service.impl.*;
-import io.fnx.backend.service.impl.CmsArticleServiceImpl;
-import io.fnx.backend.service.impl.DelayedTaskServiceImpl;
-import io.fnx.backend.service.impl.FileServiceImpl;
-import io.fnx.backend.service.impl.UserServiceImpl;
+import io.fnx.backend.tools.authorization.*;
 import io.fnx.backend.tools.hydration.Hydrator;
 import io.fnx.backend.util.conf.BackendConfiguration;
-import com.google.inject.AbstractModule;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.matcher.Matcher;
-import com.google.inject.matcher.Matchers;
-import io.fnx.backend.tools.authorization.*;
 import io.fnx.backend.util.conf.ClientConfiguration;
 
 import javax.inject.Singleton;
@@ -39,7 +35,6 @@ public class ServiceModule extends AbstractModule {
         bind(FileService.class).to(FileServiceImpl.class).in(Singleton.class);
         bind(AuditLogManager.class).to(AuditLogManagerImpl.class).in(Singleton.class);
         bind(CmsArticleService.class).to(CmsArticleServiceImpl.class).in(Singleton.class);
-        bind(DelayedTaskService.class).to(DelayedTaskServiceImpl.class).in(Singleton.class);
 	    bind(MailService.class).to(MailServiceImpl.class).in(Singleton.class);
 
 	    bind(Hydrator.class).in(Singleton.class);

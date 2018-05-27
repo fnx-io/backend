@@ -1,12 +1,14 @@
 package io.fnx.backend.rest.jersey;
 
+import com.google.common.collect.Sets;
 import io.fnx.backend.rest.*;
 import io.fnx.backend.rest.secure.SystemResource;
-import io.fnx.backend.rest.secure.tasks.DelayedTasksResource;
-import com.google.common.collect.Sets;
 
 import javax.ws.rs.core.Application;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Configures all classes for our Jersey app
@@ -37,7 +39,6 @@ public class JerseyApplication extends Application {
 		    CmsArticleResource.class,
 		    ConfigResource.class,
 
-            SystemResource.class,
-            DelayedTasksResource.class
+            SystemResource.class
     });
 }

@@ -8,6 +8,7 @@
     -->
     <application>fnx-backend</application>
     <version>v0-init</version>
+    <runtime>java8</runtime>
     
     <threadsafe>true</threadsafe>
     <sessions-enabled>false</sessions-enabled>

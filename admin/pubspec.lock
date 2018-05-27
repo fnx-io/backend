@@ -30,13 +30,13 @@ packages:
       name: barback
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.2+13"
+    version: "0.15.2+15"
   browser:
     description:
       name: browser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.0+2"
+    version: "0.10.0+3"
   build:
     description:
       name: build
@@ -54,19 +54,19 @@ packages:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2+1"
+    version: "0.1.3"
   code_transformers:
     description:
       name: code_transformers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.1+3"
+    version: "0.5.1+5"
   collection:
     description:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.14.3"
+    version: "1.14.6"
   convert:
     description:
       name: convert
@@ -90,7 +90,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.1"
+    version: "0.14.3"
   dart_style:
     description:
       name: dart_style
@@ -108,7 +108,7 @@ packages:
       name: fixnum
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.6"
+    version: "0.10.7"
   fnx_config:
     description:
       name: fnx_config
@@ -118,14 +118,14 @@ packages:
   fnx_rest:
     description:
       ref: master
-      resolved-ref: "7e995aeb24492e83c141257cb6fae957b9047962"
+      resolved-ref: a6389775e0795deb9f9b227a1324309add24d5c6
       url: "https://github.com/fnx-io/fnx_rest"
     source: git
     version: "0.5.0"
   fnx_ui:
     description:
       ref: master
-      resolved-ref: "241588c36194a3e1a4e080c7379c76349e86066b"
+      resolved-ref: "957dabad2296844da39d354a987ec40996443512"
       url: "https://github.com/fnx-io/fnx_ui"
     source: git
     version: "0.1.6"
@@ -140,19 +140,19 @@ packages:
       name: glob
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.3"
   html:
     description:
       name: html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.2"
+    version: "0.13.3"
   http:
     description:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.3+16"
+    version: "0.11.3+9"
   http_parser:
     description:
       name: http_parser
@@ -188,13 +188,13 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.5"
   mime:
     description:
       name: mime
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.4"
+    version: "0.9.5"
   observable:
     description:
       name: observable
@@ -212,7 +212,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.2"
+    version: "1.5.1"
   plugin:
     description:
       name: plugin
@@ -224,7 +224,7 @@ packages:
       name: pool
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.3"
+    version: "1.3.1"
   protobuf:
     description:
       name: protobuf
@@ -248,7 +248,7 @@ packages:
       name: source_maps
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.4"
+    version: "0.10.5"
   source_span:
     description:
       name: source_span
@@ -260,13 +260,13 @@ packages:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.0"
+    version: "1.8.0"
   stream_channel:
     description:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.2"
+    version: "1.6.6"
   string_scanner:
     description:
       name: string_scanner
@@ -296,12 +296,12 @@ packages:
       name: watcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.7+4"
+    version: "0.9.7+6"
   yaml:
     description:
       name: yaml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.13"
+    version: "2.1.12"
 sdks:
-  dart: ">=1.23.0 <2.0.0-dev.infinity"
+  dart: ">=1.22.0 <2.0.0-dev.infinity"

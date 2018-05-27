@@ -28,10 +28,13 @@ public class TaskSubmitter {
      * @param task the task to submit in current queue
      * @return the handle for submitted task
      */
-    public TaskHandle submit(Task task) {
+    public TaskHandle submit(Task task, int secondsDelay) {
         String jobUrl = format("%s%s", task.taskRoot(), task.taskUrl());
         log.info("Scheduling task " + jobUrl + " into " + queue.getQueueName());
-        final TaskOptions opts = TaskOptions.Builder.withUrl(jobUrl);
+        TaskOptions opts = TaskOptions.Builder.withUrl(jobUrl);
+        if (secondsDelay > 0) {
+	        opts = opts.countdownMillis(secondsDelay * 1000);
+        }
         return queue.add(opts.method(TaskOptions.Method.GET));
     }
 }

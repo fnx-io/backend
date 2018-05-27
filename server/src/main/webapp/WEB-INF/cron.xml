@@ -3,25 +3,8 @@
     <cron>
         <url>/api/v1/secure/monitoring/status</url>
         <description>Ping the server preventing it from getting stopped by appengine gods.</description>
-        <schedule>every 4 minutes from 06:00 to 23:59</schedule>
+        <schedule>every 30 minutes from 06:00 to 23:59</schedule>
         <timezone>Europe/London</timezone>
     </cron>
 
-    <!-- processing outstanding delayed tasks (more frequently during the day, than during the night) -->
-    <cron>
-        <url>/api/v1/secure/tasks/delayed/processing/start</url>
-        <description>Try process outstanding delayed tasks</description>
-        <schedule>every 7 minutes from 08:00 to 20:00</schedule>
-        <timezone>Europe/London</timezone>
-    </cron>
-
-    <cron>
-        <url>/api/v1/secure/tasks/delayed/processing/start</url>
-        <description>Try process outstanding delayed tasks</description>
-        <schedule>every 1 hours from 20:01 to 07:59</schedule>
-        <timezone>Europe/London</timezone>
-        <retry-parameters>
-            <min-backoff-seconds>300</min-backoff-seconds>
-        </retry-parameters>
-    </cron>
 </cronentries>
