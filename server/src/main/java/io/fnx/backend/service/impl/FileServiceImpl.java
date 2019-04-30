@@ -45,7 +45,6 @@ public class FileServiceImpl extends BaseService implements FileService {
     private String fileBucket;
 
     @Override
-    @AllowedForAuthenticated
     public FileEntity storeFile(String fileName, String set, MediaType mediaType, InputStream inputStream) {
         checkArgument(!isNullOrEmpty(fileName), "Missing file name");
         checkNotNull(inputStream, "Missing file data");
@@ -81,7 +80,6 @@ public class FileServiceImpl extends BaseService implements FileService {
     }
 
     @Override
-    @AllowedForAdmins
     public ListResult<FileEntity> listFiles(ListFilesFilter filter) {
         final Query<FileEntity> query = ofy().load().type(FileEntity.class);
         final List<FileEntity> result = filter.query(query).list();

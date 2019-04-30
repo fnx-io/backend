@@ -1,8 +1,10 @@
 package io.fnx.backend.rest;
 
 import io.fnx.backend.auth.CallContext;
+import io.fnx.backend.auth.guards.AllAllowed;
 import io.fnx.backend.domain.filter.FilterLimits;
 import com.google.inject.Inject;
+import io.fnx.backend.service.DontValidate;
 import io.fnx.backend.tools.hydration.Hydrator;
 
 import javax.inject.Provider;
@@ -17,7 +19,7 @@ import javax.ws.rs.core.Response;
  */
 @Consumes("application/json;charset=utf-8")
 @Produces("application/json;charset=utf-8")
-public abstract class BaseResource {
+public class BaseResource {
 
     //******* these are set from Query parameters of incoming request and used for pagination when filtering *******
     private int page;
@@ -28,13 +30,13 @@ public abstract class BaseResource {
 
 	protected Hydrator hydrator;
 
+    @DontValidate
 	public CallContext cc() {
         return callContextProvider.get();
     }
 
-
-
 	@OPTIONS
+    @DontValidate
     public Response rootOptions() {
         return Response.ok(null).build();
     }
@@ -123,23 +125,26 @@ public abstract class BaseResource {
         }
     }
 
+    @DontValidate
     @QueryParam("page")
     public void setPage(final int page) {
         this.page = page;
     }
 
+    @DontValidate
     @QueryParam("allPages")
     public void setAllPages(final boolean allPages) {
         this.allPages = allPages;
     }
 
+    @DontValidate
     public FilterLimits filterLimits() {
         return new FilterLimits(page, allPages);
     }
 
 
 	@Inject
-	public void setHydrator(Hydrator hydrator) {
+	protected void setHydrator(Hydrator hydrator) {
 		this.hydrator = hydrator;
 	}
 	

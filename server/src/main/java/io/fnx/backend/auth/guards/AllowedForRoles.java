@@ -1,4 +1,4 @@
-package io.fnx.backend.auth;
+package io.fnx.backend.auth.guards;
 
 import io.fnx.backend.domain.Role;
 

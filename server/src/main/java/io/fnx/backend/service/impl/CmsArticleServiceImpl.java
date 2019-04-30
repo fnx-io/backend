@@ -27,7 +27,6 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
     private AuditLogManager auditLogManager;
 
 	@Override
-	@AllowedForAdmins
 	public CmsArticleEntity createArticle(CmsArticleEntity articleEntity) {
 		checkArgument(articleEntity!=null, "Missing article");
 		checkArgument(articleEntity.getType()!=null, "Missing article type");
@@ -44,13 +43,11 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 	}
 
 	@Override
-	// AllowedForAll
 	public CmsArticleEntity findById(Long id) {
 		return ofy().load().key(CmsArticleEntity.createKey(id)).now();
 	}
 
 	@Override
-	@AllowedForAdmins
 	public CmsArticleEntity updateArticle(final CmsArticleEntity articleEntity) {
 		checkArgument(articleEntity!=null, "Missing article");
 		checkArgument(articleEntity.getId()!=null, "Missing article id");
@@ -77,7 +74,6 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 	}
 
 	@Override
-	// AllowedForAll
 	public ListResult<CmsArticleEntity> listArticles(CmsArticleFilter filter) {
 		final Query<CmsArticleEntity> query = ofy().load().type(CmsArticleEntity.class);
 		final List<CmsArticleEntity> result = filter.query(query).list();

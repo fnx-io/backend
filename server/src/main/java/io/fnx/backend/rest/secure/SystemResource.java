@@ -1,8 +1,10 @@
 package io.fnx.backend.rest.secure;
 
+import io.fnx.backend.auth.guards.AllowedForTrusted;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.rest.BaseResource;
 import io.fnx.backend.service.UserService;
+import io.fnx.backend.tools.authorization.AllowedForAdmins;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -18,6 +20,8 @@ public class SystemResource extends BaseResource {
 
     private UserService userService;
 
+    @AllowedForAdmins
+    @AllowedForTrusted
     @GET
     @Path("/users/{id}/admin")
     public UserEntity makeSuperUser(@PathParam("id") Long userId) {

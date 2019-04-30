@@ -28,6 +28,8 @@ public class GuiceConfig extends GuiceServletContextListener {
 			        new UtilModule(),
 			        new ObjectifyModule(),
 			        new RestModule(),
+					new ResourceModule(),
+					new AuthorizationModule(),
 			        new ServiceModule(),
 			        new WebModule()
 	        );

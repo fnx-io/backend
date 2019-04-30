@@ -5,7 +5,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
-import io.fnx.backend.auth.AllowedForTrusted;
+import io.fnx.backend.auth.guards.AllowedForTrusted;
 import io.fnx.backend.domain.*;
 import io.fnx.backend.domain.dto.login.InvalidCredentialsLoginResult;
 import io.fnx.backend.domain.dto.login.LoginResult;
@@ -48,8 +48,6 @@ public class UserServiceImpl extends BaseService implements UserService {
 	private Randomizer randomizer;
 
 	@Override
-	@AllowedForAdmins
-	@AllowedForTrusted
 	public UserEntity createUser(UserDto cmd) {
 		UserEntity result = createUserImpl(cmd);
 		Map<String, Object> params = new HashMap<>();
@@ -155,8 +153,6 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	@AllowedForOwner
-	@AllowedForAdmins
 	public UserEntity updateUser(final UpdateUserDto cmd) {
 		checkNotNull(cmd, "User to change must not be empty!");
 		checkNotNull(cmd.getUserId(), "User id must not be empty!");
@@ -196,7 +192,6 @@ public class UserServiceImpl extends BaseService implements UserService {
 
 
 	@Override
-	@AllowedForAdmins
 	public UserEntity getUser(Long id) {
 		return ofy().load().key(UserEntity.createKey(id)).now();
 	}
@@ -312,7 +307,6 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	@AllowedForAuthenticated
 	public void logout(String authToken) {
 		final Long curUserId = cc().getLoggedUserId();
 		final AuthTokenEntity found = authTokenManager.getAuthToken(authToken);
@@ -337,8 +331,6 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	@AllowedForAdmins
-	@AllowedForTrusted
 	public UserEntity makeSuperUser(Long userId) {
 		checkNotNull(userId, "User ID must not be empty!");
 		final Key<UserEntity> key = UserEntity.createKey(userId);

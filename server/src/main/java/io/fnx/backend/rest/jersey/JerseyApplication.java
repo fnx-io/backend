@@ -32,13 +32,13 @@ public class JerseyApplication extends Application {
     /**
      * These are all REST Endpoints (resources) for our API
      */
-    private static final List<Class<?>> resources = Arrays.asList(new Class<?>[]{
+    public static final List<Class<?>> resources = Arrays.asList(new Class<?>[]{
             UserResource.class,
             FileResource.class,
             MonitoringResource.class,
 		    CmsArticleResource.class,
 		    ConfigResource.class,
-
-            SystemResource.class
+            SystemResource.class,
+            SessionResource.class
     });
 }

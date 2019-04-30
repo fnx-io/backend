@@ -2,6 +2,7 @@ package io.fnx.backend.rest;
 
 import com.googlecode.objectify.Key;
 import io.fnx.backend.auth.CallContext;
+import io.fnx.backend.auth.guards.AllAllowed;
 import io.fnx.backend.domain.CmsArticleEntity;
 import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UserEntity;
@@ -28,11 +29,13 @@ public class ConfigResource extends BaseResource {
     private ClientConfiguration clientConfiguration;
 
 	@GET
+	@AllAllowed
 	public ClientConfiguration getConfiguration() {
 		return clientConfiguration;
 	}
 
-	@Inject()
+	@Inject
+	@AllAllowed
 	public void setClientConfiguration(ClientConfiguration clientConfiguration) {
 		this.clientConfiguration = clientConfiguration;
 	}

@@ -1,7 +1,9 @@
-package io.fnx.backend.auth;
+package io.fnx.backend.auth.guards;
 
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Key;
+import io.fnx.backend.auth.CallContext;
+import io.fnx.backend.auth.guards.AllowedForTrusted;
 import io.fnx.backend.tools.auth.Principal;
 import io.fnx.backend.tools.auth.PrincipalRole;
 import io.fnx.backend.tools.authorization.AuthorizationGuard;

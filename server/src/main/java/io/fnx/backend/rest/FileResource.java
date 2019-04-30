@@ -6,6 +6,7 @@ import io.fnx.backend.domain.FileEntity;
 import io.fnx.backend.service.FileService;
 import io.fnx.backend.service.ListResult;
 import io.fnx.backend.service.filter.ListFilesFilter;
+import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
 import io.fnx.backend.tools.random.Randomizer;
 import io.fnx.backend.util.Constants;
 
@@ -29,6 +30,7 @@ public class FileResource extends BaseResource {
 
 	@POST
 	@Consumes(MediaType.WILDCARD)
+	@AllowedForAuthenticated
 	public Response createFile(@Context HttpHeaders headers, @Context Request request, @QueryParam("set") String set, InputStream data) {
 		final String fileName = getFileName(headers.getRequestHeader(Constants.HEADER_FILENAME));
 		final MediaType mediaType = headers.getMediaType();
@@ -39,6 +41,7 @@ public class FileResource extends BaseResource {
 	@POST
 	@Path("/image")
 	@Consumes("image/*")
+	@AllowedForAuthenticated
 	public Response createImageFile(@Context HttpHeaders headers, @Context Request request, InputStream data,
 	                                @QueryParam("set") String set,
 	                                @QueryParam("x") double x, @QueryParam("y") double y,
@@ -76,6 +79,7 @@ public class FileResource extends BaseResource {
 	}
 
 	@GET
+	@AllowedForAuthenticated
 	public ListResult<FileEntity> list(@QueryParam("category") FileCategory category, @QueryParam("set") String set) {
 		return fileService.listFiles(new ListFilesFilter(category, set, filterLimits()));
 	}

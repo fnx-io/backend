@@ -1,0 +1,51 @@
+<!-- Screen: NewsEdit -->
+<div class="margin fit row--gutter">
+
+    <fnx-form (submit)="saveArticle($event)" *ngIf="entity != null" class="l8 m12 s12">
+
+        <!--
+            name je primo soucastni entity CmsArticleEntity
+        -->
+        <fnx-input label="Name" errorMessage="Name is mandatory">
+            <fnx-text [(ngModel)]="entity['name']" [required]="true" autoFocus></fnx-text>
+        </fnx-input>
+
+
+        <!--
+            Vsechny dalsi polozky clanku se ukladaji do mapy "data", tzn. jakekoliv rozsireni obsahu clanku
+            o dalsi polozky se dela proste pridanim inputu tady:
+
+            [(ngModel)]="entity['data']['neco_novyho']
+            [(ngModel)]="entity['data']['neco_dalsiho_novyho']
+
+            A tim to hasne, do datastore se to uz ulozi.
+
+        -->
+        <!--<fnx-input label="Main image" errorMessage="Main image is mandatory" *ngIf="type == 'news'">
+            <fnx-image [(ngModel)]="entity['data']['image']" [required]="true" [imageSet]="imageSet"></fnx-image>
+        </fnx-input>-->
+
+        <!--<fnx-input label="Gallery" *ngIf="type == 'news'">
+            <fnx-gallery [(ngModel)]="entity['data']['gallery']" [imageSet]="imageSet"></fnx-gallery>
+        </fnx-input>-->
+
+        <fnx-input label="Event date" errorMessage="Event date is mandatory" *ngIf="type == 'events'">
+            <fnx-date [(ngModel)]="entity['data']['eventDate']" [dateTime]="true"></fnx-date>
+        </fnx-input>
+
+        <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
+            <fnx-wysiwyg-rich [(ngModel)]="entity['data']['annotation']" [required]="true"
+                heightEm="15" maxWidthEm="50"></fnx-wysiwyg-rich>
+        </fnx-input>
+
+        <fnx-submit-bar [back]="true"></fnx-submit-bar>
+
+    </fnx-form>
+
+    <span class="s1">
+        <a *ngIf="id != null" (click)="logModalVisible = true" class="icon btn">history</a>
+    </span>
+
+</div>
+
+<!--<log-listing-modal *ngIf="logModalVisible" [restClient]="logRest" (close)="logModalVisible = false"></log-listing-modal>-->

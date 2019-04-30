@@ -1,4 +1,4 @@
-package io.fnx.backend.auth;
+package io.fnx.backend.auth.guards;
 
 import com.google.common.collect.Lists;
 import io.fnx.backend.tools.auth.PrincipalRole;
