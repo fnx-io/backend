@@ -24,6 +24,7 @@ class FnxImageSet {
 @Component(
   selector: 'fnx-gallery-picker',
   templateUrl: 'fnx_gallery_picker.html',
+  styleUrls: ['fnx_gallery_picker.css'],
   directives: const [ PickImageStageComponent,
                       CropImageComponent, fnxUiDirectives,
   coreDirectives]

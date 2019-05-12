@@ -24,23 +24,26 @@ class ScreenCmsList implements OnActivate {
   String type;
 
   ScreenCmsList(this.root, this.router, this.routing) {
-
+    print("constructor");
   }
 
   @override
   void onActivate(RouterState previous, RouterState current) {
+    print("trying to get type");
     type = current.parameters['type'];
+    print("type");
+    print(type);
 
     rest = root.child("/v1/cms/articles?type=${type}");
     listing = RestListingFactory.withPaging(rest);
   }
 
   createRecord() {
-
+    router.navigate(routing.cmsEdit.toUrl(parameters: { 'type' : type , 'id' : 'create'}));
   }
 
   editRecord(Map a) {
-
+    router.navigate(routing.cmsEdit.toUrl(parameters: { 'type' : type , 'id' : a['id'].toString()}));
   }
   
 }

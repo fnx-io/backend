@@ -53,6 +53,8 @@ class ScreenLogin implements OnInit {
       root.setHeader(authHeader, authKey);
       RestResult sessions = await sessionsRest.get();
       if (sessions.success) {
+        print("SESSIONS.DATA");
+        print(sessions.data);
         ctx.loggedUser = sessions.data;
         ctx.authKey = authKey;
       } else {

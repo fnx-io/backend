@@ -25,7 +25,7 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
   String userId;
 
-  Router router;
+  final Router router;
 
 
   Map<String, dynamic> user;
@@ -33,6 +33,8 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
   List<EnumItem> roles;
 
   ScreenUserEdit(this.root, this.router, this.fnxApp, this.ctx, this.location) {
+    print("USER constructor");
+    print(router);
     rest = root.child('/v1/users');
     roles = ctx.enumerations['roles'].all.where((EnumItem i) => i.value != 'ANONYMOUS').toList();
   }
@@ -69,6 +71,8 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
   @override
   void onActivate(RouterState previous, RouterState current) {
+    print("USER onActivate");
+    print(current.parameters);
     userId = current.parameters['id'];
 
     if (isCreate) {

@@ -33,9 +33,16 @@
             <fnx-date [(ngModel)]="entity['data']['eventDate']" [dateTime]="true"></fnx-date>
         </fnx-input>
 
+        <!-- TODO: nemame funckni wysiwyg
         <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
             <fnx-wysiwyg-rich [(ngModel)]="entity['data']['annotation']" [required]="true"
                 heightEm="15" maxWidthEm="50"></fnx-wysiwyg-rich>
+        </fnx-input>
+        -->
+
+        <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
+            <fnx-wysiwyg-rich [(ngModel)]="entity['data']['annotation']" [required]="true"
+                              heightEm="15" maxWidthEm="50"></fnx-wysiwyg-rich>
         </fnx-input>
 
         <fnx-submit-bar [back]="true"></fnx-submit-bar>

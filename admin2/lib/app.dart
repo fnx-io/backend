@@ -1,4 +1,6 @@
 import 'package:admin/app_context.dart';
+import 'package:admin/messages/messages.i69n.dart';
+import 'package:admin/messages/test.dart';
 import 'package:admin/routing.dart';
 import 'package:admin/screens/session/screen_login.dart';
 import 'package:angular/angular.dart';
@@ -28,7 +30,7 @@ class App {
   final Router router;
   final RestClient root;
 
-
+  static Map cmsRouteParams = {"news" : {"type" : "news"}, "events" : {"type" : "events"}, };
 
   App(this.ctx, this.routing, this.router, this.root);
 
@@ -36,22 +38,8 @@ class App {
     ScreenLogin.logout(ctx, root.child("/v1/sessions"));
   }
 
-
-
-
   bool isTesting() {
     return ctx.local;
-    routing.cmsEdit.toUrl(parameters: {'type': 'news'});
   }
-
-  /*void logout() async {
-    sessionsRest.delete();
-    cookie.remove(ScreenLogin.authKeyCookieName);
-    ctx.loggedUser = null;
-    ctx.lastClient = null;
-    ctx.authKey = null;
-  }*/
-
-
 
 }

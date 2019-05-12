@@ -1,5 +1,5 @@
 <div class="flex--column fit">
-    <nav class="navbar">
+    <nav class="navbar bg--blue">
         <h2>Správci a operátoři</h2>
         <span class="spacer"></span>
         <button class="btn" data-prefix="add" (click)="createUser()" *ngIf="ctx.loggedUser != null">Přidat</button>
@@ -24,6 +24,5 @@
             </tr>
             </tbody>
         </table>
-        <!--<rest-listing-monitor [listing]="listing"></rest-listing-monitor>-->
     </fnx-scroll-panel>
 </div>

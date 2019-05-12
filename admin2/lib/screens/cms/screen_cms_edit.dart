@@ -85,7 +85,7 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
   @override
   void onActivate(RouterState previous, RouterState current) {
     type = current.parameters['type'];
-    id = current.parameters['id'];
+    id = current.parameters['id'] ?? int.tryParse(current.parameters['id']);
 
     if (isCreate) {
       entity = {'type':'$type', 'data':{}};

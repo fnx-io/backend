@@ -1,1 +1,9 @@
-test: ahoj
+app:
+  name: fnx.io
+  backend: backend admin
+
+program:
+  mode: TESTING
+
+gen:
+  logout: logout

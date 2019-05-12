@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="css/fnx_ui.css">
+  <link rel="stylesheet" type="text/css" href="css/theme_blue.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <script src="//cdn.quilljs.com/1.2.0/quill.js"></script>
+  <link href="//cdn.quilljs.com/1.2.0/quill.snow.css" rel="stylesheet">
+
+</head>
+<body class="theme--blue--l2 accent--blue--d2 relative bg--white">
+
+<app>
+  <!-- Preloader -->
+  <div class="flex--column fit text--center text--white bg--theme">
+    <div class="flex--grow"></div>
+    <h1>fnx.io backend admin</h1>
+    <p class="margin">
+      <span class="preloader bg--theme fs-xl"></span>
+    </p>
+    <p>... is loading</p>
+    <div class="flex--grow--2">
+      <script>
+          setTimeout(function() {
+              var warning = document.getElementById("tooLong");
+              if (warning) {
+                  warning.style.display="block";
+              }
+          }, 7000);
+      </script>
+      <div class="margin--big--top text--center" id="tooLong" style="display: none">
+        <p>Loading of the application takes longer then expected.<br>It's possible your internet connection is too slow,
+          or maybe you are using unsupported internet browser.</p>
+        <p>Support browsers are Chrome, Firefox, Safari and Edge (in current versions)<br>
+          and Internet Explorer version 11.</p>
+      </div>
+    </div>
+  </div>
+</app>
+
+<script src="index.dart.js"></script>
+</body>
+</html>

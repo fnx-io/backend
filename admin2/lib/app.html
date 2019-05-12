@@ -12,7 +12,7 @@
                     </h1>
                     <span class="spacer"></span>
                     <ul class="menu--horizontal">
-                        <li><span *ngIf="ctx.logged">{{ ctx.loggedUser['name'] }}</span>
+                        <li><span *ngIf="ctx.logged">{{ ctx.loggedUser['firstName'] }} {{ ctx.loggedUser['lastName'] }}</span>
                             <ul class="menu--vertical">
                                 <li><a (click)="logout()">logout</a></li>
                             </ul>
@@ -25,11 +25,11 @@
                     <aside sidebar class="flex--column">
                         <ul class="menu--vertical flex--grow" (click)="layout.toggle()">
                             <li><a data-prefix="view_compact" [routerLink]="routing.dashboard.toUrl()" routerLinkActive="selected">Dashboard</a></li>
-                            <li><a data-prefix="group" [routerLink]="routing.usersList.toUrl()">Users</a></li>
-                            <!--<li><a data-prefix="library_books" [routerLink]="routing.cmsList.toUrl(parameters: {'type':'news'})">News</a></li>
-                            <li><a data-prefix="event_note" [routerLink]="routing.cmsList.toUrl(parameters: {'type':'events'})">Events</a></li>-->
+                            <li><a data-prefix="group" [routerLink]="routing.usersList.toUrl()" routerLinkActive="selected">Users</a></li>
+                            <li><a data-prefix="library_books" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['news'])" routerLinkActive="selected">News</a></li>
+                            <li><a data-prefix="event_note" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['events'])" routerLinkActive="selected">Events</a></li>
                         </ul>
-                        <p class="text--center bg--fnx no-margin padding">
+                        <p class="text--center bg--blue no-margin padding">
                             Created by <a target="_blank" href="https://fnx.io/">fnx.io</a>
                         </p>
                     </aside>

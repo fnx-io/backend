@@ -12,13 +12,14 @@ class Routing {
   RoutePath usersList = new RoutePath(path: "users-list", parent: null);
   RoutePath userEdit = new RoutePath(path: "user-edit/:id", parent: null);
 
-  RoutePath cmsList = new RoutePath(path: "cms-list/:type", parent: null);
-  RoutePath cmsEdit = new RoutePath(path: "cms-edit/:id", parent: null);
+  RoutePath cmsList = new RoutePath(path: "cms/:type", parent: null);
+  RoutePath cmsEdit = new RoutePath(path: "cms/:type/edit/:id", parent: null);
 
   //Mapovani cesty na komponenty
   List<RouteDefinition> routes = [];
 
   Routing() {
+    routes.add(RouteDefinition.redirect(path: '', redirectTo: dashboard.toUrl()));
     routes.add(new RouteDefinition(
         routePath: dashboard,
         component: ScreenDashboardNgFactory,
