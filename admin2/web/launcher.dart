@@ -59,11 +59,9 @@ void launchApp<T>(ComponentFactory<T> componentFactory) async {
   injections[AppContext] = appContext;
 
 
-  print("Injecting messages");
-  Messages messages = getI69nMessages();
+  //Messages messages = getI69nMessages();
   injections[Messages] = new Messages();
-  print("Injecting messages finished");
-
+  
 
   runApp(componentFactory,
       createInjector: ([Injector parent]) =>
