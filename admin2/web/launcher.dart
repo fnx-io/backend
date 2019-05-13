@@ -6,7 +6,6 @@ import 'dart:html' as html;
 
 import 'package:admin/app_context.dart';
 import 'package:admin/messages/messages.i69n.dart';
-import 'package:admin/messages/test.dart';
 import 'package:admin/routing.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
@@ -55,24 +54,25 @@ void launchApp<T>(ComponentFactory<T> componentFactory) async {
   injections[RestClient] = restClient;
 
   AppContext appContext = await createAppContext(restClient);
+  appContext.msg = new Messages();
   appContext.local = isLocal;
+
   injections[AppContext] = appContext;
 
 
-  //Messages messages = getI69nMessages();
-  injections[Messages] = new Messages();
-  
 
   runApp(componentFactory,
       createInjector: ([Injector parent]) =>
           new Injector.map(injections, injector(parent)));
 }
 
-Messages getI69nMessages() {
+/*
+Messagesabc getI69nMessages() {
   //here you can impements any logig for choosing message language
   //@see: https://pub.dartlang.org/packages/i69n
-  return new Messages();
+  return new Messagesabc();
 }
+*/
 
 Future<AppContext> createAppContext(RestClient restClient) async {
   var configData = (await restClient.child("/v1/config").get()).successData;

@@ -1,5 +1,4 @@
 import 'package:admin/app_context.dart';
-import 'package:admin/messages/messages.i69n.dart';
 import 'package:admin/messages/test.dart';
 import 'package:admin/routing.dart';
 import 'package:admin/screens/session/screen_login.dart';
@@ -32,7 +31,9 @@ class App {
 
   static Map cmsRouteParams = {"news" : {"type" : "news"}, "events" : {"type" : "events"}, };
 
-  App(this.ctx, this.routing, this.router, this.root);
+  App(this.ctx, this.routing, this.router, this.root) {
+    print("Message test: " + ctx.msg.app.backend);
+  }
 
   logout() {
     ScreenLogin.logout(ctx, root.child("/v1/sessions"));

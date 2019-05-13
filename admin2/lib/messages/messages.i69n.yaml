@@ -7,3 +7,4 @@ program:
 
 gen:
   logout: logout
+  test: test
