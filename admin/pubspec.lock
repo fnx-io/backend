@@ -93,7 +93,7 @@ packages:
     source: hosted
     version: "0.5.0"
   build_modules:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: build_modules
       url: "https://pub.dartlang.org"
@@ -340,7 +340,7 @@ packages:
     source: hosted
     version: "1.0.5"
   package_resolver:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: package_resolver
       url: "https://pub.dartlang.org"
