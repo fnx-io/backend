@@ -18,7 +18,7 @@
     <system-properties>
 
         <!-- For app id = fnx-backend -->
-        <property name="fnx-backend.root" value="http://localhost:8081" />
+        <property name="fnx-backend.root" value="http://localhost:8085" />
         <property name="fnx-backend.file.bucket" value="fnx-backend-files"/>
         <property name="fnx-backend.use.https.redirect" value="false"/>
         <property name="fnx-backend.email.skip" value="true"/>
@@ -31,7 +31,7 @@
         
 
         <!-- For app id = fnx-backend-test -->
-        <property name="fnx-backend-test.root" value="http://localhost:8081" />
+        <property name="fnx-backend-test.root" value="http://localhost:8085" />
         <property name="fnx-backend-test.file.bucket" value="fnx-backend-files"/>
         <property name="fnx-backend-test.use.https.redirect" value="false"/>
         <property name="fnx-backend-test.email.skip" value="true"/>
