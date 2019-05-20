@@ -10,10 +10,10 @@ class EnumerationRepository {
   List<EnumItem> all;
   Map<dynamic, EnumItem> _byId;
 
-  EnumerationRepository.fromJson(List<Map<String,dynamic>> data) {
+  EnumerationRepository.fromJson(List<dynamic> data) {
     all = [];
     _byId = {};
-    data.forEach((Map<String,dynamic> row) {
+    data.forEach((dynamic row) {
       EnumItem val = new EnumItem.fromJson(row);
       all.add(val);
       _byId[val.value] = val;
@@ -28,10 +28,10 @@ class EnumerationRepository {
     return _byId.toString();
   }
 
-  static Map<String,EnumerationRepository> buildFromAllEnumerations(Map<String, List> data) {
+  static Map<String,EnumerationRepository> buildFromAllEnumerations(Map data) {
     Map<String,EnumerationRepository> result = {};
-    data.keys.forEach((String enumeration) {
-      result[enumeration] = new EnumerationRepository.fromJson(data[enumeration] as List<Map<String,dynamic>>);
+    data.keys.forEach((dynamic enumeration) {
+      result[enumeration] = new EnumerationRepository.fromJson(data[enumeration]);
     });
     return result;
   }

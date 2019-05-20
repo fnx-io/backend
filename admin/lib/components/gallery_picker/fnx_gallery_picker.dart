@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 
-import 'package:admin/util/rest_listing_factory.dart';
-import 'package:angular2/core.dart';
+import 'package:admin/utils/rest_listing_factory.dart';
+import 'package:angular/angular.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
@@ -24,8 +24,10 @@ class FnxImageSet {
 @Component(
   selector: 'fnx-gallery-picker',
   templateUrl: 'fnx_gallery_picker.html',
+  styleUrls: ['fnx_gallery_picker.css'],
   directives: const [ PickImageStageComponent,
-                      CropImageComponent]
+                      CropImageComponent, fnxUiDirectives,
+  coreDirectives]
 )
 class FnxGalleryPicker implements OnInit {
 
@@ -44,7 +46,8 @@ class FnxGalleryPicker implements OnInit {
 
   @ViewChild('pickImageTab') FnxTab pickImageTab;
 
-  @Output() EventEmitter<String> picked = new EventEmitter<String>();
+  final _picked = new StreamController<String>();
+  @Output() Stream<String> get picked => _picked.stream;
 
   bool get requiresCrop => imageSet != null && imageSet.ratio != null;
 
@@ -106,7 +109,7 @@ class FnxGalleryPicker implements OnInit {
     stage = ImageUploadStage.PICK;
     if (rr != null && rr.success) {
       fnxApp.toast("Image has been uploaded.");
-      picked.emit(rr.data['imageUrl']);
+      _picked.add(rr.data['imageUrl']);
       /*
       if (pickImageTab != null) pickImageTab.selectTab();
       print(rr.data['imageUrl']);
@@ -128,7 +131,7 @@ class FnxGalleryPicker implements OnInit {
 
     print("Picked! $url");
 
-    picked.emit(url);
+    _picked.add(url);
   }
 
   bool get showPickImageStage => stage == null || stage == ImageUploadStage.PICK;
@@ -144,12 +147,16 @@ enum ImageUploadStage {
 
 @Component(
   selector: 'pick-image-component',
-  templateUrl: 'pick_image_component.html'
+  templateUrl: 'pick_image_component.html',
+  directives: [fnxUiDirectives,
+  coreDirectives]
 )
 class PickImageStageComponent {
 
   String errorMessage;
-  @Output() EventEmitter<ImageRead> image = new EventEmitter<ImageRead>();
+
+  final _image = new StreamController<ImageRead>();
+  @Output() Stream<ImageRead> get image => _image.stream;
 
   void filePicked(File file) {
     errorMessage = null;
@@ -162,7 +169,7 @@ class PickImageStageComponent {
     }
     final FileReader fr = new FileReader();
     fr.readAsDataUrl(file);
-    fr.onLoad.listen((_) => this.image.emit(new ImageRead(file, fr.result)));
+    fr.onLoad.listen((_) => this._image.add(new ImageRead(file, fr.result)));
     fr.onError.listen((_) => this.errorMessage = "File ${file.name} could not be loaded.");
   }
 
@@ -183,14 +190,17 @@ class ImageRead {
 
 @Component(
   selector: 'crop-image-component',
-  templateUrl: 'crop_image_component.html'
+  templateUrl: 'crop_image_component.html',
+  directives: [fnxUiDirectives,
+  coreDirectives]
 )
 class CropImageComponent implements OnInit {
 
   @Input() ImageRead image;
   @Input() double ratio;
 
-  @Output() EventEmitter<Rectangle<double>> cropped = new EventEmitter<Rectangle<double>>();
+  final _cropped = new StreamController<Rectangle<double>>();
+  @Output() Stream<Rectangle<double>> get cropped => _cropped.stream;
 
   Rectangle<double> crop = new Rectangle<double>(0.0, 0.0, 1.0, 1.0);
 
@@ -206,7 +216,7 @@ class CropImageComponent implements OnInit {
   
   void doFinish(Event event) {
     if (event != null) event.preventDefault();
-    cropped.emit(crop);
+    _cropped.add(crop);
   }
 
 }

@@ -1,73 +1,46 @@
-import 'dart:html';
-
-import 'package:admin/cms/module_cms.dart';
-import 'package:admin/dashboard/screen_dashboard.dart';
-import 'package:admin/user/module_user.dart';
-import 'package:admin/util/app_context.dart';
-import 'package:admin/util/auth.dart' as auth;
-import 'package:angular2/core.dart';
-import 'package:angular2/router.dart';
+import 'package:admin/app_context.dart';
+import 'package:admin/messages/test.dart';
+import 'package:admin/routing.dart';
+import 'package:admin/screens/session/screen_login.dart';
+import 'package:angular/angular.dart';
+import 'package:angular_forms/angular_forms.dart';
+import 'package:angular_router/angular_router.dart';
 import 'package:fnx_rest/fnx_rest.dart';
-import 'package:fnx_ui/errors.dart';
+import 'package:fnx_ui/fnx_ui.dart';
 import 'package:logging/logging.dart';
-///
-/// Root komponenta aplikace. Stará se o zobrazování errorů, ale především definuje routovací
-/// pravidla pro další moduly.
-///
-///
-@Component(selector: 'app', templateUrl: 'app.html')
-@RouteConfig(const [
-  const Route(path: '/dashboard', name: 'Dashboard', component: ScreenDashboard, useAsDefault: true),
-  const Route(path: '/user/...', name: 'User', component: ModuleUser),
-  const Route(path: "/cms/:type/...", name: "Cms", component: ModuleCms)
-])
+
+@Component(selector: 'app', templateUrl: 'app.html',
+  directives: [fnxUiDirectives,
+  coreDirectives,
+  formDirectives,
+  routerDirectives,
+  ScreenLogin
+  ]
+)
 class App {
 
   final Logger log = new Logger("App");
 
-  String errorHeadline = null;
-  String errorMessage = null;
-  List<String> errorList = [];
+  @ViewChild(FnxApp)
+  FnxApp app;
 
-  RestClient rootRestClient = null;
+  final AppContext ctx;
+  final Routing routing;
+  final Router router;
+  final RestClient root;
 
-  AppContext appContext;
+  static Map cmsRouteParams = {"news" : {"type" : "news"}, "events" : {"type" : "events"}, };
 
-  Router router;
-
-  App(this.rootRestClient, FnxExceptionHandler exceptionHandler, this.appContext, Router router) {
-    exceptionHandler.setShowErrorCallback(showError);
-    this.router = router;
-  }
-
-  void authTokenChanged(String token) {
-    auth.saveLoginToken(token);
-    rootRestClient.setHeader('Authorization', token);
-  }
-
-  void loggedUserChanged(Map<String, dynamic> user) {
-    appContext.loggedUser = user;
-  }
-
-  void showError(FnxError err) {
-    log.info("Showing error: ${err.headline}");
-    errorHeadline = err.headline;
-    errorMessage = err.message;
-    errorList = err.details;
-  }
-
-  closeError() {
-    errorHeadline = null;
-    errorMessage = null;
+  App(this.ctx, this.routing, this.router, this.root) {
+    print("Message test: " + ctx.msg.app.backend);
   }
 
   logout() {
-    appContext.logout();
-    auth.removeLoginToken();
+    ScreenLogin.logout(ctx, root.child("/v1/sessions"));
   }
 
   bool isTesting() {
-    return window.location.hostname.contains("localhost");
+    return ctx.local;
   }
 
 }
