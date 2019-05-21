@@ -12,34 +12,30 @@ import 'package:fnx_ui/fnx_ui.dart';
 @Component(
     selector: 'screen-user-edit',
     templateUrl: 'screen_user_edit.html',
-    directives: [fnxUiDirectives,
-    coreDirectives, formDirectives]
-)
+    directives: [fnxUiDirectives, coreDirectives, formDirectives])
 class ScreenUserEdit with CreateEditSupport implements OnActivate {
-
   final FnxApp fnxApp;
   final RestClient root;
   RestClient rest;
   final AppContext ctx;
-  final Location location;
+//  final Location location;
 
   String userId;
 
   final Router router;
 
-
   Map<String, dynamic> user;
 
   List<EnumItem> roles;
 
-  ScreenUserEdit(this.root, this.router, this.fnxApp, this.ctx, this.location) {
+  ScreenUserEdit(this.root, this.router, this.fnxApp, this.ctx) {
     print("USER constructor");
     print(router);
     rest = root.child('/v1/users');
-    roles = ctx.enumerations['roles'].all.where((EnumItem i) => i.value != 'ANONYMOUS').toList();
+    roles = ctx.enumerations['roles'].all
+        .where((EnumItem i) => i.value != 'ANONYMOUS')
+        .toList();
   }
-
-
 
   void fetchDetails() async {
     RestResult rr = await rest.child('/$userId').get();
@@ -54,14 +50,15 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
   void saveUser(Event e) async {
     e.preventDefault();
-    RestResult rr = creating ? await rest.post(user) : await rest.child("/$userId").put(user);
+    RestResult rr = creating
+        ? await rest.post(user)
+        : await rest.child("/$userId").put(user);
     if (rr.success) {
       if (creating) {
         fnxApp.toast('User was created.');
       } else {
         fnxApp.toast("User was changed.");
       }
-
     } else if (rr.data['error'] && rr.data['type'] == 'UniqueValueViolation') {
       fnxApp.alert("This email is already used!");
     } else {
@@ -88,6 +85,4 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
   @override
   String get dataId => userId;
-
-
 }
