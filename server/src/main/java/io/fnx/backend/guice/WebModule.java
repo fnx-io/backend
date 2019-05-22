@@ -1,7 +1,5 @@
 package io.fnx.backend.guice;
 
-import io.fnx.backend.social.BaseSocialPlugin;
-import io.fnx.backend.social.web.BaseSocialController;
 import io.fnx.backend.social.web.FacebookSocialController;
 import io.fnx.backend.social.web.GoogleSocialController;
 import io.fnx.backend.web.*;

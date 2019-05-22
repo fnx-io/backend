@@ -12,8 +12,6 @@ import io.fnx.backend.queue.QueueProvider;
 import io.fnx.backend.queue.QueueProviderFactory;
 import io.fnx.backend.queue.TaskSubmitterFactory;
 import io.fnx.backend.rest.BaseResource;
-import io.fnx.backend.rest.UserResource;
-import io.fnx.backend.rest.jersey.JerseyApplication;
 import io.fnx.backend.service.*;
 
 import io.fnx.backend.tools.authorization.AllowedForAdminsAuthorizationGuard;

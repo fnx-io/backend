@@ -245,8 +245,7 @@ public class HttpRequest {
         TRUSTED_FACTORY = context.getSocketFactory();
       } catch (GeneralSecurityException e) {
         IOException ioException = new IOException(
-            "Security exception configuring SSL context");
-        ioException.initCause(e);
+            "Security exception configuring SSL context", e);
         throw new HttpRequestException(ioException);
       }
     }
@@ -784,7 +783,7 @@ public class HttpRequest {
     String host = parsed.getHost();
     int port = parsed.getPort();
     if (port != -1)
-      host = host + ':' + Integer.toString(port);
+      host = host + ':' + port;
 
     try {
       String encoded = new URI(parsed.getProtocol(), host, parsed.getPath(),
@@ -795,8 +794,7 @@ public class HttpRequest {
                   + encoded.substring(paramsStart + 1).replace("+", "%2B");
       return encoded;
     } catch (URISyntaxException e) {
-      IOException io = new IOException("Parsing URI failed");
-      io.initCause(e);
+      IOException io = new IOException("Parsing URI failed", e);
       throw new HttpRequestException(io);
     }
   }

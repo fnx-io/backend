@@ -1,6 +1,5 @@
 package io.fnx.backend.social;
 
-import io.fnx.backend.domain.UserEntity;
 import org.mint42.util.Url;
 
 import javax.servlet.http.HttpServletRequest;

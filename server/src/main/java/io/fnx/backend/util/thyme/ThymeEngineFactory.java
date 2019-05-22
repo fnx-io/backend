@@ -3,10 +3,7 @@ package io.fnx.backend.util.thyme;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.TemplateProcessingParameters;
-import org.thymeleaf.resourceresolver.ClassLoaderResourceResolver;
 import org.thymeleaf.resourceresolver.IResourceResolver;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 import java.io.InputStream;

@@ -36,7 +36,7 @@ public class ListResult<T> implements Iterable<T> {
     }
 
     public static <T> ListResult<T> empty() {
-        return new ListResult<T>(Lists.<T>newLinkedList(), 0);
+        return new ListResult<T>(Lists.newLinkedList(), 0);
     }
 
     @Override

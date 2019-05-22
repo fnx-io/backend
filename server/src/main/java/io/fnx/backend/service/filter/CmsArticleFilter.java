@@ -1,7 +1,6 @@
 package io.fnx.backend.service.filter;
 
 import com.googlecode.objectify.cmd.Query;
-import io.fnx.backend.domain.FileCategory;
 import io.fnx.backend.domain.filter.Filter;
 import io.fnx.backend.domain.filter.FilterLimits;
 

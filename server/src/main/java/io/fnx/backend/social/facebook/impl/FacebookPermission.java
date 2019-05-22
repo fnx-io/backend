@@ -45,7 +45,7 @@ public enum FacebookPermission implements SocialPermission {
 
 	private String scopeName;
 
-	private FacebookPermission(String scopeName) {
+	FacebookPermission(String scopeName) {
 		this.scopeName = scopeName;
 	}
 

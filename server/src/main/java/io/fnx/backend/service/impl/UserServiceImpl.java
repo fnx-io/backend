@@ -5,7 +5,6 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
-import io.fnx.backend.auth.guards.AllowedForTrusted;
 import io.fnx.backend.domain.*;
 import io.fnx.backend.domain.dto.login.InvalidCredentialsLoginResult;
 import io.fnx.backend.domain.dto.login.LoginResult;
@@ -16,9 +15,6 @@ import io.fnx.backend.domain.filter.user.ListUsersFilter;
 import io.fnx.backend.manager.AuthTokenManager;
 import io.fnx.backend.manager.UniqueIndexManager;
 import io.fnx.backend.service.*;
-import io.fnx.backend.tools.authorization.AllowedForAdmins;
-import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
-import io.fnx.backend.tools.authorization.AllowedForOwner;
 import io.fnx.backend.tools.random.Randomizer;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -81,14 +77,11 @@ public class UserServiceImpl extends BaseService implements UserService {
 		if (user.getRole() == null) {
 			user.setRole(Role.USER);
 		}
-		return ofy().transact(new Work<UserEntity>() {
-			@Override
-			public UserEntity run() {
-				// make sure we are creating user with unique email
-				uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), userKey);
-				ofy().save().entity(user).now();
-				return user;
-			}
+		return ofy().transact(() -> {
+			// make sure we are creating user with unique email
+			uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), userKey);
+			ofy().save().entity(user).now();
+			return user;
 		});
 	}
 
@@ -133,19 +126,16 @@ public class UserServiceImpl extends BaseService implements UserService {
 			final Key<UserEntity> userKey = ofy().factory().allocateId(UserEntity.class);
 
 			final UserEntity finalExistingUser = existingUser;
-			ofy().transact(new Runnable() {
-				@Override
-				public void run() {
-					// make sure we are creating user with unique email
-					uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, finalExistingUser.getEmail(), userKey);
-					finalExistingUser.setId(userKey.getId());
+			ofy().transact(() -> {
+				// make sure we are creating user with unique email
+				uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, finalExistingUser.getEmail(), userKey);
+				finalExistingUser.setId(userKey.getId());
 
-					SocialMediaId socMemId = new SocialMediaId();
-					socMemId.setOwner(Ref.create(finalExistingUser.getKey()));
-					socMemId.setId(socMemKey.getName());
+				SocialMediaId socMemId = new SocialMediaId();
+				socMemId.setOwner(Ref.create(finalExistingUser.getKey()));
+				socMemId.setId(socMemKey.getName());
 
-					ofy().save().entities(finalExistingUser, socMemId).now();
-				}
+				ofy().save().entities(finalExistingUser, socMemId).now();
 			});
 		}
 
@@ -158,35 +148,32 @@ public class UserServiceImpl extends BaseService implements UserService {
 		checkNotNull(cmd.getUserId(), "User id must not be empty!");
 		log.debug(format("User [%d] wants to update user [%d]", cc().getLoggedUserId(), cmd.getUserId()));
 
-		return ofy().transact(new Work<UserEntity>() {
-			@Override
-			public UserEntity run() {
-				final Key<UserEntity> key = UserEntity.createKey(cmd.getUserId());
-				final UserEntity user = ofy().load().key(key).now();
-				if (user == null) throw new NotFoundException(key);
+		return ofy().transact(() -> {
+			final Key<UserEntity> key = UserEntity.createKey(cmd.getUserId());
+			final UserEntity user = ofy().load().key(key).now();
+			if (user == null) throw new NotFoundException(key);
 
-				final String origEmail = user.getEmail();
+			final String origEmail = user.getEmail();
 
-				user.setEmail(cmd.getEmail());
-				user.setFirstName(cmd.getFirstName());
-				user.setLastName(cmd.getLastName());
+			user.setEmail(cmd.getEmail());
+			user.setFirstName(cmd.getFirstName());
+			user.setLastName(cmd.getLastName());
 
-				if (cc().isAdmin() && cmd.getRole() != null) {
-					user.setRole(cmd.getRole());
-				}
-
-				if (!isNullOrEmpty(cmd.getPassword())) {
-					// also regenerate salt
-					user.setPasswordHash(hashPassword(cmd.getPassword()));
-				}
-				// do we need to release and acquire new unique for changed email?
-				if (!Objects.equals(origEmail, user.getEmail())) {
-					uniqueIndexManager.deleteUniqueIndexOwner(UniqueProps.user_email, origEmail);
-					uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), key);
-				}
-				ofy().save().entity(user).now();
-				return user;
+			if (cc().isAdmin() && cmd.getRole() != null) {
+				user.setRole(cmd.getRole());
 			}
+
+			if (!isNullOrEmpty(cmd.getPassword())) {
+				// also regenerate salt
+				user.setPasswordHash(hashPassword(cmd.getPassword()));
+			}
+			// do we need to release and acquire new unique for changed email?
+			if (!Objects.equals(origEmail, user.getEmail())) {
+				uniqueIndexManager.deleteUniqueIndexOwner(UniqueProps.user_email, origEmail);
+				uniqueIndexManager.saveUniqueIndexOwner(UniqueProps.user_email, user.getEmail(), key);
+			}
+			ofy().save().entity(user).now();
+			return user;
 		});
 	}
 
@@ -205,16 +192,13 @@ public class UserServiceImpl extends BaseService implements UserService {
 			final UserEntity user = ofy().load().key(ownerKey).now();
 			if (user != null) {
 				final int validForHours = 1;
-				ofy().transact(new Runnable() {
-					@Override
-					public void run() {
-						String token = randomizer.randomBase64(22);
-						DateTime validTill = new DateTime();
-						validTill = validTill.plusHours(validForHours);
-						user.setPasswordToken(token);
-						user.setPasswordTokenValidTill(validTill);
-						ofy().save().entity(user).now();
-					}
+				ofy().transact(() -> {
+					String token = randomizer.randomBase64(22);
+					DateTime validTill = new DateTime();
+					validTill = validTill.plusHours(validForHours);
+					user.setPasswordToken(token);
+					user.setPasswordTokenValidTill(validTill);
+					ofy().save().entity(user).now();
 				});
 				Map<String, Object> params = new HashMap<>();
 				params.put("validForHours", validForHours);
@@ -241,14 +225,11 @@ public class UserServiceImpl extends BaseService implements UserService {
 		if (ownerKey != null) {
 			final UserEntity user = ofy().load().key(ownerKey).now();
 			if (user != null && change.getToken().equals(user.getPasswordToken())) {
-				ofy().transact(new Runnable() {
-					@Override
-					public void run() {
-						user.setPasswordToken(null);
-						user.setPasswordTokenValidTill(null);
-						user.setPasswordHash(hashPassword(change.getPassword()));
-						ofy().save().entity(user).now();
-					}
+				ofy().transact(() -> {
+					user.setPasswordToken(null);
+					user.setPasswordTokenValidTill(null);
+					user.setPasswordHash(hashPassword(change.getPassword()));
+					ofy().save().entity(user).now();
 				});
 				return true;
 			}
@@ -297,7 +278,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 			return new InvalidCredentialsLoginResult();
 
 		} else if (!Objects.equals(passwordHash, hashPassword(password, passwordHash))) {
-			log.info("User %s attempted to login with invalid password", email);
+			log.info(format("User [%s] attempted to login with invalid password", email));
 			return new InvalidCredentialsLoginResult();
 		}
 
@@ -334,17 +315,14 @@ public class UserServiceImpl extends BaseService implements UserService {
 	public UserEntity makeSuperUser(Long userId) {
 		checkNotNull(userId, "User ID must not be empty!");
 		final Key<UserEntity> key = UserEntity.createKey(userId);
-		return ofy().transact(new Work<UserEntity>() {
-			@Override
-			public UserEntity run() {
-				final UserEntity user = ofy().load().key(key).now();
-				if (user == null) {
-					throw new NotFoundException(key);
-				}
-				user.setRole(Role.ADMIN);
-				ofy().save().entity(user).now();
-				return user;
+		return ofy().transact(() -> {
+			final UserEntity user = ofy().load().key(key).now();
+			if (user == null) {
+				throw new NotFoundException(key);
 			}
+			user.setRole(Role.ADMIN);
+			ofy().save().entity(user).now();
+			return user;
 		});
 	}
 

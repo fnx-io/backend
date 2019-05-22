@@ -59,7 +59,7 @@ public final class PageMeta {
 	/**
 	 * Enum, ktery popisuje, jake vsechny meta tagy zname a jak spolu souvisi.
 	 */
-	public static enum MetaTag {
+	public enum MetaTag {
 
 		TITLE(true, "title", null, null),
 		DESCRIPTION(false, "description", NAME, null),
@@ -95,7 +95,7 @@ public final class PageMeta {
 		String type;
 		MetaTag inheritsFrom;
 
-		private MetaTag(boolean renderAsTag, String name, String type, MetaTag inheritsFrom) {
+		MetaTag(boolean renderAsTag, String name, String type, MetaTag inheritsFrom) {
 			this.renderAsTag = renderAsTag;
 			this.name = name;
 			this.type = type;

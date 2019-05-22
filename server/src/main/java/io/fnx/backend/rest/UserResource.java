@@ -1,12 +1,9 @@
 package io.fnx.backend.rest;
 
-import io.fnx.backend.auth.CallContext;
 import io.fnx.backend.auth.guards.AllAllowed;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.domain.dto.user.UpdateUserDto;
 import io.fnx.backend.domain.dto.user.UserDto;
-import io.fnx.backend.domain.dto.login.LoginResult;
-import io.fnx.backend.domain.dto.login.UserLoginDto;
 import io.fnx.backend.domain.filter.user.ListUsersFilter;
 import io.fnx.backend.service.ListResult;
 import io.fnx.backend.service.UserService;
@@ -15,8 +12,6 @@ import io.fnx.backend.tools.authorization.AllowedForOwner;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 
 /**
  * REST endpoints having something to do with user resource

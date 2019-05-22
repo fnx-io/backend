@@ -1,18 +1,11 @@
 package io.fnx.backend.util.conf;
 
-import com.google.appengine.api.utils.SystemProperty;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import io.fnx.backend.domain.FileCategory;
 import io.fnx.backend.util.EnumerationRepository;
 import io.fnx.backend.util.MessageAccessor;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-
-import static java.lang.String.format;
 
 /**
  *

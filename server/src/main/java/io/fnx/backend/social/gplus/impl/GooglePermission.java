@@ -17,7 +17,7 @@ public enum GooglePermission implements SocialPermission {
 
 	private String scopeName;
 
-	private GooglePermission(String scopeName) {
+	GooglePermission(String scopeName) {
 		this.scopeName = scopeName;
 	}
 

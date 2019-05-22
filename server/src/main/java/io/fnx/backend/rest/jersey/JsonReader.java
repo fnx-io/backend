@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Can deserialize message body from JSON to objects using configured {@link Gson}
@@ -35,6 +36,6 @@ public class JsonReader implements MessageBodyReader<Object> {
 
     @Override
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
-        return gson.fromJson(new InputStreamReader(entityStream, "UTF-8"), genericType);
+        return gson.fromJson(new InputStreamReader(entityStream, StandardCharsets.UTF_8), genericType);
     }
 }

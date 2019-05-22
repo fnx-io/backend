@@ -2,13 +2,11 @@ package io.fnx.backend.domain;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
-import io.fnx.backend.tools.hydration.*;
 import org.joda.time.DateTime;
 
 import java.util.*;
 
 import static io.fnx.backend.tools.ofy.OfyUtils.idToKey;
-import static java.lang.String.format;
 
 @Entity
 @Unindex

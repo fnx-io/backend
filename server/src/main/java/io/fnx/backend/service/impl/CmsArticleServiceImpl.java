@@ -9,9 +9,6 @@ import io.fnx.backend.service.BaseService;
 import io.fnx.backend.service.CmsArticleService;
 import io.fnx.backend.service.ListResult;
 import io.fnx.backend.service.filter.CmsArticleFilter;
-import io.fnx.backend.tools.authorization.AllowedForAdmins;
-import io.fnx.backend.tools.hydration.HydrationContext;
-import io.fnx.backend.tools.hydration.Hydrator;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,23 +50,20 @@ public class CmsArticleServiceImpl extends BaseService implements CmsArticleServ
 		checkArgument(articleEntity.getId()!=null, "Missing article id");
 		checkArgument(articleEntity.getType()!=null, "Missing article type");
 
-		return ofy().transact(new Work<CmsArticleEntity>() {
-			@Override
-			public CmsArticleEntity run() {
-				CmsArticleEntity persistent = ofy().load().key(articleEntity.getKey()).now();
-				if (!articleEntity.getType().equals(persistent.getType())) {
-					throw new IllegalStateException(String.format("Changing article type is not allowed. Expected %s, found %s.", persistent.getType(), articleEntity.getType()));
-				}
-				// keep unmodifiable data
-				articleEntity.setCreatedBy(persistent.getCreatedBy());
-				articleEntity.setCreated(persistent.getCreated());
-				ofy().save().entity(articleEntity).now();
-
-				final String msg = "Article has been changed.";
-				auditLogManager.createAuditLogEvent(articleEntity.getKey(), msg);
-
-				return articleEntity;
+		return ofy().transact(() -> {
+			CmsArticleEntity persistent = ofy().load().key(articleEntity.getKey()).now();
+			if (!articleEntity.getType().equals(persistent.getType())) {
+				throw new IllegalStateException(String.format("Changing article type is not allowed. Expected %s, found %s.", persistent.getType(), articleEntity.getType()));
 			}
+			// keep unmodifiable data
+			articleEntity.setCreatedBy(persistent.getCreatedBy());
+			articleEntity.setCreated(persistent.getCreated());
+			ofy().save().entity(articleEntity).now();
+
+			final String msg = "Article has been changed.";
+			auditLogManager.createAuditLogEvent(articleEntity.getKey(), msg);
+
+			return articleEntity;
 		});
 	}
 

@@ -12,8 +12,6 @@ import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.tools.cloudstorage.*;
 import com.google.common.base.Joiner;
 import com.googlecode.objectify.cmd.Query;
-import io.fnx.backend.tools.authorization.AllowedForAdmins;
-import io.fnx.backend.tools.authorization.AllowedForAuthenticated;
 import io.fnx.backend.tools.random.Randomizer;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

@@ -2,7 +2,6 @@ package io.fnx.backend.service.impl;
 
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.domain.eventlog.AuditLogEventEntity;
@@ -36,12 +35,9 @@ public class AuditLogManagerImpl extends BaseService implements AuditLogManager 
         }
         event.setOccurredOn(DateTime.now());
 
-        return ofy().transact(new Work<AuditLogEventEntity>() {
-            @Override
-            public AuditLogEventEntity run() {
-                ofy().save().entity(event).now(); // TODO: async save?
-                return event;
-            }
+        return ofy().transact(() -> {
+            ofy().save().entity(event).now(); // TODO: async save?
+            return event;
         });
     }
 

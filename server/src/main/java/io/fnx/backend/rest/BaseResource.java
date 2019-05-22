@@ -1,7 +1,6 @@
 package io.fnx.backend.rest;
 
 import io.fnx.backend.auth.CallContext;
-import io.fnx.backend.auth.guards.AllAllowed;
 import io.fnx.backend.domain.filter.FilterLimits;
 import com.google.inject.Inject;
 import io.fnx.backend.service.DontValidate;
