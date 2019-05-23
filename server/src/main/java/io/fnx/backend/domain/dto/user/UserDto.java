@@ -5,6 +5,8 @@ import io.fnx.backend.service.Validate;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.util.List;
+
 @Validate
 public class UserDto extends BaseUserDto {
 
@@ -12,7 +14,7 @@ public class UserDto extends BaseUserDto {
     @Length(min = 6, message = "{error.password.too.short}")
     protected String password;
 
-    protected Role role;
+    protected List<Role> roles;
 
     public String getPassword() {
         return password;
@@ -22,11 +24,11 @@ public class UserDto extends BaseUserDto {
         this.password = password;
     }
 
-	public Role getRole() {
-		return role;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 }

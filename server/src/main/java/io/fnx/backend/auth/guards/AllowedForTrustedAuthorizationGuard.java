@@ -39,13 +39,11 @@ public class AllowedForTrustedAuthorizationGuard implements AuthorizationGuard {
     }
 
     @Override
-    public AuthorizationResult guardInvocation(MethodInvocation invocation, Annotation annotation, PrincipalRole callingRole, Key<? extends Principal> callingPrincipal) {
+    public AuthorizationResult guardInvocation(MethodInvocation methodInvocation, Annotation annotation, Principal principal) {
         boolean trusted = ccProvider != null && ccProvider.get() != null && ccProvider.get().isTrusted();
-        if (trusted) {
-            return AuthorizationResult.SUCCESS;
-        } else {
-            return AuthorizationResult.failure("Context not trusted!");
-        }
+        return trusted
+                ? AuthorizationResult.SUCCESS
+                : AuthorizationResult.failure("Context not trusted for method call " + methodInvocation.getMethod());
     }
 
     @Inject

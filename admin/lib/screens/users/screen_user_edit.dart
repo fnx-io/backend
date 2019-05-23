@@ -73,7 +73,7 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
     userId = current.parameters['id'];
 
     if (isCreate) {
-      user = {'role': 'USER'};
+      user = {'roles': 'USER'};
     }
     if (isEdit) {
       fetchDetails();

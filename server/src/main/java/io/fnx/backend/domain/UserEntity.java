@@ -7,6 +7,9 @@ import io.fnx.backend.tools.auth.PrincipalRole;
 import io.fnx.backend.tools.authorization.OwnedEntity;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
+import java.util.List;
+
 import static io.fnx.backend.tools.ofy.OfyUtils.idToKey;
 
 @Cache
@@ -25,7 +28,7 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 	@Index
 	private String lastName;
 
-    private Role role;
+    private List<Role> roles;
 
     @JsonIgnore
     private String passwordHash;
@@ -53,8 +56,8 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
     }
 
     @Override
-    public PrincipalRole getUserRole() {
-        return role;
+    public List<? extends PrincipalRole> getUserRoles() {
+        return roles;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
         return "UserEntity{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", role=" + role +
+                ", roles=" + roles +
                 '}';
     }
 
@@ -100,14 +103,6 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public void setPasswordHash(String passwordHash) {
@@ -168,4 +163,16 @@ public class UserEntity implements Principal, OwnedEntity<UserEntity> {
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
 	}
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setSingleRole(Role role) {
+        this.roles = Collections.singletonList(role);
+    }
 }

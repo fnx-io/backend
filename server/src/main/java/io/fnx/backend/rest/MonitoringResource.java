@@ -1,7 +1,7 @@
 package io.fnx.backend.rest;
 
 import com.google.common.collect.Maps;
-import io.fnx.backend.auth.guards.AllAllowed;
+import io.fnx.backend.tools.authorization.AllAllowed;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.GET;

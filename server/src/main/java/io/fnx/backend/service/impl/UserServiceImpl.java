@@ -3,7 +3,6 @@ package io.fnx.backend.service.impl;
 import com.google.common.base.Preconditions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
 import io.fnx.backend.domain.*;
 import io.fnx.backend.domain.dto.login.InvalidCredentialsLoginResult;
@@ -23,10 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -72,10 +68,10 @@ public class UserServiceImpl extends BaseService implements UserService {
 		user.setLastName(cmd.getLastName());
 		user.setPasswordHash(hashPassword(cmd.getPassword()));
 		if (cc().isAdmin()) {
-			user.setRole(cmd.getRole());
+			user.setRoles(cmd.getRoles());
 		}
-		if (user.getRole() == null) {
-			user.setRole(Role.USER);
+		if (user.hasNoRoles()) {
+			user.setSingleRole(Role.USER);
 		}
 		return ofy().transact(() -> {
 			// make sure we are creating user with unique email
@@ -122,7 +118,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 			// user doesn't exist
 			log.info("User doesn't exist creating");
 			existingUser = socialMediaUser;
-			existingUser.setRole(Role.USER);
+			existingUser.setSingleRole(Role.USER);
 			final Key<UserEntity> userKey = ofy().factory().allocateId(UserEntity.class);
 
 			final UserEntity finalExistingUser = existingUser;
@@ -159,8 +155,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 			user.setFirstName(cmd.getFirstName());
 			user.setLastName(cmd.getLastName());
 
-			if (cc().isAdmin() && cmd.getRole() != null) {
-				user.setRole(cmd.getRole());
+			if (cc().isAdmin() && cmd.getRoles() != null) {
+				user.setRoles(cmd.getRoles());
 			}
 
 			if (!isNullOrEmpty(cmd.getPassword())) {
@@ -253,7 +249,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	public LoginResult login(String email, String password, boolean admin) {
+	public LoginResult login(String email, String password, boolean adminRequired) {
 		log.debug(format("Attempting to login user with email: %s and password: %s", email, protectPwd(password)));
 		if (isNullOrEmpty(email) || isNullOrEmpty(password)) {
 			log.debug("User could not be authenticated, credentials empty");
@@ -266,7 +262,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 		// check that user is admin, if it is required
 		if (found == null) {
 			log.debug(format("No such user with email %s found", email));
-		} else if (admin && (found.getRole() == null || !found.getRole().isAdmin())) {
+		} else if (adminRequired && !found.hasAdminRole()) {
 			log.info(format("Login limited to admin only, but %s is is not an admin!", email));
 		} else {
 			passwordHash = found.getPasswordHash();
@@ -320,7 +316,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 			if (user == null) {
 				throw new NotFoundException(key);
 			}
-			user.setRole(Role.ADMIN);
+			user.setSingleRole(Role.ADMIN);
 			ofy().save().entity(user).now();
 			return user;
 		});

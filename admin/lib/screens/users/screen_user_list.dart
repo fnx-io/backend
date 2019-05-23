@@ -8,12 +8,10 @@ import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
 @Component(
-  selector: 'screen-user-list',
-  templateUrl: 'screen_user_list.html',
-    directives: [fnxUiDirectives, coreDirectives]
-)
+    selector: 'screen-user-list',
+    templateUrl: 'screen_user_list.html',
+    directives: [fnxUiDirectives, coreDirectives])
 class ScreenUserList {
-
   final AppContext ctx;
   final RestClient root;
   RestClient rest;
@@ -30,11 +28,14 @@ class ScreenUserList {
   }
 
   goToDetail(Map user) {
-    router.navigate(routing.userEdit.toUrl(parameters: {"id" : user['id'].toString()}));
+    router.navigate(
+        routing.userEdit.toUrl(parameters: {"id": user['id'].toString()}));
   }
 
   createUser() {
-    router.navigate(routing.userEdit.toUrl(parameters: {"id" : "create"}));
+    router.navigate(routing.userEdit.toUrl(parameters: {"id": "create"}));
   }
 
+  String rolesLabel(Map user) =>
+      user['roles'].map((r) => roles[r].label).join(',');
 }

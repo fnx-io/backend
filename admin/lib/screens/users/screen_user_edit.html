@@ -14,9 +14,9 @@
                 <fnx-text [(ngModel)]="user['email']" [required]="true"></fnx-text>
             </fnx-input>
 
-            <fnx-input label="Role">
-                <fnx-select [(ngModel)]="user['role']" [required]="true">
-                    <fnx-option [value]="null" label="Select appropriate role"></fnx-option>
+            <fnx-input label="Roles">
+                <fnx-select [(ngModel)]="user['roles']" [required]="true" [multi]="true">
+                    <fnx-option [value]="null" label="Select appropriate roles"></fnx-option>
                     <fnx-option *ngFor="let r of roles" [value]="r.value" [label]="r.label"></fnx-option>
                 </fnx-select>
             </fnx-input>

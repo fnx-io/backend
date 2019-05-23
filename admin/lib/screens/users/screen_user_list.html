@@ -19,7 +19,7 @@
                 <td>{{ u['firstName'] }}</td>
                 <td>{{ u['lastName'] }}</td>
                 <td><a class="underline" href="mailto:{{ u['email'] }}">{{ u['email'] }}</a></td>
-                <td>{{ roles[u['role']].label }}</td>
+                <td>{{ rolesLabel(u) }}</td>
                 <td><a class="btn" (click)="goToDetail(u);">edit</a></td>
             </tr>
             </tbody>

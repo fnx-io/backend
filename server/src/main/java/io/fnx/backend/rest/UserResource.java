@@ -1,12 +1,12 @@
 package io.fnx.backend.rest;
 
-import io.fnx.backend.auth.guards.AllAllowed;
 import io.fnx.backend.domain.UserEntity;
 import io.fnx.backend.domain.dto.user.UpdateUserDto;
 import io.fnx.backend.domain.dto.user.UserDto;
 import io.fnx.backend.domain.filter.user.ListUsersFilter;
 import io.fnx.backend.service.ListResult;
 import io.fnx.backend.service.UserService;
+import io.fnx.backend.tools.authorization.AllAllowed;
 import io.fnx.backend.tools.authorization.AllowedForAdmins;
 import io.fnx.backend.tools.authorization.AllowedForOwner;
 

@@ -4,20 +4,14 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
-import io.fnx.backend.auth.guards.AllAllowed;
-import io.fnx.backend.auth.guards.AllowedForRoleAuthorizationGuard;
+import io.fnx.backend.auth.guards.AllowedForRolesAuthorizationGuardImpl;
 import io.fnx.backend.auth.guards.AllowedForTrustedAuthorizationGuard;
-import io.fnx.backend.auth.AuthorizationInterceptor;
 import io.fnx.backend.queue.QueueProvider;
 import io.fnx.backend.queue.QueueProviderFactory;
 import io.fnx.backend.queue.TaskSubmitterFactory;
 import io.fnx.backend.rest.BaseResource;
-import io.fnx.backend.service.*;
-
-import io.fnx.backend.tools.authorization.AllowedForAdminsAuthorizationGuard;
-import io.fnx.backend.tools.authorization.AllowedForAuthenticatedAuthorizationGuard;
-import io.fnx.backend.tools.authorization.AllowedForOwnerAuthorizationGuard;
-import io.fnx.backend.tools.authorization.AuthorizationGuard;
+import io.fnx.backend.service.DontValidate;
+import io.fnx.backend.tools.authorization.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -58,9 +52,10 @@ public class AuthorizationModule extends AbstractModule {
 
     private AuthorizationGuard[] createAuthorizationGuards() {
         final ArrayList<AuthorizationGuard> guards = new ArrayList<>();
+        guards.add(new AllAllowedAuthorizationGuard());
         guards.add(new AllowedForAuthenticatedAuthorizationGuard());
         guards.add(new AllowedForAdminsAuthorizationGuard());
-        final AllowedForRoleAuthorizationGuard roleGuard = new AllowedForRoleAuthorizationGuard();
+        final AllowedForRolesAuthorizationGuardImpl roleGuard = new AllowedForRolesAuthorizationGuardImpl();
         guards.add(roleGuard);
         final AllowedForOwnerAuthorizationGuard ownerGuard = new AllowedForOwnerAuthorizationGuard();
         requestInjection(ownerGuard);
@@ -119,7 +114,6 @@ public class AuthorizationModule extends AbstractModule {
 
         static List<Class<? extends Annotation>> EXCLUDED_ANNOTATIONS = new ArrayList<>();
         static {
-            EXCLUDED_ANNOTATIONS.add(AllAllowed.class);
             EXCLUDED_ANNOTATIONS.add(Inject.class);
             EXCLUDED_ANNOTATIONS.add(DontValidate.class);
         }

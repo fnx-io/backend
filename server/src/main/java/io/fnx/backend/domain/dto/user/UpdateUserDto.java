@@ -7,6 +7,8 @@ import com.googlecode.objectify.Key;
 import io.fnx.backend.tools.authorization.OwnedEntity;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Validate
 public class UpdateUserDto extends BaseUserDto implements OwnedEntity<UserEntity> {
 
@@ -15,7 +17,7 @@ public class UpdateUserDto extends BaseUserDto implements OwnedEntity<UserEntity
     @Length(min = 6, message = "{error.password.too.short}")
     protected String password;
 
-	protected Role role;
+	protected List<Role> roles;
 	
 	@Override
     public Key<UserEntity> getOwnerKey() {
@@ -38,11 +40,11 @@ public class UpdateUserDto extends BaseUserDto implements OwnedEntity<UserEntity
         this.password = password;
     }
 
-	public Role getRole() {
-		return role;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 }

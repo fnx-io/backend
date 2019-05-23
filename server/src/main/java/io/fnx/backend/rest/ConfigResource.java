@@ -1,6 +1,6 @@
 package io.fnx.backend.rest;
 
-import io.fnx.backend.auth.guards.AllAllowed;
+import io.fnx.backend.tools.authorization.AllAllowed;
 import io.fnx.backend.util.conf.ClientConfiguration;
 
 import javax.inject.Inject;

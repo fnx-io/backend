@@ -19,7 +19,7 @@ public class ExamplePrivacyStep implements HydrationRecipeStep<CmsArticleEntity,
 
     @Override
     public void executeStep(CmsArticleEntity articleEntity, CallContext callContext, Map<Key<Object>, Object> map) {
-        if (callContext.getCurrentRole() != Role.ADMIN) {
+        if (!callContext.isAdmin()) {
             // articleEntity.sensitiveInfo = null
         }
     }

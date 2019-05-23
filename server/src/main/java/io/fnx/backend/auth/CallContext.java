@@ -3,7 +3,11 @@ package io.fnx.backend.auth;
 import com.google.inject.servlet.RequestScoped;
 import io.fnx.backend.domain.Role;
 import io.fnx.backend.domain.UserEntity;
+import io.fnx.backend.tools.auth.PrincipalRole;
 import io.fnx.backend.tools.hydration.HydrationContext;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Request scoped holder for currently authenticated user
@@ -23,6 +27,10 @@ public class CallContext implements HydrationContext {
         return loggedUser;
     }
 
+    public void setLoggedUser(UserEntity loggedUser) {
+        this.loggedUser = loggedUser;
+    }
+
     public Long getLoggedUserId() {
         if (logged()) {
             return loggedUser.getId();
@@ -31,31 +39,27 @@ public class CallContext implements HydrationContext {
         }
     }
 
-    public void setLoggedUser(UserEntity loggedUser) {
-        this.loggedUser = loggedUser;
-    }
-
     public boolean logged() {
         return loggedUser != null && loggedUser.getId() != null;
     }
 
-    public Role getCurrentRole() {
-        if (loggedUser == null || loggedUser.getRole() == null) {
-            return Role.ANONYMOUS;
+    public List<? extends PrincipalRole> getCurrentRoles() {
+        if (loggedUser == null || loggedUser.getRoles() == null) {
+            return Collections.singletonList(Role.ANONYMOUS);
         } else {
-            return loggedUser.getRole();
+            return loggedUser.getRoles();
         }
-    }
-
-    public void setTrusted(boolean trusted) {
-        this.trusted = trusted;
     }
 
     public boolean isTrusted() {
         return trusted;
     }
 
-	public boolean isAdmin() {
-		return getCurrentRole() == Role.ADMIN;
-	}
+    public void setTrusted(boolean trusted) {
+        this.trusted = trusted;
+    }
+
+    public boolean isAdmin() {
+        return loggedUser != null && loggedUser.hasAdminRole();
+    }
 }
