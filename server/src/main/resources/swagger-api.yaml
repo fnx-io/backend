@@ -1,0 +1,429 @@
+swagger: "2.0"
+info:
+  description: "Fnx template basic swagger"
+  version: "0.0.1"
+  title: "Swagger fnx template"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8085"
+basePath: "/api/v1"
+tags:
+- name: "users"
+  description: "Operations about user"
+- name: "sessions"
+  description: "Session related operations"
+  
+  # externalDocs:
+    # description: "Find out more about our store"
+    # url: "http://swagger.io"
+schemes:
+- "http"
+- "https"
+paths:
+
+  /sessions/login:
+    post:
+      tags:
+      - "sessions"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "login"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/UserLoginDto"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Invalid username/password supplied"
+          
+  /sessions/logout:
+    delete:
+      tags:
+      - "sessions"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "logout"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: "List users"
+      operationId: "listUsers"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UserEntity"
+    post:
+      tags:
+      - "users"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "create"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/UserDto"
+      responses:
+        default:
+          description: "successful operation"
+          
+  /users/{id}:
+    get:
+      tags:
+      - "users"
+      summary: "Get user by id"
+      description: ""
+      operationId: "getUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The user id."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserEntity"
+        400:
+          description: "Invalid user id supplied"
+        404:
+          description: "User not found"
+          
+    put:
+      tags:
+      - "users"
+      summary: "Update user"
+      description: "This can only be done by the logged in user."
+      operationId: "update"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user id that need to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateUserDto"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserEntity"
+        400:
+          description: "Invalid user id supplied"
+        404:
+          description: "User not found"
+          
+    delete:
+      tags:
+      - "users"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "delete"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The user id that needs to be deleted"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid user id supplied"
+        404:
+          description: "User not found"
+          
+  /users/register:
+    post:
+      tags:
+      - "users"
+      summary: "Register user"
+      description: ""
+      operationId: "register"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Registered user object"
+        required: true
+        schema:
+          $ref: "#/definitions/UserDto"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserEntity"
+
+#securityDefinitions:
+#
+#  petstore_auth:
+#    type: "oauth2"
+#    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+#    flow: "implicit"
+#    scopes:
+#      write:pets: "modify pets in your account"
+#      read:pets: "read your pets"
+#  api_key:
+#    type: "apiKey"
+#    name: "api_key"
+#    in: "header"
+
+definitions:
+
+  UserLoginDto:
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+
+  LoginResult:
+    properties:
+      success:
+        type: "boolean"
+      token:
+        type: "string"
+      user:
+        type: "object"
+        $ref: "#/definitions/UserEntity"
+
+  Role:
+    type: "string"
+    description: "Role types"
+    enum:
+    - "ADMIN"
+    - "USER"
+    - "ANONYMOUS"
+  
+  UserDto:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/Role"
+          
+  UpdateUserDto:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      userId:
+        type: "integer"
+        format: "int64"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/Role"
+
+  PasswordChangeDto:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+      token:
+        type: "string"
+
+  UserEntity:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      email:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/Role"
+      avatarUrl:
+        type: "string"
+
+  ClientConfiguration:
+    type: object
+    properties:
+      messages:
+        type: object
+        additionalProperties:
+          type: object
+      enumerations:
+        type: object
+        $ref: "#/definitions/EnumerationRepository"
+
+  EnumerationRepository:
+    type: "object"
+    properties:
+      fileCategories:
+        type: "array"
+        items:
+          $ref: "#/definitions/EnumItem"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/EnumItem"
+
+  EnumItem:
+    type: "object"
+    properties:
+      value:
+        type: "string"
+      label:
+        type: "string"
+
+  Key:
+    type: object
+
+  CmsArticleEntity:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      type:
+        type: string
+      created:
+        type: string
+        format: 'date-time'
+      createdBy:
+        type: object
+        $ref: "#/definitions/Key"
+      authorName:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+
+  AuditLogEventEntity:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      eventTarget:
+        type: object
+        $ref: "#/definitions/Key"
+      message:
+        type: string
+      occurredOn:
+        type: string
+        format: 'date-time'
+      changedBy:
+        type: object
+        $ref: "#/definitions/Key"
+      changedByName:
+        type: string
+
+  FileCategory:
+    type: string
+    enum:
+      - "IMAGE"
+      - "OTHER"
+
+  FileEntity:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      bucketUrl:
+        type: string
+      imageUrl:
+        type: string
+      category:
+        type: object
+        $ref: '#/definitions/FileCategory'
+      set:
+        description: 'folder'
+        type: string
+      uploader:
+        type: object
+        $ref: "#/definitions/Key"
+      uploaded:
+        type: string
+        format: 'date-time'
+      mediaType:
+        type: string
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

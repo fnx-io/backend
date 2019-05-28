@@ -9,17 +9,17 @@ import 'package:admin/messages/messages.i69n.dart';
 import 'package:admin/routing.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
+import 'package:api_client/api.dart';
+import 'package:fnx_rest/fnx_rest_browser.dart';
 import 'package:fnx_ui/errors.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
-import 'package:fnx_rest/fnx_rest_browser.dart';
 
 import 'launcher.template.dart' as self;
 
-@GenerateInjector(
-  [routerProvidersHash]
-  // You can use routerProviders in production
-)
+@GenerateInjector([routerProvidersHash]
+    // You can use routerProviders in production
+    )
 final InjectorFactory injector = self.injector$Injector;
 
 void launchApp<T>(ComponentFactory<T> componentFactory) async {
@@ -59,8 +59,6 @@ void launchApp<T>(ComponentFactory<T> componentFactory) async {
 
   injections[AppContext] = appContext;
 
-
-
   runApp(componentFactory,
       createInjector: ([Injector parent]) =>
           new Injector.map(injections, injector(parent)));
@@ -76,7 +74,7 @@ Messagesabc getI69nMessages() {
 
 Future<AppContext> createAppContext(RestClient restClient) async {
   var configData = (await restClient.child("/v1/config").get()).successData;
-  return new AppContext(configData);
+  return new AppContext(ClientConfiguration.fromJson(configData));
 }
 
 FnxExceptionHandler createExceptionHandler() {

@@ -1,16 +1,14 @@
-import 'package:admin/model/enum_item.dart';
-
+import 'package:api_client/api.dart';
 
 ///
 /// Repozitář pro jeden číselník, kromě property 'all' má ještě
 /// operátor [] takže se dá na hodnotu číselníku sáhnout přes ID jako do mapy.
 ///
-class EnumerationRepository {
-
+class EnumerationRepositoryExt {
   List<EnumItem> all;
   Map<dynamic, EnumItem> _byId;
 
-  EnumerationRepository.fromJson(List<dynamic> data) {
+  EnumerationRepositoryExt.fromJson(List<dynamic> data) {
     all = [];
     _byId = {};
     data.forEach((dynamic row) {
@@ -28,12 +26,13 @@ class EnumerationRepository {
     return _byId.toString();
   }
 
-  static Map<String,EnumerationRepository> buildFromAllEnumerations(Map data) {
-    Map<String,EnumerationRepository> result = {};
+  static Map<String, EnumerationRepositoryExt> buildFromAllEnumerations(
+      Map data) {
+    Map<String, EnumerationRepositoryExt> result = {};
     data.keys.forEach((dynamic enumeration) {
-      result[enumeration] = new EnumerationRepository.fromJson(data[enumeration]);
+      result[enumeration] =
+          new EnumerationRepositoryExt.fromJson(data[enumeration]);
     });
     return result;
   }
-
 }

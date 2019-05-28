@@ -1,9 +1,9 @@
 import 'package:admin/app_context.dart';
-import 'package:admin/model/enumeration_repository.dart';
 import 'package:admin/routing.dart';
 import 'package:admin/utils/rest_listing_factory.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
+import 'package:api_client/api.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
@@ -16,7 +16,6 @@ class ScreenUserList {
   final RestClient root;
   RestClient rest;
   RestListing listing;
-  EnumerationRepository roles;
 
   final Router router;
   final Routing routing;
@@ -24,18 +23,21 @@ class ScreenUserList {
   ScreenUserList(this.ctx, this.root, this.router, this.routing) {
     rest = root.child("/v1/users");
     listing = RestListingFactory.withPaging(rest);
-    roles = ctx.enumerations['roles'];
   }
 
-  goToDetail(Map user) {
+  goToDetail(UserEntity user) {
     router.navigate(
-        routing.userEdit.toUrl(parameters: {"id": user['id'].toString()}));
+        routing.userEdit.toUrl(parameters: {"id": user.id.toString()}));
   }
 
   createUser() {
     router.navigate(routing.userEdit.toUrl(parameters: {"id": "create"}));
   }
 
-  String rolesLabel(Map user) =>
-      user['roles'].map((r) => roles[r].label).join(',');
+  List<EnumItem> get roles => ctx.enumerations.roles;
+
+  List<UserEntity> get users => UserEntity.listFromJson(listing.list);
+
+  String rolesLabel(UserEntity user) =>
+      user.roles.map((r) => r.value).join(',');
 }

@@ -1,0 +1,6 @@
+{
+  "pubName": "api_client",
+  "pubVersion": "0.0.1",
+  "pubDescription": "Rest API client generated from fnx template by swagger-codegen",
+  "useEnumExtension": "true"
+}

@@ -1,8 +1,7 @@
 import 'package:admin/messages/messages.i69n.dart';
-import 'package:admin/model/enumeration_repository.dart';
+import 'package:api_client/api.dart';
 
 class AppContext {
-
   bool local;
   String authKey;
 
@@ -11,16 +10,15 @@ class AppContext {
 
   Messages msg = null;
 
-  Map serverMessages = null;
-  Map<String,EnumerationRepository> enumerations;
+  final ClientConfiguration configData;
 
-  final Map<String, dynamic> configData;
-  AppContext(this.configData) {
-    serverMessages = configData['messages'];
-    enumerations = EnumerationRepository.buildFromAllEnumerations(configData['enumerations']);
-  }
+  AppContext(this.configData) {}
 
   bool get logged => loggedUser != null;
+
+  Map<String, String> get serverMessages => configData.messages;
+
+  EnumerationRepository get enumerations => configData.enumerations;
 
   /// remove logged user details
   void logout() {

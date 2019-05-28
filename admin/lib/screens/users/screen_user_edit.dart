@@ -1,11 +1,11 @@
 import 'dart:html';
 
 import 'package:admin/app_context.dart';
-import 'package:admin/model/enum_item.dart';
 import 'package:admin/shared/create_edit_support.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
+import 'package:api_client/api.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
@@ -26,14 +26,16 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
   Map<String, dynamic> user;
 
+  UserEntity typedUser;
+
   List<EnumItem> roles;
 
   ScreenUserEdit(this.root, this.router, this.fnxApp, this.ctx) {
     print("USER constructor");
     print(router);
     rest = root.child('/v1/users');
-    roles = ctx.enumerations['roles'].all
-        .where((EnumItem i) => i.value != 'ANONYMOUS')
+    roles = ctx.enumerations.roles
+        .where((r) => r.value != Role.aNONYMOUS_.value)
         .toList();
   }
 
@@ -41,6 +43,8 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
     RestResult rr = await rest.child('/$userId').get();
     if (rr.success) {
       user = rr.successData;
+      typedUser = UserEntity.fromJson(user);
+      print('Hura, typed user: $typedUser');
     } else {
       throw rr;
     }
