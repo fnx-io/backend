@@ -24,11 +24,13 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
   final Router router;
 
-  Map<String, dynamic> user;
+  UserEntity user;
 
   UserEntity typedUser;
 
   List<EnumItem> roles;
+
+  List<String> rolesValues = <String>[];
 
   ScreenUserEdit(this.root, this.router, this.fnxApp, this.ctx) {
     print("USER constructor");
@@ -42,9 +44,8 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
   void fetchDetails() async {
     RestResult rr = await rest.child('/$userId').get();
     if (rr.success) {
-      user = rr.successData;
-      typedUser = UserEntity.fromJson(user);
-      print('Hura, typed user: $typedUser');
+      user = UserEntity.fromJson(rr.successData);
+      rolesValues = user?.roles?.map((r) => r.value)?.toList() ?? <String>[];
     } else {
       throw rr;
     }
@@ -54,9 +55,12 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
   void saveUser(Event e) async {
     e.preventDefault();
+
+    user.roles = rolesValues.map((rv) => Role.fromJson(rv)).toList();
+
     RestResult rr = creating
-        ? await rest.post(user)
-        : await rest.child("/$userId").put(user);
+        ? await rest.post(user.toJson())
+        : await rest.child("/$userId").put(user.toJson());
     if (rr.success) {
       if (creating) {
         fnxApp.toast('User was created.');
@@ -77,7 +81,7 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
     userId = current.parameters['id'];
 
     if (isCreate) {
-      user = {'roles': 'USER'};
+      user = UserEntity()..roles = [Role.uSER_];
     }
     if (isEdit) {
       fetchDetails();
@@ -85,8 +89,15 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
   }
 
   @override
-  Map get data => user;
+  get data => user;
 
   @override
   String get dataId => userId;
+}
+
+class EnumRole {
+  final EnumItem roleEnum;
+  final Role role;
+
+  EnumRole(this.roleEnum, this.role);
 }

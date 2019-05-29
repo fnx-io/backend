@@ -22,8 +22,12 @@ class ScreenUserList {
 
   ScreenUserList(this.ctx, this.root, this.router, this.routing) {
     rest = root.child("/v1/users");
-    listing = RestListingFactory.withPaging(rest);
+    listing = RestListingFactory.withPagingAndConverter(
+        rest, (jsonUsers) => UserEntity.listFromJson(jsonUsers));
   }
+
+  // note, cast needed to prevent runtime error
+  List<UserEntity> get users => listing.list.cast<UserEntity>();
 
   goToDetail(UserEntity user) {
     router.navigate(
@@ -36,7 +40,10 @@ class ScreenUserList {
 
   List<EnumItem> get roles => ctx.enumerations.roles;
 
-  List<UserEntity> get users => UserEntity.listFromJson(listing.list);
+  List<UserEntity> decodeUsers(List jsonUsers) {
+    final users = UserEntity.listFromJson(jsonUsers);
+    return users;
+  }
 
   String rolesLabel(UserEntity user) =>
       user.roles.map((r) => r.value).join(',');

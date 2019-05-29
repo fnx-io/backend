@@ -1,10 +1,7 @@
-
-
 abstract class CreateEditSupport {
-
   String get dataId;
 
-  Map get data;
+  dynamic get data;
 
   bool get isNotEmpty => data != null;
 
@@ -12,5 +9,4 @@ abstract class CreateEditSupport {
       dataId != null && dataId.toLowerCase().contains('create');
 
   bool get isEdit => dataId != null && !isCreate;
-
 }
