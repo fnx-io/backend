@@ -45,12 +45,6 @@ class Role {
         : json.map((value) => new Role.fromJson(value)).toList();
   }
 
-  static List<dynamic> listToJson(List<Role> roles) {
-    return roles == null
-        ? new List<dynamic>()
-        : roles.map((r) => r.toJson()).toList();
-  }
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

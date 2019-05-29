@@ -32,5 +32,4 @@ part 'model/user_dto.dart';
 part 'model/user_entity.dart';
 part 'model/user_login_dto.dart';
 
-
 ApiClient defaultApiClient = new ApiClient();

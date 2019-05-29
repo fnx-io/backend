@@ -11,9 +11,14 @@ class FileCategory {
 
   FileCategory.fromJson(dynamic data) {
     switch (data) {
-          case "IMAGE": value = data; break;
-          case "OTHER": value = data; break;
-    default: throw('Unknown enum value to decode: $data');
+      case "IMAGE":
+        value = data;
+        break;
+      case "OTHER":
+        value = data;
+        break;
+      default:
+        throw ('Unknown enum value to decode: $data');
     }
   }
 
@@ -26,18 +31,18 @@ class FileCategory {
   }
 
   static List<FileCategory> listFromJson(List<dynamic> json) {
-    return json == null ? new List<FileCategory>() : json.map((value) => new FileCategory.fromJson(value)).toList();
+    return json == null
+        ? new List<FileCategory>()
+        : json.map((value) => new FileCategory.fromJson(value)).toList();
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FileCategory &&
-              runtimeType == other.runtimeType &&
-              value == other.value;
+      other is FileCategory &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
 
   @override
   int get hashCode => value.hashCode;
-
 }
-

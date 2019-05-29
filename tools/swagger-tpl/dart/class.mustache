@@ -38,7 +38,17 @@ class {{classname}} {
   Map<String, dynamic> toJson() {
     return {
     {{#vars}}
-      {{#isDateTime}}'{{name}}': {{name}} == null ? '' : {{name}}.toUtc().toIso8601String(){{^-last}},{{/-last}}{{/isDateTime}}{{^isDateTime}}'{{name}}': {{name}}{{^-last}},{{/-last}}{{/isDateTime}}
+      {{#isDateTime}}'{{name}}': {{name}} == null ? '' : {{name}}.toUtc().toIso8601String(){{^-last}},{{/-last}}{{/isDateTime}}
+      {{^isDateTime}}'{{name}}':
+        {{#complexType}}
+              {{#isListContainer}}{{name}}.map((i)=>i.toJson()).toList(){{/isListContainer}}{{^isListContainer}}
+              {{#isMapContainer}}{{name}}{{/isMapContainer}}
+              {{^isMapContainer}}{{name}}.toJson(){{/isMapContainer}}{{/isListContainer}}
+        {{/complexType}}
+        {{^complexType}}
+            {{name}}
+        {{/complexType}}{{^-last}},{{/-last}}
+      {{/isDateTime}}
     {{/vars}}
      };
   }

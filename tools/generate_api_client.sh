@@ -9,3 +9,5 @@ java -jar swagger-codegen-cli.jar generate \
    -o ../api_client \
    -t swagger-tpl/dart \
    -c gen_config.json
+
+dartfmt -w ../api_client/

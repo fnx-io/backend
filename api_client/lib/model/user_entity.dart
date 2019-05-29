@@ -40,7 +40,7 @@ class UserEntity {
       'firstName': firstName,
       'lastName': lastName,
       'password': password,
-      'roles': Role.listToJson(roles),
+      'roles': roles.map((i) => i.toJson()).toList(),
       'avatarUrl': avatarUrl
     };
   }
