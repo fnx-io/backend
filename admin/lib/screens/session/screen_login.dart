@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:admin/app_context.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
+import 'package:api_client/api.dart';
 import 'package:cooky/cooky.dart' as cookie;
 import 'package:fnx_rest/fnx_rest_browser.dart';
 import 'package:fnx_ui/fnx_ui.dart';
@@ -21,7 +22,7 @@ class ScreenLogin implements OnInit {
   final RestClient sessionsRest;
   final FnxApp fnxApp;
 
-  var loginInfo = <String, String>{};
+  UserLoginDto loginInfo = UserLoginDto();
 
   var renewPasswordInfo = <String, String>{};
 
@@ -47,7 +48,8 @@ class ScreenLogin implements OnInit {
     initInProgress = false;
   }
 
-  static initUser(AppContext ctx, RestClient sessionsRest, RestClient root) async {
+  static initUser(
+      AppContext ctx, RestClient sessionsRest, RestClient root) async {
     final authKey = cookie.get(authKeyCookieName);
     if (authKey != null) {
       root.setHeader(authHeader, authKey);
@@ -64,7 +66,8 @@ class ScreenLogin implements OnInit {
   }
 
   login() async {
-    RestResult authKey = await sessionsRest.child('/login').post(loginInfo);
+    RestResult authKey =
+        await sessionsRest.child('/login').post(loginInfo.toJson());
     if (authKey.success) {
       cookie.set(authKeyCookieName, authKey.data);
       initUserWithProgress();
@@ -74,7 +77,7 @@ class ScreenLogin implements OnInit {
   }
 
   void requestRenewPassword() {
-    renewPasswordInfo = {'email': loginInfo['email']};
+    renewPasswordInfo = {'email': loginInfo.email};
     showChangePasswordForm = false;
     showRenewPasswordForm = true;
   }

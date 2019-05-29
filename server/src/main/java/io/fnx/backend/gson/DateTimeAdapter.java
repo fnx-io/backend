@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 
 public class DateTimeAdapter implements JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
 
-    public static final DateTimeFormatter API_DATE_FORMAT = ISODateTimeFormat.dateTimeNoMillis();
+    public static final DateTimeFormatter API_DATE_FORMAT = ISODateTimeFormat.dateTime();
 
     @Override
     public DateTime deserialize(final JsonElement json,

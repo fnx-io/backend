@@ -33,7 +33,7 @@ class UserDto {
       'firstName': firstName,
       'lastName': lastName,
       'password': password,
-      'roles': roles.map((i) => i.toJson()).toList()
+      'roles': roles?.map((i) => i.toJson())?.toList()
     };
   }
 

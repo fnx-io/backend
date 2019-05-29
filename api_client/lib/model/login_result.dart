@@ -22,7 +22,7 @@ class LoginResult {
   }
 
   Map<String, dynamic> toJson() {
-    return {'success': success, 'token': token, 'user': user.toJson()};
+    return {'success': success, 'token': token, 'user': user?.toJson()};
   }
 
   static List<LoginResult> listFromJson(List<dynamic> json) {

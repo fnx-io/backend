@@ -38,8 +38,8 @@ class CmsArticleEntity {
       'id': id,
       'name': name,
       'type': type,
-      'created': created == null ? '' : created.toUtc().toIso8601String(),
-      'createdBy': createdBy.toJson(),
+      'created': created?.toUtc()?.toIso8601String(),
+      'createdBy': createdBy?.toJson(),
       'authorName': authorName,
       'data': data
     };

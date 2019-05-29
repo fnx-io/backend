@@ -8,9 +8,6 @@ fi
 
 java -jar swagger-codegen-cli.jar generate \
    -i ../server/swagger-api.yaml \
-   -l dart \
-   -o ../api_client \
-   -t swagger-tpl/dart \
-   -c gen_config.json
+   -l jaxrs \
+   -o api_server \
 
-dartfmt -w ../api_client/

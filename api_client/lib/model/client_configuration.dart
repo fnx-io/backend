@@ -19,7 +19,7 @@ class ClientConfiguration {
   }
 
   Map<String, dynamic> toJson() {
-    return {'messages': messages, 'enumerations': enumerations.toJson()};
+    return {'messages': messages, 'enumerations': enumerations?.toJson()};
   }
 
   static List<ClientConfiguration> listFromJson(List<dynamic> json) {

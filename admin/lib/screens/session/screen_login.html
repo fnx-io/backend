@@ -8,11 +8,11 @@
                 <h5 header>Přihlášení</h5>
 
                 <fnx-input label="Uživatelské jméno nebo email">
-                    <fnx-text [(ngModel)]="loginInfo['email']" [required]="true"></fnx-text>
+                    <fnx-text [(ngModel)]="loginInfo.email" [required]="true"></fnx-text>
                 </fnx-input>
 
                 <fnx-input label="Heslo" errorMessage="Heslo musí mít alespoň 6 znaků">
-                    <fnx-text [(ngModel)]="loginInfo['password']" [required]="true" [minLength]="6"
+                    <fnx-text [(ngModel)]="loginInfo.password" [required]="true" [minLength]="6"
                               type="password"></fnx-text>
                 </fnx-input>
 <!-- TODO: pripravit na zapomenute heslo

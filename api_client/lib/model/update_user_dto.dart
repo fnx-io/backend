@@ -37,7 +37,7 @@ class UpdateUserDto {
       'lastName': lastName,
       'userId': userId,
       'password': password,
-      'roles': roles.map((i) => i.toJson()).toList()
+      'roles': roles?.map((i) => i.toJson())?.toList()
     };
   }
 

@@ -34,11 +34,10 @@ class AuditLogEventEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'eventTarget': eventTarget.toJson(),
+      'eventTarget': eventTarget?.toJson(),
       'message': message,
-      'occurredOn':
-          occurredOn == null ? '' : occurredOn.toUtc().toIso8601String(),
-      'changedBy': changedBy.toJson(),
+      'occurredOn': occurredOn?.toUtc()?.toIso8601String(),
+      'changedBy': changedBy?.toJson(),
       'changedByName': changedByName
     };
   }

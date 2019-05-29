@@ -7,11 +7,11 @@
     <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink padding" *ngIf="listing != null">
 
         <div class="row--gutter" *ngIf="listing != null && !listing.isEmpty()">
-            <a *ngFor="let a of listing.list" class="s12 m6 l4 card padding shadow--raising" (click)="editRecord(a)">
-                <h3>{{a['name']}}</h3>
-                <img *ngIf="a['data']['image'] != null" class="margin--small--left" [attr.src]="a['data']['image']+'=s120'" style="float: right;">
-                <p *ngIf="a['authorName'] != null" class="padding--small--bottom"><i>{{a['authorName']}}</i></p>
-                <div *ngIf="a['data'] != null && a['data']['annotation']!=null" [innerHtml]="a['data']['annotation']"></div>
+            <a *ngFor="let a of articles" class="s12 m6 l4 card padding shadow--raising" (click)="editRecord(a)">
+                <h3>{{a.name}}</h3>
+                <img *ngIf="a.data['image'] != null" class="margin--small--left" [attr.src]="a.data['image'].toString()+'=s120'" style="float: right;">
+                <p *ngIf="a.authorName != null" class="padding--small--bottom"><i>{{a.authorName}}</i></p>
+                <div *ngIf="a.data != null && a.data['annotation']!=null" [innerHtml]="a.data['annotation']"></div>
             </a>
         </div>
 

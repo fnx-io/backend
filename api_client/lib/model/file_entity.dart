@@ -47,10 +47,10 @@ class FileEntity {
       'name': name,
       'bucketUrl': bucketUrl,
       'imageUrl': imageUrl,
-      'category': category.toJson(),
+      'category': category?.toJson(),
       'set_': set_,
-      'uploader': uploader.toJson(),
-      'uploaded': uploaded == null ? '' : uploaded.toUtc().toIso8601String(),
+      'uploader': uploader?.toJson(),
+      'uploaded': uploaded?.toUtc()?.toIso8601String(),
       'mediaType': mediaType
     };
   }

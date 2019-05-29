@@ -6,6 +6,7 @@ import 'package:admin/shared/create_edit_support.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
+import 'package:api_client/api.dart';
 import 'package:fnx_rest/fnx_rest.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
@@ -13,12 +14,15 @@ import 'package:fnx_ui/fnx_ui.dart';
 /// ScreenNewsEdit
 ///
 @Component(
-  selector: 'screen-cms-edit',
-  templateUrl: 'screen_cms_edit.html',
-    directives: [fnxUiDirectives, coreDirectives, formDirectives, FnxGalleryPicker]
-)
+    selector: 'screen-cms-edit',
+    templateUrl: 'screen_cms_edit.html',
+    directives: [
+      fnxUiDirectives,
+      coreDirectives,
+      formDirectives,
+      FnxGalleryPicker
+    ])
 class ScreenCmsEdit with CreateEditSupport implements OnActivate {
-
   final FnxApp fnxApp;
   final RestClient root;
   RestClient rest;
@@ -26,7 +30,7 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
 
   final Router router;
 
-  Map<String, dynamic> entity;
+  CmsArticleEntity entity;
 
   String type;
 
@@ -35,13 +39,12 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
   RestClient logRest;
 
   @override
-  Map get data => entity;
+  get data => entity;
 
   @override
   String get dataId => id;
 
-
-///
+  ///
   /// Defines image set. Mainly the ratio you want to enforce in certain types of images.
   ///
   FnxImageSet imageSet = new FnxImageSet("news", "News", 1.3333);
@@ -54,11 +57,11 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
     RestResult rr = await rest.child('/$id').get();
 
     if (rr.success) {
-      entity = rr.data;
-      if (type != entity['type']) {
-        throw "Something is wrong. Received article type '${entity['type']}' != expected '$type'";
+      entity = CmsArticleEntity.fromJson(rr.data);
+      if (type != entity.type) {
+        throw "Something is wrong. Received article type '${entity.type}' != expected '$type'";
       }
-      if (entity['data'] == null) entity['data'] = {};
+      if (entity.data == null) entity.data = {};
       return true;
     } else {
       return false;
@@ -69,7 +72,9 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
 
   Future<bool> saveArticle(Event e) async {
     e.preventDefault();
-    RestResult rr = await (creating ? rest.post(entity) : rest.child(id).put(entity));
+    RestResult rr = await (creating
+        ? rest.post(entity.toJson())
+        : rest.child(id).put(entity.toJson()));
     if (rr.success) {
       fnxApp.toast('Article has been created');
       //router.current.;
@@ -88,7 +93,9 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
     id = current.parameters['id'] ?? int.tryParse(current.parameters['id']);
 
     if (isCreate) {
-      entity = {'type':'$type', 'data':{}};
+      entity = CmsArticleEntity()
+        ..type = type
+        ..data = {};
     }
     if (isEdit) {
       fetchDetails();
@@ -96,5 +103,4 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
 
     logRest = root.child("/v1/cms/articles/${id}/log");
   }
-
 }

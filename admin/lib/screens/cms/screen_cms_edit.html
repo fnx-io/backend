@@ -7,7 +7,7 @@
             name je primo soucastni entity CmsArticleEntity
         -->
         <fnx-input label="Name" errorMessage="Name is mandatory">
-            <fnx-text [(ngModel)]="entity['name']" [required]="true" autoFocus></fnx-text>
+            <fnx-text [(ngModel)]="entity.name" [required]="true" autoFocus></fnx-text>
         </fnx-input>
 
 
@@ -30,7 +30,7 @@
         </fnx-input>-->
 
         <fnx-input label="Event date" errorMessage="Event date is mandatory" *ngIf="type == 'events'">
-            <fnx-date [(ngModel)]="entity['data']['eventDate']" [dateTime]="true"></fnx-date>
+            <fnx-date [(ngModel)]="entity.data['eventDate']" [required]="true" [dateTime]="true"></fnx-date>
         </fnx-input>
 
         <!-- TODO: nemame funckni fnx-wysiwyg-rich
@@ -41,7 +41,7 @@
         -->
 
         <fnx-input label="Annotation" errorMessage="Annotation is mandatory">
-            <fnx-wysiwyg-poor [(ngModel)]="entity['data']['annotation']" [required]="true"
+            <fnx-wysiwyg-poor [(ngModel)]="entity.data['annotation']" [required]="true"
                               heightEm="15" maxWidthEm="50"></fnx-wysiwyg-poor>
         </fnx-input>
 

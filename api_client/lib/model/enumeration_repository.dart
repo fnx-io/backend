@@ -20,8 +20,8 @@ class EnumerationRepository {
 
   Map<String, dynamic> toJson() {
     return {
-      'fileCategories': fileCategories.map((i) => i.toJson()).toList(),
-      'roles': roles.map((i) => i.toJson()).toList()
+      'fileCategories': fileCategories?.map((i) => i.toJson())?.toList(),
+      'roles': roles?.map((i) => i.toJson())?.toList()
     };
   }
 
