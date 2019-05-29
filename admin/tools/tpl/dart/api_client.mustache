@@ -1,4 +1,4 @@
-part of api_client.api;
+part of {{pubName}}.api;
 
 class QueryParam {
   String name;
@@ -10,7 +10,7 @@ class QueryParam {
 class ApiClient {
 
   String basePath;
-  var client = new BrowserClient();
+  var client = new {{#browserClient}}Browser{{/browserClient}}Client();
 
   Map<String, String> _defaultHeaderMap = {};
   Map<String, Authentication> _authentications = {};
@@ -18,8 +18,11 @@ class ApiClient {
   final _RegList = new RegExp(r'^List<(.*)>$');
   final _RegMap = new RegExp(r'^Map<String,(.*)>$');
 
-  ApiClient({this.basePath: "http://localhost:8085/api/v1"}) {
-    // Setup authentications (key: authentication name, value: authentication).
+  ApiClient({this.basePath: "{{{basePath}}}"}) {
+    // Setup authentications (key: authentication name, value: authentication).{{#authMethods}}{{#isBasic}}
+    _authentications['{{name}}'] = new HttpBasicAuth();{{/isBasic}}{{#isApiKey}}
+    _authentications['{{name}}'] = new ApiKeyAuth({{#isKeyInHeader}}"header"{{/isKeyInHeader}}{{^isKeyInHeader}}"query"{{/isKeyInHeader}}, "{{keyParamName}}");{{/isApiKey}}{{#isOAuth}}
+    _authentications['{{name}}'] = new OAuth();{{/isOAuth}}{{/authMethods}}
   }
 
   void addDefaultHeader(String key, String value) {
@@ -37,36 +40,17 @@ class ApiClient {
           return value is bool ? value : '$value'.toLowerCase() == 'true';
         case 'double':
           return value is double ? value : double.parse('$value');
-        case 'AuditLogEventEntity':
-          return new AuditLogEventEntity.fromJson(value);
-        case 'ClientConfiguration':
-          return new ClientConfiguration.fromJson(value);
-        case 'CmsArticleEntity':
-          return new CmsArticleEntity.fromJson(value);
-        case 'EnumItem':
-          return new EnumItem.fromJson(value);
-        case 'EnumerationRepository':
-          return new EnumerationRepository.fromJson(value);
-        case 'FileCategory':
-           return new FileCategory.fromJson(value);
-        case 'FileEntity':
-          return new FileEntity.fromJson(value);
-        case 'Key':
-          return new Key.fromJson(value);
-        case 'LoginResult':
-          return new LoginResult.fromJson(value);
-        case 'PasswordChangeDto':
-          return new PasswordChangeDto.fromJson(value);
-        case 'Role':
-           return new Role.fromJson(value);
-        case 'UpdateUserDto':
-          return new UpdateUserDto.fromJson(value);
-        case 'UserDto':
-          return new UserDto.fromJson(value);
-        case 'UserEntity':
-          return new UserEntity.fromJson(value);
-        case 'UserLoginDto':
-          return new UserLoginDto.fromJson(value);
+        {{#models}}
+          {{#model}}
+        case '{{classname}}':
+            {{#isEnum}}
+           return new {{classname}}.fromJson(value);
+            {{/isEnum}}
+            {{^isEnum}}
+          return new {{classname}}.fromJson(value);
+            {{/isEnum}}
+          {{/model}}
+        {{/models}}
         default:
           {
             Match match;

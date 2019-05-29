@@ -1,4 +1,4 @@
-part of api_client.api;
+part of {{pubName}}.api;
 
 const _delimiters = const {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
 
@@ -38,10 +38,14 @@ String parameterToString(dynamic value) {
     return '';
   } else if (value is DateTime) {
     return value.toUtc().toIso8601String();
-  } else if (value is FileCategory) {
-    return FileCategory.encode(value).toString();
-  } else if (value is Role) {
-    return Role.encode(value).toString();
+  {{#models}}
+    {{#model}}
+      {{#isEnum}}
+  } else if (value is {{classname}}) {
+    return {{classname}}.encode(value).toString();
+      {{/isEnum}}
+    {{/model}}
+  {{/models}}
   } else {
     return value.toString();
   }

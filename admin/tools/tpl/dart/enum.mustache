@@ -1,0 +1,49 @@
+class {{classname}} {
+  /// The underlying value of this enum member.
+  {{dataType}} value;
+
+  {{classname}}._internal(this.value);
+
+  {{#allowableValues}}
+    {{#enumVars}}
+      {{#description}}
+  /// {{description}}
+      {{/description}}
+  static {{classname}} {{name}} = {{classname}}._internal({{{value}}});
+    {{/enumVars}}
+  {{/allowableValues}}
+
+  {{classname}}.fromJson(dynamic data) {
+    switch (data) {
+    {{#allowableValues}}
+      {{#enumVars}}
+          case {{{value}}}: value = data; break;
+      {{/enumVars}}
+    {{/allowableValues}}
+    default: throw('Unknown enum value to decode: $data');
+    }
+  }
+
+  static dynamic encode({{classname}} data) {
+    return data.value;
+  }
+
+  {{dataType}} toJson() {
+    return {{classname}}.encode(this);
+  }
+
+  static List<{{classname}}> listFromJson(List<dynamic> json) {
+    return json == null ? new List<{{classname}}>() : json.map((value) => new {{classname}}.fromJson(value)).toList();
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is {{classname}} &&
+              runtimeType == other.runtimeType &&
+              value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
+
+}

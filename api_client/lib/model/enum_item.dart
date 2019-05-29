@@ -1,10 +1,12 @@
 part of api_client.api;
 
 class EnumItem {
+  
   String value = null;
+  
 
   String label = null;
-
+  
   EnumItem();
 
   @override
@@ -14,27 +16,31 @@ class EnumItem {
 
   EnumItem.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
-    value = json['value'];
-    label = json['label'];
+    value =
+        json['value']
+    ;
+    label =
+        json['label']
+    ;
   }
 
   Map<String, dynamic> toJson() {
-    return {'value': value, 'label': label};
+    return {
+      'value': value,
+      'label': label
+     };
   }
 
   static List<EnumItem> listFromJson(List<dynamic> json) {
-    return json == null
-        ? new List<EnumItem>()
-        : json.map((value) => new EnumItem.fromJson(value)).toList();
+    return json == null ? new List<EnumItem>() : json.map((value) => new EnumItem.fromJson(value)).toList();
   }
 
-  static Map<String, EnumItem> mapFromJson(
-      Map<String, Map<String, dynamic>> json) {
+  static Map<String, EnumItem> mapFromJson(Map<String, Map<String, dynamic>> json) {
     var map = new Map<String, EnumItem>();
     if (json != null && json.length > 0) {
-      json.forEach((String key, Map<String, dynamic> value) =>
-          map[key] = new EnumItem.fromJson(value));
+      json.forEach((String key, Map<String, dynamic> value) => map[key] = new EnumItem.fromJson(value));
     }
     return map;
   }
 }
+
