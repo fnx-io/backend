@@ -166,5 +166,11 @@ only the API endpoint which is different for development and for production.
 - *runtime* configuration, which is downloaded from the server during start. See `ClientConfiguration.java`,
 `ConfigResource.java` and again `admin.dart`. This configuration should for example contain all shared enums.
 
+### Troubleshooting
 
+* In case of `webdev serve` failure related to conflicting outputs:  
+```
+    pub run build_runner build --delete-conflicting-outputs
+    webdev serve
+```    
      
