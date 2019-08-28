@@ -39,4 +39,9 @@
         </auth-constraint>
     </security-constraint>
 
+    <!-- to get rid of jsessionId -->
+    <session-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+
 </web-app>
