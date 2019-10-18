@@ -17,10 +17,14 @@ import 'package:logging/logging.dart';
 
 import 'launcher.template.dart' as self;
 
-@GenerateInjector([routerProvidersHash]
-    // You can use routerProviders in production
-    )
-final InjectorFactory injector = self.injector$Injector;
+// Local dev
+@GenerateInjector([routerProvidersHash])
+final InjectorFactory injectorWithHashStrategy = self.injectorWithHashStrategy$Injector;
+
+// Production
+@GenerateInjector([routerProviders])
+final InjectorFactory injectorWithLocation = self.injectorWithLocation$Injector;
+
 
 void launchApp<T>(ComponentFactory<T> componentFactory) async {
   Level currentLoggingLevel = Level.ALL;
@@ -59,9 +63,9 @@ void launchApp<T>(ComponentFactory<T> componentFactory) async {
 
   injections[AppContext] = appContext;
 
-  runApp(componentFactory,
-      createInjector: ([Injector parent]) =>
-          new Injector.map(injections, injector(parent)));
+  var injector = isLocal ? injectorWithHashStrategy : injectorWithLocation;
+
+  runApp(componentFactory, createInjector: ([Injector parent]) => new Injector.map(injections, injector(parent)));
 }
 
 /*
