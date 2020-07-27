@@ -3,7 +3,7 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.fnx.backend</groupId>
-    <artifactId>api-server</artifactId>
+    <artifactId>server</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>BackendServer</name>
@@ -12,10 +12,10 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
 
-        <appengine.version>1.9.61</appengine.version>
-        <guice.version>4.1.0</guice.version>
+        <appengine.version>1.9.81</appengine.version>
+        <guice.version>4.2.3</guice.version>
         <slf4j.version>1.7.22</slf4j.version>
-        <jersey.version>1.19.3</jersey.version>
+        <jersey.version>1.19.4</jersey.version>
 
     </properties>
 
@@ -34,7 +34,7 @@
             <id>test</id>
             <properties>
                 <app.id>fnx-backend-test</app.id>
-                <app.version>v01-init</app.version>
+                <app.version>continuous</app.version>
             </properties>
         </profile>
     </profiles>
@@ -43,12 +43,12 @@
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
             <artifactId>objectify</artifactId>
-            <version>5.1.13</version>
+            <version>6.0.6</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0</version>
+            <version>29.0-jre</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -58,27 +58,27 @@
         <dependency>
             <groupId>org.mint42</groupId>
             <artifactId>mint42</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring3</artifactId>
-            <version>2.1.4.RELEASE</version>
+            <version>2.1.6.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
-            <version>1.2.8</version>
+            <version>1.4.0</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-            <version>1.9.15</version>
+            <version>1.9.22</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.7</version>
+            <version>2.8.6</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.3.5.Final</version>
+            <version>5.4.3.Final</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -187,7 +187,7 @@
         <dependency>
             <groupId>io.fnx.backend</groupId>
             <artifactId>tools</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -207,12 +207,13 @@
                 <version>3.2</version>
             </plugin>
             <plugin>
-                <groupId>com.google.appengine</groupId>
+                <groupId>com.google.cloud.tools</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
-                <version>${appengine.version}</version>
+                <version>2.2.0</version>
                 <configuration>
+                    <promote>false</promote>
                     <!-- These properties are set by profiles - prod or test. See Makefile -->
-                    <appId>${app.id}</appId>
+                    <projectId>${app.id}</projectId>
                     <version>${app.version}</version>
                 </configuration>
             </plugin>

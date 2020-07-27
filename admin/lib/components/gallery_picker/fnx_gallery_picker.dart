@@ -5,32 +5,26 @@ import 'dart:typed_data';
 import 'package:admin/utils/rest_listing_factory.dart';
 import 'package:angular/angular.dart';
 import 'package:fnx_rest/fnx_rest.dart';
+import 'package:fnx_ui/components/fnx_app/fnx_app.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
 ///
 /// Defines set of images. Used to keep similar images together.
 ///
 class FnxImageSet {
-
   final String set;
   final String name;
   final double ratio;
 
   FnxImageSet(this.set, this.name, this.ratio);
-
 }
 
-
 @Component(
-  selector: 'fnx-gallery-picker',
-  templateUrl: 'fnx_gallery_picker.html',
-  styleUrls: ['fnx_gallery_picker.css'],
-  directives: const [ PickImageStageComponent,
-                      CropImageComponent, fnxUiDirectives,
-  coreDirectives]
-)
+    selector: 'fnx-gallery-picker',
+    templateUrl: 'fnx_gallery_picker.html',
+    styleUrls: ['fnx_gallery_picker.css'],
+    directives: const [PickImageStageComponent, CropImageComponent, fnxUiAllDirectives, coreDirectives])
 class FnxGalleryPicker implements OnInit {
-
   RestClient rest;
   RestListing listing;
 
@@ -42,19 +36,21 @@ class FnxGalleryPicker implements OnInit {
 
   FnxApp fnxApp;
 
-  @Input() FnxImageSet imageSet;
+  @Input()
+  FnxImageSet imageSet;
 
-  @ViewChild('pickImageTab') FnxTab pickImageTab;
+//  @ViewChild('pickImageTab')
+//  FnxTab pickImageTab;
 
   final _picked = new StreamController<String>();
-  @Output() Stream<String> get picked => _picked.stream;
+  @Output()
+  Stream<String> get picked => _picked.stream;
 
   bool get requiresCrop => imageSet != null && imageSet.ratio != null;
 
   FnxGalleryPicker(RestClient rest, this.fnxApp) {
     this.rest = rest.child("/v1/files");
   }
-
 
   @override
   void ngOnInit() {
@@ -139,24 +135,15 @@ class FnxGalleryPicker implements OnInit {
   bool get showImageUploadStage => stage == ImageUploadStage.UPLOAD;
 }
 
-enum ImageUploadStage {
-  PICK,
-  CROP,
-  UPLOAD
-}
+enum ImageUploadStage { PICK, CROP, UPLOAD }
 
-@Component(
-  selector: 'pick-image-component',
-  templateUrl: 'pick_image_component.html',
-  directives: [fnxUiDirectives,
-  coreDirectives]
-)
+@Component(selector: 'pick-image-component', templateUrl: 'pick_image_component.html', directives: [fnxUiDirectives, coreDirectives])
 class PickImageStageComponent {
-
   String errorMessage;
 
   final _image = new StreamController<ImageRead>();
-  @Output() Stream<ImageRead> get image => _image.stream;
+  @Output()
+  Stream<ImageRead> get image => _image.stream;
 
   void filePicked(File file) {
     errorMessage = null;
@@ -188,22 +175,18 @@ class ImageRead {
   ImageRead(this.file, this.dataUrlContents);
 }
 
-@Component(
-  selector: 'crop-image-component',
-  templateUrl: 'crop_image_component.html',
-  directives: [fnxUiDirectives,
-  coreDirectives]
-)
+@Component(selector: 'crop-image-component', templateUrl: 'crop_image_component.html', directives: [fnxUiDirectives, coreDirectives])
 class CropImageComponent implements OnInit {
-
-  @Input() ImageRead image;
-  @Input() double ratio;
+  @Input()
+  ImageRead image;
+  @Input()
+  double ratio;
 
   final _cropped = new StreamController<Rectangle<double>>();
-  @Output() Stream<Rectangle<double>> get cropped => _cropped.stream;
+  @Output()
+  Stream<Rectangle<double>> get cropped => _cropped.stream;
 
   Rectangle<double> crop = new Rectangle<double>(0.0, 0.0, 1.0, 1.0);
-
 
   @override
   ngOnInit() {
@@ -213,10 +196,9 @@ class CropImageComponent implements OnInit {
   void imageCropped(Rectangle<double> crop) {
     this.crop = crop;
   }
-  
+
   void doFinish(Event event) {
     if (event != null) event.preventDefault();
     _cropped.add(crop);
   }
-
 }

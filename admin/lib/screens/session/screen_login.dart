@@ -6,12 +6,13 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:api_client/api.dart';
 import 'package:cooky/cooky.dart' as cookie;
 import 'package:fnx_rest/fnx_rest_browser.dart';
+import 'package:fnx_ui/components/fnx_app/fnx_app.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
 @Component(
   selector: 'screen-login',
   templateUrl: 'screen_login.html',
-  directives: [fnxUiDirectives, coreDirectives, formDirectives],
+  directives: [fnxUiAllDirectives, coreDirectives, formDirectives],
 )
 class ScreenLogin implements OnInit {
   static const authKeyCookieName = 'fnx_authkey';
@@ -32,8 +33,7 @@ class ScreenLogin implements OnInit {
 
   bool showChangePasswordForm = false;
 
-  ScreenLogin(this.ctx, this.root, this.fnxApp)
-      : sessionsRest = root.child("/v1/sessions") {}
+  ScreenLogin(this.ctx, this.root, this.fnxApp) : sessionsRest = root.child("/v1/sessions") {}
 
   @override
   void ngOnInit() {
@@ -48,8 +48,7 @@ class ScreenLogin implements OnInit {
     initInProgress = false;
   }
 
-  static initUser(
-      AppContext ctx, RestClient sessionsRest, RestClient root) async {
+  static initUser(AppContext ctx, RestClient sessionsRest, RestClient root) async {
     final authKey = cookie.get(authKeyCookieName);
     if (authKey != null) {
       root.setHeader(authHeader, authKey);
@@ -66,8 +65,7 @@ class ScreenLogin implements OnInit {
   }
 
   login() async {
-    RestResult authKey =
-        await sessionsRest.child('/login').post(loginInfo.toJson());
+    RestResult authKey = await sessionsRest.child('/login').post(loginInfo.toJson());
     if (authKey.success) {
       cookie.set(authKeyCookieName, authKey.data);
       initUserWithProgress();
@@ -85,24 +83,19 @@ class ScreenLogin implements OnInit {
   void generateNewPasswordCode(Event event) async {
     event.preventDefault();
 
-    await sessionsRest
-        .child('/send-new-password-code')
-        .post(renewPasswordInfo['email']);
+    await sessionsRest.child('/send-new-password-code').post(renewPasswordInfo['email']);
 
     showChangePasswordForm = true;
   }
 
   void renewPassword() async {
-    RestResult response =
-        await sessionsRest.child('/renew-password').post(renewPasswordInfo);
+    RestResult response = await sessionsRest.child('/renew-password').post(renewPasswordInfo);
 
     if (response.success) {
-      fnxApp
-          .toast('Změna hesla proběhla úspěšně, přihlaste se s novým heslem.');
+      fnxApp.toast('Změna hesla proběhla úspěšně, přihlaste se s novým heslem.');
       goToLogin();
     } else {
-      fnxApp.alert(
-          'Změna hesla byla neúspěšná, pravděpodobně zadán neplatný kód.');
+      fnxApp.alert('Změna hesla byla neúspěšná, pravděpodobně zadán neplatný kód.');
     }
   }
 

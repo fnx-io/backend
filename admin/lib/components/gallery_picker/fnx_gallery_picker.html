@@ -1,16 +1,16 @@
 <div>
     <fnx-tabs>
         <fnx-tab title="Image gallery" #pickImageTab>
-            <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink">
+            <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex-grow flex-shrink">
                 <div class="row">
-                    <div class="s6 m4 l4 padding--small" *ngFor="let i of listing.list">
-                        <img (click)="galleryImagePicked(i)" [src]="thumbnailUrl(i)" class="width--100 gallery-image">
+                    <div class="s6 m4 l4 padding-small" *ngFor="let i of listing.list">
+                        <img (click)="galleryImagePicked(i)" [src]="thumbnailUrl(i)" class="width-100 gallery-image">
                     </div>
                 </div>
-                <div class="text--center active padding--big" *ngIf="listing.working">
-                    <span class="preloader bg--white fs-xl"></span>
+                <div class="text-center active padding-big" *ngIf="listing.working">
+                    <span class="preloader bg-white fs-xl"></span>
                 </div>
-                <div class="text--center padding--big" *ngIf="!listing.working && !listing.hasNext && listing.list.isEmpty">
+                <div class="text-center padding-big" *ngIf="!listing.working && !listing.hasNext && listing.list.isEmpty">
                     The gallery is empty.
                 </div>
 
@@ -18,15 +18,15 @@
         </fnx-tab>
         <fnx-tab title="Upload new image">
             <div class="padding">
-                <div *ngIf="errorMessage != null" class="s12 text--red padding--bottom">
+                <div *ngIf="errorMessage != null" class="s12 text-red padding-bottom">
                     {{ errorMessage }}
                 </div>
                 <pick-image-component *ngIf="showPickImageStage" (image)="imagePicked($event)"></pick-image-component>
                 <crop-image-component *ngIf="showCropImageStage" [image]="imageRead" [ratio]="imageSet.ratio" (cropped)="imageCropped($event)"></crop-image-component>
-                <div class="text--center active" *ngIf="showImageUploadStage">
+                <div class="text-center active" *ngIf="showImageUploadStage">
                     <h5>Uploading...</h5>
                     <br/>
-                    <span class="preloader bg--white fs-xl"></span>
+                    <span class="preloader bg-white fs-xl"></span>
                 </div>
             </div>
         </fnx-tab>

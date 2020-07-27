@@ -8,20 +8,13 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:api_client/api.dart';
 import 'package:fnx_rest/fnx_rest.dart';
+import 'package:fnx_ui/components/fnx_app/fnx_app.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
 ///
 /// ScreenNewsEdit
 ///
-@Component(
-    selector: 'screen-cms-edit',
-    templateUrl: 'screen_cms_edit.html',
-    directives: [
-      fnxUiDirectives,
-      coreDirectives,
-      formDirectives,
-      FnxGalleryPicker
-    ])
+@Component(selector: 'screen-cms-edit', templateUrl: 'screen_cms_edit.html', directives: [fnxUiAllDirectives, coreDirectives, formDirectives, FnxGalleryPicker])
 class ScreenCmsEdit with CreateEditSupport implements OnActivate {
   final FnxApp fnxApp;
   final RestClient root;
@@ -72,9 +65,7 @@ class ScreenCmsEdit with CreateEditSupport implements OnActivate {
 
   Future<bool> saveArticle(Event e) async {
     e.preventDefault();
-    RestResult rr = await (creating
-        ? rest.post(entity.toJson())
-        : rest.child(id).put(entity.toJson()));
+    RestResult rr = await (creating ? rest.post(entity.toJson()) : rest.child(id).put(entity.toJson()));
     if (rr.success) {
       fnxApp.toast('Article has been created');
       //router.current.;

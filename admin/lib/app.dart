@@ -6,19 +6,12 @@ import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:fnx_rest/fnx_rest.dart';
+import 'package:fnx_ui/components/fnx_app/fnx_app.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:logging/logging.dart';
 
-@Component(selector: 'app', templateUrl: 'app.html',
-  directives: [fnxUiDirectives,
-  coreDirectives,
-  formDirectives,
-  routerDirectives,
-  ScreenLogin
-  ]
-)
+@Component(selector: 'app', templateUrl: 'app.html', directives: [fnxUiAllDirectives, coreDirectives, formDirectives, routerDirectives, ScreenLogin])
 class App {
-
   final Logger log = new Logger("App");
 
   @ViewChild(FnxApp)
@@ -29,7 +22,10 @@ class App {
   final Router router;
   final RestClient root;
 
-  static Map cmsRouteParams = {"news" : {"type" : "news"}, "events" : {"type" : "events"}, };
+  static Map cmsRouteParams = {
+    "news": {"type": "news"},
+    "events": {"type": "events"},
+  };
 
   App(this.ctx, this.routing, this.router, this.root) {
     print("Message test: " + ctx.msg.app.backend);
@@ -42,5 +38,4 @@ class App {
   bool isTesting() {
     return ctx.local;
   }
-
 }

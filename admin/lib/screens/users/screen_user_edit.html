@@ -2,28 +2,28 @@
     <fnx-form (submit)="saveUser($event)" *ngIf="user != null">
         <div style="max-width: 50em;">
 
-            <fnx-input label="User's first name">
+            <fnx-label label="User's first name">
                 <fnx-text [(ngModel)]="user.firstName" [required]="true"></fnx-text>
-            </fnx-input>
+            </fnx-label>
 
-            <fnx-input label="User's last name">
+            <fnx-label label="User's last name">
                 <fnx-text [(ngModel)]="user.lastName" [required]="true"></fnx-text>
-            </fnx-input>
+            </fnx-label>
 
-            <fnx-input label="User's email">
+            <fnx-label label="User's email">
                 <fnx-text [(ngModel)]="user.email" [required]="true"></fnx-text>
-            </fnx-input>
+            </fnx-label>
 
-            <fnx-input label="Roles">
+            <fnx-label label="Roles">
                 <fnx-select [(ngModel)]="rolesValues" [required]="true" [multi]="true">
                     <fnx-option [value]="null" label="Select appropriate roles"></fnx-option>
                     <fnx-option *ngFor="let r of roles" [value]="r.value" [label]="r.label"></fnx-option>
                 </fnx-select>
-            </fnx-input>
+            </fnx-label>
 
-            <fnx-input label="Password" errorMessage="Password is required and must be at least 6 characters long">
+            <fnx-label label="Password" errorMessage="Password is required and must be at least 6 characters long">
                 <fnx-text [(ngModel)]="user.password" type="password" [required]="creating" [minLength]="6"></fnx-text>
-            </fnx-input>
+            </fnx-label>
 
             <p *ngIf="!creating">Fill the password only if you want to change it.</p>
 

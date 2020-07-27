@@ -1,11 +1,11 @@
-<div class="flex--column fit">
+<div class="flex-column fit">
     <nav class="navbar">
         <h2>Správci a operátoři</h2>
         <span class="spacer"></span>
         <button class="btn" data-prefix="add" (click)="createUser()" *ngIf="ctx.loggedUser != null">Přidat</button>
     </nav>
-    <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex--grow flex--shrink padding">
-        <table class="table--stripes" *ngIf="!listing.isEmpty()">
+    <fnx-scroll-panel (loadMore)="listing.loadNextPage()" class="flex-grow flex-shrink padding">
+        <table class="table-stripes" *ngIf="!listing.isEmpty()">
             <thead>
             <tr>
                 <th colspan="2">Name</th>

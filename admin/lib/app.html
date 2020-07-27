@@ -3,7 +3,7 @@
     <screen-login *ngIf="ctx.loggedUser == null"></screen-login>
 
     <template [ngIf]="ctx.logged">
-        <div class="layout--header">
+        <div class="layout-header">
             <header>
                 <nav class="navbar">
                     <!--<button class="hide-on-l btn icon" (click)="layout.toggle()">menu</button>-->
@@ -11,9 +11,9 @@
                         <span *ngIf="isTesting()">TESTING</span>
                     </h1>
                     <span class="spacer"></span>
-                    <ul class="menu--horizontal">
+                    <ul class="menu-horizontal">
                         <li><span *ngIf="ctx.logged">{{ ctx.loggedUser['firstName'] }} {{ ctx.loggedUser['lastName'] }}</span>
-                            <ul class="menu--vertical">
+                            <ul class="menu-vertical">
                                 <li><a (click)="logout()">logout</a></li>
                             </ul>
                         </li>
@@ -22,18 +22,18 @@
             </header>
             <main>
                 <fnx-layout-sidebar #layout [widthPx]="280">
-                    <aside sidebar class="flex--column">
-                        <ul class="menu--vertical flex--grow" (click)="layout.toggle()">
+                    <aside sidebar class="flex-column">
+                        <ul class="menu-vertical flex-grow"> <!--(click)="layout.toggle()"-->
                             <li><a data-prefix="view_compact" [routerLink]="routing.dashboard.toUrl()" routerLinkActive="selected">Dashboard</a></li>
                             <li><a data-prefix="group" [routerLink]="routing.usersList.toUrl()" routerLinkActive="selected">Users</a></li>
                             <li><a data-prefix="library_books" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['news'])" routerLinkActive="selected">News</a></li>
                             <li><a data-prefix="event_note" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['events'])" routerLinkActive="selected">Events</a></li>
                         </ul>
-                        <p class="text--center bg--theme no-margin padding">
+                        <p class="text-center bg-theme no-margin padding">
                             Created by <a target="_blank" href="https://fnx.io/">fnx.io</a>
                         </p>
                     </aside>
-                    <main class="border--left">
+                    <main class="border-left">
                         <router-outlet [routes]="routing.routes"></router-outlet>
                     </main>
                 </fnx-layout-sidebar>
@@ -55,6 +55,6 @@
     <p footer class="buttonbar">
         <button class="btn" attr.href="mailto:support@fnx.io?subject=Complete Doddle {{errorHeadline}}">support</button>
         <span class="spacer"></span>
-        <button class="btn bg--important" (click)="closeError()">ok</button>
+        <button class="btn bg-important" (click)="closeError()">ok</button>
     </p>
 </fnx-modal>-->

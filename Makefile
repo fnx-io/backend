@@ -5,10 +5,12 @@ ADMIN_BUILD = admin/build
 
 $(ADMIN_BUILD):
 	cd $(ADMIN_ROOT); pub get
+	cd $(ADMIN_ROOT); pub run build_runner build --delete-conflicting-outputs
 	cd $(ADMIN_ROOT); webdev build
 
 $(ADMIN_BUILD)-always:
 	cd $(ADMIN_ROOT); pub get
+	cd $(ADMIN_ROOT); pub run build_runner build --delete-conflicting-outputs
 	cd $(ADMIN_ROOT); webdev build
 	cd $(ADMIN_ROOT)/build
 
@@ -25,8 +27,8 @@ server-clean:
 	rm -rf $(SERVER_ADMIN_BUILD)
 
 appengine-prod: admin-install
-	cd $(SERVER_ROOT); mvn appengine:update -Pprod
+	cd $(SERVER_ROOT); mvn clean package appengine:deployAll -Pprod
 
 appengine-test: admin-install
-	cd $(SERVER_ROOT); mvn appengine:update -Ptest
+	cd $(SERVER_ROOT); mvn clean package appengine:deployAll -Ptest
 

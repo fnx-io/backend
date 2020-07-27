@@ -7,13 +7,17 @@
        deploy your app.
     -->
     <application>fnx-backend</application>
-    <version>v0-init</version>
+    <version>see pom.xml</version>
     <runtime>java8</runtime>
     
     <threadsafe>true</threadsafe>
     <sessions-enabled>false</sessions-enabled>
 
     <instance-class>F1</instance-class>
+
+    <staging>
+        <enable-jar-classes>true</enable-jar-classes>
+    </staging>
 
     <system-properties>
 

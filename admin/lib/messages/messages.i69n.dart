@@ -1,3 +1,4 @@
+// ignore_for_file: unused_element, unused_field, camel_case_types, annotate_overrides, prefer_single_quotes
 // GENERATED FILE, do not edit!
 import 'package:i69n/i69n.dart' as i69n;
 
@@ -38,7 +39,7 @@ class Messages implements i69n.I69nMessageBundle {
   ProgramMessages get program => ProgramMessages(this);
   GenMessages get gen => GenMessages(this);
   Object operator [](String key) {
-    int index = key.indexOf('.');
+    var index = key.indexOf('.');
     if (index > 0) {
       return (this[key.substring(0, index)]
           as i69n.I69nMessageBundle)[key.substring(index + 1)];
@@ -51,7 +52,7 @@ class Messages implements i69n.I69nMessageBundle {
       case 'gen':
         return gen;
       default:
-        throw new Exception("Message '$key' doesn't exist in $this");
+        throw Exception('Message $key doesn\'t exist in $this');
     }
   }
 }
@@ -62,7 +63,7 @@ class AppMessages implements i69n.I69nMessageBundle {
   String get name => "fnx.io";
   String get backend => "backend admin";
   Object operator [](String key) {
-    int index = key.indexOf('.');
+    var index = key.indexOf('.');
     if (index > 0) {
       return (this[key.substring(0, index)]
           as i69n.I69nMessageBundle)[key.substring(index + 1)];
@@ -73,7 +74,7 @@ class AppMessages implements i69n.I69nMessageBundle {
       case 'backend':
         return backend;
       default:
-        throw new Exception("Message '$key' doesn't exist in $this");
+        throw Exception('Message $key doesn\'t exist in $this');
     }
   }
 }
@@ -83,7 +84,7 @@ class ProgramMessages implements i69n.I69nMessageBundle {
   const ProgramMessages(this._parent);
   String get mode => "TESTING";
   Object operator [](String key) {
-    int index = key.indexOf('.');
+    var index = key.indexOf('.');
     if (index > 0) {
       return (this[key.substring(0, index)]
           as i69n.I69nMessageBundle)[key.substring(index + 1)];
@@ -92,7 +93,7 @@ class ProgramMessages implements i69n.I69nMessageBundle {
       case 'mode':
         return mode;
       default:
-        throw new Exception("Message '$key' doesn't exist in $this");
+        throw Exception('Message $key doesn\'t exist in $this');
     }
   }
 }
@@ -103,7 +104,7 @@ class GenMessages implements i69n.I69nMessageBundle {
   String get logout => "logout";
   String get test => "test";
   Object operator [](String key) {
-    int index = key.indexOf('.');
+    var index = key.indexOf('.');
     if (index > 0) {
       return (this[key.substring(0, index)]
           as i69n.I69nMessageBundle)[key.substring(index + 1)];
@@ -114,7 +115,7 @@ class GenMessages implements i69n.I69nMessageBundle {
       case 'test':
         return test;
       default:
-        throw new Exception("Message '$key' doesn't exist in $this");
+        throw Exception('Message $key doesn\'t exist in $this');
     }
   }
 }
