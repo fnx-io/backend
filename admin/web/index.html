@@ -1,48 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>fnx_ui</title>
   <meta charset="utf-8">
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" type="text/css" href="css/fnx_ui.css">
-  <link rel="stylesheet" type="text/css" href="css/theme_lime.css">
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i&display=swap&subset=latin-ext" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/fnx_ui.css">
+  <!--
+  Support for xs: and xl: qualifiers.
+  <link rel="stylesheet" href="css/fnx_ui_x.css">
+  -->
+  <link rel="stylesheet" href="css/fnx_ui_docs.css">
 
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
+  <style>
+    * {
+      font-family: 'Roboto', sans-serif;
+    }
+    :root {
+      --theme-color: #ff8403;
+      --theme-text-color: #fff;
+      --accent-color: #f00;
+      --accent-text-color: #fff;
+      --hover-color: #dd5500;
+      --hover-text-color: #fff;
+      --selected-color: #e96600;
+      --selected-text-color: #fff;
+    }
+  </style>
+
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <script defer src="index.dart.js"></script>
+
 </head>
-<body class="theme--lime--d2 accent--lime--d2 relative bg--white">
+<body>
 
 <app>
   <!-- Preloader -->
-  <div class="flex--column fit text--center text--white bg--theme">
-    <div class="flex--grow"></div>
+  <div class="flex-column fit text-center text-white bg-theme">
+    <div class="flex-grow"></div>
     <h1>fnx.io backend admin</h1>
-    <p class="margin">
-      <span class="preloader bg--theme fs-xl"></span>
+    <p class="margin" style="--loader-color: white;">
+      <span class="preloader fs-xl"></span>
     </p>
     <p>... is loading</p>
-    <div class="flex--grow--2">
+    <div class="flex-grow-2">
       <script>
-          setTimeout(function() {
-              var warning = document.getElementById("tooLong");
-              if (warning) {
-                  warning.style.display="block";
-              }
-          }, 7000);
+        setTimeout(function() {
+          var warning = document.getElementById("tooLong");
+          if (warning) {
+            warning.style.display="block";
+          }
+        }, 7000);
       </script>
-      <div class="margin--big--top text--center" id="tooLong" style="display: none">
+      <div class="margin-big-top text-center" id="tooLong" style="display: none">
         <p>Loading of the application takes longer then expected.<br>It's possible your internet connection is too slow,
           or maybe you are using unsupported internet browser.</p>
-        <p>Support browsers are Chrome, Firefox, Safari and Edge (in current versions)<br>
-          and Internet Explorer version 11.</p>
+        <p>Supported browsers are Chrome, Firefox, Safari and Edge (in current versions).</p>
       </div>
     </div>
   </div>
 </app>
 
-<script src="index.dart.js"></script>
+
 </body>
 </html>

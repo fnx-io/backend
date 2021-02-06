@@ -1,0 +1,6 @@
+<div>
+    <fnx-file (files)="doUpload($event)" ></fnx-file>
+    <div *ngIf="progress != null" style="height: 1rem; width: 100%" class="margin-small-top bg-white-d4">
+        <span style="display: block; height: 100%;" class="bg-theme" [style.width.%]="progress * 95"></span>
+    </div>
+</div>

@@ -3,6 +3,8 @@ package io.fnx.backend.guice;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import io.fnx.backend.tools.FnxGaeToolsModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,10 @@ public class GuiceConfig extends GuiceServletContextListener {
         // This is very dirty, but we need it
 	    // because some libraries are just incompatible with DI
         if (INSTANCE == null) {
+
+			// novinka Ofy 6
+        	ObjectifyService.init();
+
 	        INSTANCE = Guice.createInjector(
 			        new FnxGaeToolsModule(),
 			        new UtilModule(),

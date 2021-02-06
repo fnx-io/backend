@@ -9,10 +9,7 @@ import 'package:fnx_ui/fnx_ui.dart';
 ///
 /// ScreenNewsList
 ///
-@Component(
-    selector: 'screen-cms-listing',
-    templateUrl: 'screen_cms_list.html',
-    directives: [fnxUiDirectives, coreDirectives])
+@Component(selector: 'screen-cms-listing', templateUrl: 'screen_cms_list.html', directives: [fnxUiAllDirectives, coreDirectives])
 class ScreenCmsList implements OnActivate {
   final RestClient root;
   RestClient rest;
@@ -34,18 +31,15 @@ class ScreenCmsList implements OnActivate {
     print(type);
 
     rest = root.child("/v1/cms/articles?type=${type}");
-    listing = RestListingFactory.withPagingAndConverter(
-        rest, (jsonArticles) => CmsArticleEntity.listFromJson(jsonArticles));
+    listing = RestListingFactory.withPagingAndConverter(rest, (jsonArticles) => CmsArticleEntity.listFromJson(jsonArticles));
   }
 
   createRecord() {
-    router.navigate(
-        routing.cmsEdit.toUrl(parameters: {'type': type, 'id': 'create'}));
+    router.navigate(routing.cmsEdit.toUrl(parameters: {'type': type, 'id': 'create'}));
   }
 
   editRecord(CmsArticleEntity a) {
-    router.navigate(routing.cmsEdit
-        .toUrl(parameters: {'type': type, 'id': a.id.toString()}));
+    router.navigate(routing.cmsEdit.toUrl(parameters: {'type': type, 'id': a.id.toString()}));
   }
 
   List<CmsArticleEntity> get articles => listing.list.cast<CmsArticleEntity>();

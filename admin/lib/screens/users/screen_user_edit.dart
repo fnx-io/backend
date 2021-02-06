@@ -7,12 +7,10 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:api_client/api.dart';
 import 'package:fnx_rest/fnx_rest.dart';
+import 'package:fnx_ui/components/fnx_app/fnx_app.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 
-@Component(
-    selector: 'screen-user-edit',
-    templateUrl: 'screen_user_edit.html',
-    directives: [fnxUiDirectives, coreDirectives, formDirectives])
+@Component(selector: 'screen-user-edit', templateUrl: 'screen_user_edit.html', directives: [fnxUiAllDirectives, coreDirectives, formDirectives])
 class ScreenUserEdit with CreateEditSupport implements OnActivate {
   final FnxApp fnxApp;
   final RestClient root;
@@ -36,9 +34,7 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
     print("USER constructor");
     print(router);
     rest = root.child('/v1/users');
-    roles = ctx.enumerations.roles
-        .where((r) => r.value != Role.aNONYMOUS_.value)
-        .toList();
+    roles = ctx.enumerations.roles.where((r) => r.value != Role.aNONYMOUS_.value).toList();
   }
 
   void fetchDetails() async {
@@ -58,9 +54,7 @@ class ScreenUserEdit with CreateEditSupport implements OnActivate {
 
     user.roles = rolesValues.map((rv) => Role.fromJson(rv)).toList();
 
-    RestResult rr = creating
-        ? await rest.post(user.toJson())
-        : await rest.child("/$userId").put(user.toJson());
+    RestResult rr = creating ? await rest.post(user.toJson()) : await rest.child("/$userId").put(user.toJson());
     if (rr.success) {
       if (creating) {
         fnxApp.toast('User was created.');

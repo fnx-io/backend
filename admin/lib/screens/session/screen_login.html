@@ -1,98 +1,102 @@
-<div *ngIf="!initInProgress" class="flex--column fit">
-    <span class="flex--grow"></span>
+<div *ngIf="!initInProgress" class="flex-column fit">
+    <span class="flex-grow"></span>
 
-    <div class="padding--big row--gutter">
-        <fnx-form (submit)="login()" *ngIf="!showRenewPasswordForm" class="s12 m8 l6 offset--m2 offset--l3">
+    <div class="padding-big row-gutter">
+        <fnx-form (submit)="login()" *ngIf="!showRenewPasswordForm" class="s:c12 m:c8 l:c6 m:o2 l:o3">
 
-            <fnx-panel-small>
-                <h5 header>Přihlášení</h5>
+            <fnx-panel [closable]="false">
 
-                <fnx-input label="Uživatelské jméno nebo email">
-                    <fnx-text [(ngModel)]="loginInfo.email" [required]="true"></fnx-text>
-                </fnx-input>
+                <h3 header>Přihlášení</h3>
 
-                <fnx-input label="Heslo" errorMessage="Heslo musí mít alespoň 6 znaků">
-                    <fnx-text [(ngModel)]="loginInfo.password" [required]="true" [minLength]="6"
-                              type="password"></fnx-text>
-                </fnx-input>
-<!-- TODO: pripravit na zapomenute heslo
-                <a (click)="requestRenewPassword()" class="underline padding--top">Zapomenuté heslo?</a>
--->
-            </fnx-panel-small>
+                <div class="padding">
+
+                    <fnx-label label="Uživatelské jméno nebo email">
+                        <fnx-text [(ngModel)]="loginInfo.email" [required]="true"></fnx-text>
+                    </fnx-label>
+
+                    <fnx-label label="Heslo" errorMessage="Heslo musí mít alespoň 6 znaků">
+                        <fnx-text [(ngModel)]="loginInfo.password" [required]="true" [minLength]="6" type="password"></fnx-text>
+                    </fnx-label>
+                    <!-- TODO: pripravit na zapomenute heslo
+                                    <a (click)="requestRenewPassword()" class="underline padding-top">Zapomenuté heslo?</a>
+                    -->
+                    <fnx-submit-bar [back]="false" class="margin-top">
+                    </fnx-submit-bar>
+
+                </div>
+            </fnx-panel>
 
             <!-- smart submit button -->
-            <fnx-submit-bar [back]="false">
-            </fnx-submit-bar>
             <!--<ea-submit-bar [back]="false"></ea-submit-bar>-->
 
         </fnx-form>
 
-       <!-- <fnx-form (submit)="showChangePasswordForm ? renewPassword() : generateNewPasswordCode($event)"
-                  *ngIf="showRenewPasswordForm"
-                  class="s12 m8 l6 offset--m2 offset--l3">
+        <!-- <fnx-form (submit)="showChangePasswordForm ? renewPassword() : generateNewPasswordCode($event)"
+                   *ngIf="showRenewPasswordForm"
+                   class="s12 m8 l6 offset-m2 offset-l3">
 
-            <fnx-panel-small>
-                <h5 header>Obnova hesla</h5>
+             <fnx-panel-small>
+                 <h5 header>Obnova hesla</h5>
 
-                <div *ngIf="!showChangePasswordForm">
-                    <h5>1. Zadejte váš uživatelský účet</h5>
-                    <fnx-input label="Uživatelské jméno nebo email" errorMessage="Pole je povinné">
-                        <fnx-text [(ngModel)]="renewPasswordInfo['email']" [required]="true"></fnx-text>
-                    </fnx-input>
+                 <div *ngIf="!showChangePasswordForm">
+                     <h5>1. Zadejte váš uživatelský účet</h5>
+                     <fnx-label label="Uživatelské jméno nebo email" errorMessage="Pole je povinné">
+                         <fnx-text [(ngModel)]="renewPasswordInfo['email']" [required]="true"></fnx-text>
+                     </fnx-label>
 
-                    <div class="buttonbar">
-                        <button (click)="goToLogin()" class="btn" data-prefix="arrow_back">Zpět na
-                            přihlášení
-                        </button>
-                        <span class="spacer"></span>
-                        <button class="btn" data-prefix="email" type="submit">Zadáno</button>
-                    </div>
-                </div>
+                     <div class="buttonbar">
+                         <button (click)="goToLogin()" class="btn" data-prefix="arrow_back">Zpět na
+                             přihlášení
+                         </button>
+                         <span class="spacer"></span>
+                         <button class="btn" data-prefix="email" type="submit">Zadáno</button>
+                     </div>
+                 </div>
 
-                <div *ngIf="showChangePasswordForm">
-                    <h5>2. Změňte si heslo</h5>
-                    <div class="italics">Pokud je email správný, zašleme Vám na něj jednorázový kód na změnu hesla,
-                        který
-                        zkopírujte a vložte do formuláře.
-                    </div>
-                    <fnx-input label="Kód pro změnu hesla z emailu" errorMessage="Kód musí být vyplněn">
-                        <fnx-text [(ngModel)]="renewPasswordInfo['code']" [required]="true"></fnx-text>
-                    </fnx-input>
+                 <div *ngIf="showChangePasswordForm">
+                     <h5>2. Změňte si heslo</h5>
+                     <div class="italics">Pokud je email správný, zašleme Vám na něj jednorázový kód na změnu hesla,
+                         který
+                         zkopírujte a vložte do formuláře.
+                     </div>
+                     <fnx-label label="Kód pro změnu hesla z emailu" errorMessage="Kód musí být vyplněn">
+                         <fnx-text [(ngModel)]="renewPasswordInfo['code']" [required]="true"></fnx-text>
+                     </fnx-label>
 
-                    <fnx-input label="Nové heslo" errorMessage="Heslo musí mít alespoň 6 znaků">
-                        <fnx-text [(ngModel)]="renewPasswordInfo['password']" [required]="true"
-                                  [minLength]="6" type="password"></fnx-text>
-                    </fnx-input>
+                     <fnx-label label="Nové heslo" errorMessage="Heslo musí mít alespoň 6 znaků">
+                         <fnx-text [(ngModel)]="renewPasswordInfo['password']" [required]="true"
+                                   [minLength]="6" type="password"></fnx-text>
+                     </fnx-label>
 
-                    <fnx-input label="Nové heslo pro ověření" errorMessage="Heslo musí mít alespoň 6 znaků">
-                        <fnx-text [(ngModel)]="renewPasswordInfo['repeatedPassword']" [required]="true"
-                                  [minLength]="6" type="password"></fnx-text>
-                    </fnx-input>
-                </div>
+                     <fnx-label label="Nové heslo pro ověření" errorMessage="Heslo musí mít alespoň 6 znaků">
+                         <fnx-text [(ngModel)]="renewPasswordInfo['repeatedPassword']" [required]="true"
+                                   [minLength]="6" type="password"></fnx-text>
+                     </fnx-label>
+                 </div>
 
-            </fnx-panel-small>
+             </fnx-panel-small>
 
 
-            <ea-submit-bar *ngIf="showChangePasswordForm" [back]="false">
-                <button (click)="goToLogin()" class="btn" data-prefix="arrow_back">Zpět na
-                    přihlášení
-                </button>
-            </ea-submit-bar>
+             <ea-submit-bar *ngIf="showChangePasswordForm" [back]="false">
+                 <button (click)="goToLogin()" class="btn" data-prefix="arrow_back">Zpět na
+                     přihlášení
+                 </button>
+             </ea-submit-bar>
 
-        </fnx-form>
-        -->
+         </fnx-form>
+         -->
 
     </div>
 
-    <span class="flex--grow--2"></span>
+    <span class="flex-grow-2"></span>
 </div>
 
-<div *ngIf="initInProgress" class="flex--column fit text--center text--blue">
-    <span class="flex--grow"></span>
+<div *ngIf="initInProgress" class="flex-column fit text-center text-white bg-theme">
+    <div class="flex-grow"></div>
     <h1>fnx.io backend admin</h1>
-    <p class="margin">
-        <span class="preloader bg--white fs-xl"></span>
+    <p class="margin" style="--loader-color: white;">
+        <span class="preloader fs-xl"></span>
     </p>
-    <h5>... kontrola přihlašovacích práv</h5>
-    <span class="flex--grow--2"></span>
+    <p>... kontrola přihlašovacích práv</p>
+    <div class="flex-grow-2"></div>
 </div>

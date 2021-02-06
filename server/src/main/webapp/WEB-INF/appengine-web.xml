@@ -7,7 +7,7 @@
        deploy your app.
     -->
     <application>fnx-backend</application>
-    <version>v0-init</version>
+    <version>see pom.xml</version>
     <runtime>java8</runtime>
     
     <threadsafe>true</threadsafe>
@@ -31,6 +31,10 @@
             <http-header name="X-Frame-Options" value="DENY" />
         </include>
     </static-files>
+
+    <staging>
+        <enable-jar-classes>true</enable-jar-classes>
+    </staging>
 
     <system-properties>
 

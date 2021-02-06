@@ -3,40 +3,36 @@
     <screen-login *ngIf="ctx.loggedUser == null"></screen-login>
 
     <template [ngIf]="ctx.logged">
-        <div class="layout--header">
-            <header>
-                <nav class="navbar">
+        <div class="fit flex-column">
+            <header class="padding-small theme">
+                <nav class="item-row">
                     <!--<button class="hide-on-l btn icon" (click)="layout.toggle()">menu</button>-->
                     <h1>fnx.io <span class="hide-on-s">backend admin</span>
                         <span *ngIf="isTesting()">TESTING</span>
                     </h1>
                     <span class="spacer"></span>
-                    <ul class="menu--horizontal">
-                        <li><span *ngIf="ctx.logged">{{ ctx.loggedUser['firstName'] }} {{ ctx.loggedUser['lastName'] }}</span>
-                            <ul class="menu--vertical">
-                                <li><a (click)="logout()">logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <fnx-dropdown-menu *ngIf="ctx.logged" label="{{ ctx.loggedUser['firstName'] }} {{ ctx.loggedUser['lastName'] }}">
+                        <ul class="item-column body no-margin">
+                            <li><a (click)="logout()">logout</a></li>
+                        </ul>
+                    </fnx-dropdown-menu>
                 </nav>
             </header>
-            <main>
-                <fnx-layout-sidebar #layout [widthPx]="280">
-                    <aside sidebar class="flex--column">
-                        <ul class="menu--vertical flex--grow" (click)="layout.toggle()">
-                            <li><a data-prefix="view_compact" [routerLink]="routing.dashboard.toUrl()" routerLinkActive="selected">Dashboard</a></li>
-                            <li><a data-prefix="group" [routerLink]="routing.usersList.toUrl()" routerLinkActive="selected">Users</a></li>
-                            <li><a data-prefix="library_books" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['news'])" routerLinkActive="selected">News</a></li>
-                            <li><a data-prefix="event_note" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['events'])" routerLinkActive="selected">Events</a></li>
-                        </ul>
-                        <p class="text--center bg--theme no-margin padding">
-                            Created by <a target="_blank" href="https://fnx.io/">fnx.io</a>
-                        </p>
-                    </aside>
-                    <main class="border--left">
-                        <router-outlet [routes]="routing.routes"></router-outlet>
-                    </main>
-                </fnx-layout-sidebar>
+            <main class="spacer flex-row">
+                <aside sidebar class="flex-column" style="width: 15em">
+                    <nav class="item-column spacer scroll active-children"> <!--(click)="layout.toggle()"-->
+                        <a data-prefix="view_compact" [routerLink]="routing.dashboard.toUrl()" routerLinkActive="selected">Dashboard</a>
+                        <a data-prefix="group" [routerLink]="routing.usersList.toUrl()" routerLinkActive="selected">Users</a>
+                        <a data-prefix="library_books" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['news'])" routerLinkActive="selected">News</a>
+                        <a data-prefix="event_note" [routerLink]="routing.cmsList.toUrl(parameters: cmsRouteParams['events'])" routerLinkActive="selected">Events</a>
+                    </nav>
+                    <p class="text-center bg-theme no-margin padding">
+                        Created by <a target="_blank" href="https://fnx.io/">fnx.io</a>
+                    </p>
+                </aside>
+                <main class="border-left spacer relative">
+                    <router-outlet [routes]="routing.routes"></router-outlet>
+                </main>
             </main>
         </div>
     </template>
@@ -55,6 +51,6 @@
     <p footer class="buttonbar">
         <button class="btn" attr.href="mailto:support@fnx.io?subject=Complete Doddle {{errorHeadline}}">support</button>
         <span class="spacer"></span>
-        <button class="btn bg--important" (click)="closeError()">ok</button>
+        <button class="btn bg-important" (click)="closeError()">ok</button>
     </p>
 </fnx-modal>-->
