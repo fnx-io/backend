@@ -25,8 +25,8 @@ server-clean:
 	rm -rf $(SERVER_ADMIN_BUILD)
 
 appengine-prod: admin-install
-	cd $(SERVER_ROOT); mvn appengine:update -Pprod
+	cd $(SERVER_ROOT); mvn clean package appengine:deployAll -Pprod
 
 appengine-test: admin-install
-	cd $(SERVER_ROOT); mvn appengine:update -Ptest
+	cd $(SERVER_ROOT); mvn clean package appengine:deployAll -Ptest
 

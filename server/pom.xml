@@ -207,12 +207,13 @@
                 <version>3.2</version>
             </plugin>
             <plugin>
-                <groupId>com.google.appengine</groupId>
+                <groupId>com.google.cloud.tools</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
-                <version>${appengine.version}</version>
+                <version>2.2.0</version>
                 <configuration>
+                    <promote>false</promote>
                     <!-- These properties are set by profiles - prod or test. See Makefile -->
-                    <appId>${app.id}</appId>
+                    <projectId>${app.id}</projectId>
                     <version>${app.version}</version>
                 </configuration>
             </plugin>
