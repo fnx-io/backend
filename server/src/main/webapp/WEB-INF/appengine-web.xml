@@ -15,6 +15,23 @@
 
     <instance-class>F1</instance-class>
 
+    <static-files>
+        <include path="/**.png" />
+        <include path="/**.jpg" />
+        <include path="/**.jpeg" />
+        <include path="/**.css" />
+        <include path="/**.js" />
+        <include path="/admin" >
+            <http-header name="X-Frame-Options" value="DENY" />
+        </include>
+        <include path="/admin/" >
+            <http-header name="X-Frame-Options" value="DENY" />
+        </include>
+        <include path="/**.html" >
+            <http-header name="X-Frame-Options" value="DENY" />
+        </include>
+    </static-files>
+
     <staging>
         <enable-jar-classes>true</enable-jar-classes>
     </staging>

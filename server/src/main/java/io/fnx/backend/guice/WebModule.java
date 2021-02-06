@@ -21,6 +21,7 @@ public class WebModule extends MintModule {
 		// TODO: add your routes
 		route(".*", HttpsRedirect.class);
 		route(".*", FlashMessages.class);
+		route(".*", HeadersDecorator.class);
 		route(".*", UserController.class);
 
 		route("/", PagesController.class, "index");
